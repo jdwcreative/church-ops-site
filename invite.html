@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChurchOps Invite</title>
+  <meta name="description" content="Open a ChurchOps team invite and install ChurchOps if needed.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="page-shell invite-shell">
+    <div class="topbar">
+      <a class="brand" href="/">
+        <span class="brand-mark"></span>
+        <span>ChurchOps</span>
+      </a>
+      <div class="top-links">
+        <a href="/support.html">Support</a>
+      </div>
+    </div>
+
+    <main class="invite-card" aria-live="polite">
+      <div class="section-label">Team Invite</div>
+      <h1>You have been invited to join ChurchOps.</h1>
+      <p class="lead">
+        Open this link on your iPhone, iPad, or Mac with ChurchOps installed to prefill your invite.
+      </p>
+
+      <div class="invite-details">
+        <div>
+          <span>Email</span>
+          <strong id="invite-email">Not provided</strong>
+        </div>
+        <div>
+          <span>Invite Code</span>
+          <strong id="invite-code">Not provided</strong>
+        </div>
+      </div>
+
+      <div class="support-actions">
+        <a class="button-link primary" id="open-app-link" href="#">Open ChurchOps</a>
+        <button class="button-link secondary" id="copy-invite-button" type="button">Copy Invite Details</button>
+      </div>
+
+      <div class="callout invite-install-note">
+        If ChurchOps is not installed yet, install it from the App Store, then return to this text and tap the invite link again.
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div>ChurchOps team invite.</div>
+      <div class="footer-links">
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/support.html">Support</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const allowedCode = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const params = new URLSearchParams(window.location.search);
+    const code = (params.get("code") || "").toUpperCase().split("").filter((char) => allowedCode.includes(char)).join("");
+    const email = (params.get("email") || "").trim().toLowerCase();
+    const role = (params.get("role") || "").trim().toLowerCase();
+    const openLink = document.getElementById("open-app-link");
+    const codeEl = document.getElementById("invite-code");
+    const emailEl = document.getElementById("invite-email");
+    const copyButton = document.getElementById("copy-invite-button");
+
+    const inviteUrl = new URL(window.location.origin + "/invite.html");
+    if (code) inviteUrl.searchParams.set("code", code);
+    if (email) inviteUrl.searchParams.set("email", email);
+    if (role) inviteUrl.searchParams.set("role", role);
+
+    codeEl.textContent = code || "Not provided";
+    emailEl.textContent = email || "Not provided";
+    openLink.href = inviteUrl.toString();
+
+    copyButton.addEventListener("click", async () => {
+      const text = [
+        "ChurchOps invite",
+        email ? `Email: ${email}` : null,
+        code ? `Code: ${code}` : null,
+        `Link: ${inviteUrl.toString()}`
+      ].filter(Boolean).join("\n");
+
+      try {
+        await navigator.clipboard.writeText(text);
+        copyButton.textContent = "Copied";
+      } catch {
+        copyButton.textContent = "Copy unavailable";
+      }
+    });
+  </script>
+</body>
+</html>

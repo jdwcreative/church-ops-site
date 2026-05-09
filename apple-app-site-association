@@ -1,0 +1,22 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "CLC2Q76H7M.com.jdw.churchops"
+        ],
+        "components": [
+          {
+            "/": "/invite.html",
+            "comment": "Open ChurchOps invite links in the app."
+          },
+          {
+            "/": "/invite",
+            "comment": "Open extensionless ChurchOps invite links in the app."
+          }
+        ]
+      }
+    ]
+  }
+}
