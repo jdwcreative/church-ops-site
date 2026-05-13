@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChurchOps Invite</title>
   <meta name="description" content="Open a ChurchOps team invite and install ChurchOps if needed.">
+  <meta name="apple-itunes-app" content="app-id=6756548290">
   <link rel="canonical" href="https://www.church-ops.com/invite.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ChurchOps">
@@ -37,7 +38,7 @@
       <div class="section-label">Team Invite</div>
       <h1>You have been invited to join ChurchOps.</h1>
       <p class="lead">
-        Open this link on your iPhone, iPad, or Mac with ChurchOps installed to prefill your invite.
+        Use the option below that matches your phone. Keep this page or text message handy until you are signed in.
       </p>
 
       <div class="invite-details">
@@ -51,14 +52,31 @@
         </div>
       </div>
 
-      <div class="support-actions">
-        <a class="button-link primary" id="open-app-link" href="#">Open ChurchOps</a>
+      <div class="invite-paths">
+        <section>
+          <h2>Already have ChurchOps?</h2>
+          <p>Tap Open ChurchOps. Your invite code and email will be filled in for you.</p>
+          <a class="button-link primary" id="open-app-link" href="#">Open ChurchOps</a>
+        </section>
+
+        <section>
+          <h2>Need to install it?</h2>
+          <ol>
+            <li>Tap Install ChurchOps.</li>
+            <li>Install the app from the App Store.</li>
+            <li>Come back to this text message and tap the invite link again.</li>
+          </ol>
+          <a class="button-link primary" id="install-app-link" href="https://apps.apple.com/us/app/church-ops-hub/id6756548290">Install ChurchOps</a>
+        </section>
+      </div>
+
+      <div class="invite-helper-row">
         <button class="button-link secondary" id="copy-invite-button" type="button">Copy Invite Details</button>
       </div>
 
-      <div class="callout invite-install-note">
-        If ChurchOps is not installed yet, install it from the App Store, then return to this text and tap the invite link again.
-      </div>
+      <p class="invite-manual-note">
+        If the app asks for the invite manually, use the email and code shown above.
+      </p>
     </main>
 
     <footer class="footer">
@@ -78,18 +96,26 @@
     const email = (params.get("email") || "").trim().toLowerCase();
     const role = (params.get("role") || "").trim().toLowerCase();
     const openLink = document.getElementById("open-app-link");
+    const installLink = document.getElementById("install-app-link");
     const codeEl = document.getElementById("invite-code");
     const emailEl = document.getElementById("invite-email");
     const copyButton = document.getElementById("copy-invite-button");
+    const appStoreUrl = "https://apps.apple.com/us/app/church-ops-hub/id6756548290";
 
     const inviteUrl = new URL(window.location.origin + "/invite.html");
     if (code) inviteUrl.searchParams.set("code", code);
     if (email) inviteUrl.searchParams.set("email", email);
     if (role) inviteUrl.searchParams.set("role", role);
 
+    const appInviteUrl = new URL("churchopshub://invite");
+    if (code) appInviteUrl.searchParams.set("code", code);
+    if (email) appInviteUrl.searchParams.set("email", email);
+    if (role) appInviteUrl.searchParams.set("role", role);
+
     codeEl.textContent = code || "Not provided";
     emailEl.textContent = email || "Not provided";
-    openLink.href = inviteUrl.toString();
+    installLink.href = appStoreUrl;
+    openLink.href = appInviteUrl.toString();
 
     copyButton.addEventListener("click", async () => {
       const text = [
