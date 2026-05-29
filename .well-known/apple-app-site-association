@@ -14,6 +14,14 @@
           {
             "/": "/invite",
             "comment": "Open extensionless ChurchOps invite links in the app."
+          },
+          {
+            "/": "/open.html",
+            "comment": "Open ChurchOps from email notifications."
+          },
+          {
+            "/": "/open",
+            "comment": "Open extensionless ChurchOps notification links in the app."
           }
         ]
       }
