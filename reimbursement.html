@@ -134,6 +134,121 @@
       margin-top: 4px;
     }
 
+    .receipt-picker {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .receipt-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .file-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f7f9fc;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .file-button:hover:not([disabled]) {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: #102a6b;
+    }
+
+    .file-button[disabled] {
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    .receipt-count {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .receipt-list {
+      display: none;
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f9fbff;
+    }
+
+    .receipt-list.has-items {
+      display: block;
+    }
+
+    .receipt-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .receipt-item:first-child {
+      border-top: none;
+    }
+
+    .receipt-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 13px;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .receipt-size {
+      flex: 0 0 auto;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .receipt-remove-button {
+      flex: 0 0 auto;
+      border: none;
+      background: transparent;
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    .receipt-remove-button[disabled] {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .receipt-notice {
+      display: none;
+      margin-top: 6px;
+      color: #8b1c1c;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
     .payment-options {
       display: flex;
       flex-wrap: wrap;
@@ -390,9 +505,15 @@
         <div class="field-row">
           <div class="field">
             <label for="receiptFile">Upload Receipts or Invoices</label>
-            <input id="receiptFile" name="receiptFile" type="file" accept=".pdf,image/*" multiple required />
+            <div class="receipt-picker">
+              <input id="receiptFile" class="receipt-input" name="receiptFile" type="file" accept=".pdf,image/*" multiple required />
+              <button id="receiptPickerButton" class="file-button" type="button">Choose receipts</button>
+              <span id="receiptCount" class="receipt-count">No receipts selected</span>
+            </div>
+            <ul id="receiptList" class="receipt-list" aria-live="polite"></ul>
+            <div id="receiptNotice" class="receipt-notice"></div>
             <div class="help">
-              Attach up to 6 clear photos or PDFs. You can select multiple files at once.
+              Attach up to 6 clear photos or PDFs. You can choose more than once before submitting.
             </div>
           </div>
         </div>
@@ -719,17 +840,178 @@
       const form = domById("reimbForm");
       const submitButton = domById("submitButton");
       const receiptInput = domById("receiptFile");
+      const receiptPickerButton = domById("receiptPickerButton");
+      const receiptCount = domById("receiptCount");
+      const receiptList = domById("receiptList");
+      const receiptNotice = domById("receiptNotice");
       const defaultSubmitButtonText = submitButton.textContent.trim();
+      const selectedReceiptFiles = [];
+      let isSubmitting = false;
+
+      function receiptFileKey(file) {
+        return [
+          file && file.name ? file.name : "",
+          file && typeof file.size === "number" ? file.size : "",
+          file && typeof file.lastModified === "number" ? file.lastModified : ""
+        ].join("|");
+      }
+
+      function formatReceiptSize(bytes) {
+        const size = Number(bytes);
+        if (!Number.isFinite(size) || size <= 0) {
+          return "";
+        }
+        if (size < 1024 * 1024) {
+          return Math.max(1, Math.round(size / 1024)) + " KB";
+        }
+        return (size / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      function setReceiptNotice(message) {
+        if (!receiptNotice) {
+          return;
+        }
+        receiptNotice.textContent = message || "";
+        receiptNotice.style.display = message ? "block" : "none";
+      }
+
+      function renderReceiptFiles() {
+        if (receiptCount) {
+          const count = selectedReceiptFiles.length;
+          receiptCount.textContent = count === 0
+            ? "No receipts selected"
+            : count + " receipt" + (count === 1 ? "" : "s") + " selected";
+        }
+
+        if (receiptPickerButton) {
+          const atLimit = selectedReceiptFiles.length >= maxReceiptFiles;
+          receiptPickerButton.disabled = isSubmitting || atLimit;
+          receiptPickerButton.textContent = atLimit
+            ? "Receipt limit reached"
+            : selectedReceiptFiles.length === 0
+              ? "Choose receipts"
+              : "Add more receipts";
+        }
+
+        if (!receiptList) {
+          return;
+        }
+
+        receiptList.innerHTML = "";
+        receiptList.classList.toggle("has-items", selectedReceiptFiles.length > 0);
+        selectedReceiptFiles.forEach((file, index) => {
+          const item = document.createElement("li");
+          item.className = "receipt-item";
+
+          const name = document.createElement("span");
+          name.className = "receipt-name";
+          name.textContent = file.name || "Receipt " + (index + 1);
+
+          const size = document.createElement("span");
+          size.className = "receipt-size";
+          size.textContent = formatReceiptSize(file.size);
+
+          const remove = document.createElement("button");
+          remove.className = "receipt-remove-button";
+          remove.type = "button";
+          remove.textContent = "Remove";
+          remove.setAttribute("data-index", String(index));
+          remove.disabled = isSubmitting;
+
+          item.appendChild(name);
+          if (size.textContent) {
+            item.appendChild(size);
+          }
+          item.appendChild(remove);
+          receiptList.appendChild(item);
+        });
+      }
+
+      function addReceiptFiles(files) {
+        const incomingFiles = Array.from(files || []);
+        if (incomingFiles.length === 0) {
+          return;
+        }
+
+        const existingKeys = new Set(selectedReceiptFiles.map(receiptFileKey));
+        let added = 0;
+        let skippedDuplicates = 0;
+        let skippedLimit = 0;
+
+        incomingFiles.forEach((file) => {
+          if (!file) {
+            return;
+          }
+          const key = receiptFileKey(file);
+          if (existingKeys.has(key)) {
+            skippedDuplicates += 1;
+            return;
+          }
+          if (selectedReceiptFiles.length >= maxReceiptFiles) {
+            skippedLimit += 1;
+            return;
+          }
+          selectedReceiptFiles.push(file);
+          existingKeys.add(key);
+          added += 1;
+        });
+
+        if (skippedLimit > 0) {
+          setReceiptNotice("You can attach up to " + maxReceiptFiles + " receipts. Extra files were not added.");
+        } else if (skippedDuplicates > 0 && added === 0) {
+          setReceiptNotice("That receipt is already selected.");
+        } else {
+          setReceiptNotice("");
+        }
+
+        renderReceiptFiles();
+      }
+
+      if (receiptPickerButton && receiptInput) {
+        receiptPickerButton.addEventListener("click", function () {
+          if (isSubmitting || selectedReceiptFiles.length >= maxReceiptFiles) {
+            return;
+          }
+          receiptInput.click();
+        });
+      }
+
+      if (receiptInput) {
+        receiptInput.addEventListener("change", function () {
+          addReceiptFiles(this.files);
+          this.value = "";
+        });
+      }
+
+      if (receiptList) {
+        receiptList.addEventListener("click", function (evt) {
+          const target = evt.target;
+          if (!target || !target.matches || !target.matches(".receipt-remove-button")) {
+            return;
+          }
+          const index = Number(target.getAttribute("data-index"));
+          if (!Number.isInteger(index) || index < 0 || index >= selectedReceiptFiles.length || isSubmitting) {
+            return;
+          }
+          selectedReceiptFiles.splice(index, 1);
+          setReceiptNotice("");
+          renderReceiptFiles();
+        });
+      }
 
       function startSubmitting(message) {
+        isSubmitting = true;
         submitButton.disabled = true;
         submitButton.textContent = "Submitting...";
+        renderReceiptFiles();
         setSubmitProgress(message);
       }
 
       function finishSubmitting() {
+        isSubmitting = false;
         submitButton.disabled = false;
         submitButton.textContent = defaultSubmitButtonText;
+        renderReceiptFiles();
         hideSubmitProgress();
       }
 
@@ -799,9 +1081,7 @@
         let uploadedReceipts = [];
         const requestId = createReimbursementRequestId();
         try {
-          const receiptFiles = receiptInput && receiptInput.files
-            ? Array.from(receiptInput.files)
-            : [];
+          const receiptFiles = selectedReceiptFiles.slice();
 
           if (receiptFiles.length === 0) {
             finishSubmitting();
@@ -875,6 +1155,12 @@
           }
 
           form.reset();
+          selectedReceiptFiles.splice(0, selectedReceiptFiles.length);
+          if (receiptInput) {
+            receiptInput.value = "";
+          }
+          setReceiptNotice("");
+          renderReceiptFiles();
           updatePaymentUI();
           updateDdFields();
           showSuccess("Thank you! Your reimbursement request has been submitted.");
@@ -885,6 +1171,8 @@
           finishSubmitting();
         }
       });
+
+      renderReceiptFiles();
     })();
   </script>
 </body>
