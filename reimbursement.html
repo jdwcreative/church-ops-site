@@ -389,10 +389,10 @@
         <div class="section-label">Receipts (Required)</div>
         <div class="field-row">
           <div class="field">
-            <label for="receiptFile">Upload Receipt or Invoice</label>
-            <input id="receiptFile" name="receiptFile" type="file" accept=".pdf,image/*" required />
+            <label for="receiptFile">Upload Receipts or Invoices</label>
+            <input id="receiptFile" name="receiptFile" type="file" accept=".pdf,image/*" multiple required />
             <div class="help">
-              Attach a clear photo or PDF of your receipt. If you have multiple receipts, you can combine them into one image or PDF.
+              Attach up to 6 clear photos or PDFs. You can select multiple files at once.
             </div>
           </div>
         </div>
@@ -609,16 +609,37 @@
       // Kick off config load (non-blocking)
       loadExternalFormsConfig();
 
-      // Helper: upload a single receipt file to Firebase Storage
-      async function uploadReceiptFile(teamId, file) {
+      const maxReceiptFiles = 6;
+
+      function randomRequestToken() {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+          return window.crypto.randomUUID().replace(/-/g, "").slice(0, 12);
+        }
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      }
+
+      function createReimbursementRequestId() {
+        return "reimb_" + Date.now().toString(36) + "_" + randomRequestToken();
+      }
+
+      function sanitizeReceiptFileName(name) {
+        const safeName = String(name || "receipt").replace(/[^\w.\-]/g, "_");
+        return safeName || "receipt";
+      }
+
+      function storedReceiptFileName(file, index) {
+        const order = String(index + 1).padStart(2, "0");
+        return order + "_" + randomRequestToken() + "_" + sanitizeReceiptFileName(file.name);
+      }
+
+      async function uploadReceiptFile(teamId, requestId, file, index) {
         if (!file) return null;
         if (!storage) {
           console.warn("uploadReceiptFile: storage not initialized; skipping upload.");
           return null;
         }
 
-        const safeName = file.name.replace(/[^\w.\-]/g, "_");
-        const requestId = "reimb_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+        const safeName = storedReceiptFileName(file, index);
         const path = "teams/" + teamId + "/external_attachments/reimbursements/" + requestId + "/" + safeName;
 
         const rootRef = storage.ref();
@@ -630,6 +651,20 @@
           filePath: path,
           requestId: requestId
         };
+      }
+
+      async function uploadReceiptFiles(teamId, requestId, files) {
+        const uploaded = [];
+        for (let i = 0; i < files.length; i += 1) {
+          const file = files[i];
+          setSubmitProgress("Uploading receipt " + (i + 1) + " of " + files.length + "...");
+          const attachmentInfo = await uploadReceiptFile(teamId, requestId, file, i);
+          if (!attachmentInfo || !attachmentInfo.filePath) {
+            throw new Error("Receipt upload did not return a Storage path.");
+          }
+          uploaded.push(attachmentInfo);
+        }
+        return uploaded;
       }
 
       // Payment method UI
@@ -760,31 +795,43 @@
 
         startSubmitting("Preparing your reimbursement request...");
 
-        // Upload attachment (required)
-        let attachmentInfo = null;
+        // Upload receipts (required)
+        let uploadedReceipts = [];
+        const requestId = createReimbursementRequestId();
         try {
-          const file = receiptInput && receiptInput.files && receiptInput.files[0]
-            ? receiptInput.files[0]
-            : null;
+          const receiptFiles = receiptInput && receiptInput.files
+            ? Array.from(receiptInput.files)
+            : [];
 
-          if (!file) {
+          if (receiptFiles.length === 0) {
             finishSubmitting();
-            showError("Please upload a receipt before submitting.");
+            showError("Please upload at least one receipt before submitting.");
             return;
           }
 
-          setSubmitProgress("Uploading your receipt...");
-          attachmentInfo = await uploadReceiptFile(teamId, file);
+          if (receiptFiles.length > maxReceiptFiles) {
+            finishSubmitting();
+            showError("Please upload no more than " + maxReceiptFiles + " receipts.");
+            return;
+          }
+
+          uploadedReceipts = await uploadReceiptFiles(teamId, requestId, receiptFiles);
         } catch (uploadErr) {
-          console.error("uploadReceiptFile error", uploadErr);
+          console.error("uploadReceiptFiles error", uploadErr);
           finishSubmitting();
-          showError("There was an error uploading your receipt. Please try again.");
+          showError("There was an error uploading your receipts. Please try again.");
           return;
         }
 
-        const attachments = attachmentInfo && attachmentInfo.filePath
-          ? [attachmentInfo.filePath]
-          : [];
+        const attachments = uploadedReceipts
+          .map((info) => info.filePath)
+          .filter((path) => !!path);
+
+        if (attachments.length !== uploadedReceipts.length || attachments.length === 0) {
+          finishSubmitting();
+          showError("There was an error preparing your uploaded receipts. Please try again.");
+          return;
+        }
 
         const payload = {
           teamId: teamId,
@@ -802,7 +849,7 @@
           bankRoutingNumber: bankRoutingNumber,
           bankAccountNumber: bankAccountNumber,
           attachments: attachments,
-          clientRequestId: attachmentInfo ? attachmentInfo.requestId : null
+          clientRequestId: requestId
         };
 
         try {
