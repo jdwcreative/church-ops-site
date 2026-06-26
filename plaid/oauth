@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Returning to ChurchOps</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <article class="content-card" style="margin-top: 48px;">
+      <div class="section-label">Bank Connection</div>
+      <h1>Return to ChurchOps</h1>
+      <p>
+        Your bank connection is ready to continue in the ChurchOps app. If the app did not open
+        automatically, reopen ChurchOps and return to Bank Connection.
+      </p>
+      <p><a class="button-link primary" href="churchopshub://open?target=bank">Open ChurchOps</a></p>
+    </article>
+  </div>
+</body>
+</html>

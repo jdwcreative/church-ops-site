@@ -22,6 +22,10 @@
           {
             "/": "/open",
             "comment": "Open extensionless ChurchOps notification links in the app."
+          },
+          {
+            "/": "/plaid/oauth",
+            "comment": "Return Plaid bank OAuth flows to ChurchOps."
           }
         ]
       }
