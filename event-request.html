@@ -703,6 +703,7 @@
               <select id="structuredCampus" name="structuredCampus">
                 <option value="">Select a Campus</option>
               </select>
+              <div id="singleCampusHelp" class="help" style="display:none;">Campus selected automatically for this team.</div>
             </div>
           </div>
 
@@ -1062,6 +1063,7 @@
 
       function populateCampuses(campuses) {
         const select = domById("structuredCampus");
+        const singleCampusHelp = domById("singleCampusHelp");
         select.innerHTML = "<option value=\"\">Select a Campus</option>";
 
         campuses.forEach(function (campus) {
@@ -1070,6 +1072,29 @@
           option.textContent = campus.name;
           select.appendChild(option);
         });
+
+        const usableCampuses = campuses.filter(function (campus) {
+          return campus && typeof campus.name === "string" && campus.name.trim() !== "";
+        });
+
+        if (usableCampuses.length === 1) {
+          select.value = usableCampuses[0].name;
+          if (singleCampusHelp) singleCampusHelp.style.display = "block";
+        } else if (singleCampusHelp) {
+          singleCampusHelp.style.display = "none";
+        }
+      }
+
+      function applySingleCampusDefault() {
+        const usableCampuses = state.campuses.filter(function (campus) {
+          return campus && typeof campus.name === "string" && campus.name.trim() !== "";
+        });
+
+        if (usableCampuses.length === 1) {
+          domById("structuredCampus").value = usableCampuses[0].name;
+          const singleCampusHelp = domById("singleCampusHelp");
+          if (singleCampusHelp) singleCampusHelp.style.display = "block";
+        }
       }
 
       function renderRoomsForCampus() {
@@ -1524,6 +1549,7 @@
 
           form.reset();
           domById("structuredCampus").value = "";
+          applySingleCampusDefault();
           setEstimateDisclaimer(state.disclaimer);
           syncTablesChairsVisibility();
           renderRoomsForCampus();
