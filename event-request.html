@@ -167,6 +167,7 @@
     input[type="email"],
     input[type="tel"],
     input[type="datetime-local"],
+    input[type="date"],
     input[type="number"],
     select,
     textarea {
@@ -300,6 +301,49 @@
       font-size: 12px;
       color: var(--text-muted);
       font-weight: 400;
+    }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .schedule-card {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface-strong);
+    }
+
+    .schedule-card-title {
+      margin-bottom: 12px;
+    }
+
+    .schedule-card-title strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.25;
+      color: var(--text-main);
+    }
+
+    .schedule-card-title span {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--text-muted);
+    }
+
+    .date-time-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 150px;
+      gap: 10px;
+    }
+
+    .date-time-controls label {
+      font-size: 12px;
     }
 
     .estimate-card {
@@ -690,6 +734,11 @@
         grid-template-columns: 1fr;
       }
 
+      .schedule-grid,
+      .date-time-controls {
+        grid-template-columns: 1fr;
+      }
+
       .step-progress {
         grid-template-columns: 1fr 1fr;
       }
@@ -907,25 +956,79 @@
           </div>
         </div>
 
-        <div class="field-row">
-          <div class="field">
-            <label for="startDateTime">Start Date &amp; Time <span class="req">*</span></label>
-            <input id="startDateTime" name="startDateTime" type="datetime-local" required />
+        <div class="schedule-grid">
+          <div class="schedule-card">
+            <div class="schedule-card-title">
+              <strong>Event Starts <span class="req">*</span></strong>
+              <span>When guests should arrive or the event begins.</span>
+            </div>
+            <input id="startDateTime" name="startDateTime" type="hidden" required />
+            <div class="date-time-controls">
+              <div>
+                <label for="startDate">Date <span class="req">*</span></label>
+                <input id="startDate" name="startDate" type="date" />
+              </div>
+              <div>
+                <label for="startTime">Time <span class="req">*</span></label>
+                <select id="startTime" name="startTime"></select>
+              </div>
+            </div>
           </div>
-          <div class="field">
-            <label for="endDateTime">End Date &amp; Time <span class="req">*</span></label>
-            <input id="endDateTime" name="endDateTime" type="datetime-local" required />
+
+          <div class="schedule-card">
+            <div class="schedule-card-title">
+              <strong>Event Ends <span class="req">*</span></strong>
+              <span>When the event is expected to finish.</span>
+            </div>
+            <input id="endDateTime" name="endDateTime" type="hidden" required />
+            <div class="date-time-controls">
+              <div>
+                <label for="endDate">Date <span class="req">*</span></label>
+                <input id="endDate" name="endDate" type="date" />
+              </div>
+              <div>
+                <label for="endTime">Time <span class="req">*</span></label>
+                <select id="endTime" name="endTime"></select>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="field-row">
-          <div class="field">
-            <label for="setupStartDateTime">Requested Setup Start (Optional)</label>
-            <input id="setupStartDateTime" name="setupStartDateTime" type="datetime-local" />
+        <div class="schedule-grid">
+          <div class="schedule-card">
+            <div class="schedule-card-title">
+              <strong>Requested Setup Start</strong>
+              <span>Optional. Use if you need access before the event.</span>
+            </div>
+            <input id="setupStartDateTime" name="setupStartDateTime" type="hidden" />
+            <div class="date-time-controls">
+              <div>
+                <label for="setupStartDate">Date</label>
+                <input id="setupStartDate" name="setupStartDate" type="date" />
+              </div>
+              <div>
+                <label for="setupStartTime">Time</label>
+                <select id="setupStartTime" name="setupStartTime"></select>
+              </div>
+            </div>
           </div>
-          <div class="field">
-            <label for="breakdownEndDateTime">Requested Breakdown End (Optional)</label>
-            <input id="breakdownEndDateTime" name="breakdownEndDateTime" type="datetime-local" />
+
+          <div class="schedule-card">
+            <div class="schedule-card-title">
+              <strong>Requested Breakdown End</strong>
+              <span>Optional. Use if cleanup/load-out needs extra time.</span>
+            </div>
+            <input id="breakdownEndDateTime" name="breakdownEndDateTime" type="hidden" />
+            <div class="date-time-controls">
+              <div>
+                <label for="breakdownEndDate">Date</label>
+                <input id="breakdownEndDate" name="breakdownEndDate" type="date" />
+              </div>
+              <div>
+                <label for="breakdownEndTime">Time</label>
+                <select id="breakdownEndTime" name="breakdownEndTime"></select>
+              </div>
+            </div>
           </div>
         </div>
         </section>
@@ -1057,6 +1160,12 @@
       };
 
       const FINAL_STEP_INDEX = 3;
+      const dateTimePairs = [
+        { hiddenId: "startDateTime", dateId: "startDate", timeId: "startTime", required: true },
+        { hiddenId: "endDateTime", dateId: "endDate", timeId: "endTime", required: true },
+        { hiddenId: "setupStartDateTime", dateId: "setupStartDate", timeId: "setupStartTime", required: false },
+        { hiddenId: "breakdownEndDateTime", dateId: "breakdownEndDate", timeId: "breakdownEndTime", required: false }
+      ];
 
       function formatMoney(cents) {
         const dollars = (Number(cents || 0) / 100);
@@ -1121,6 +1230,63 @@
       function fieldValue(id) {
         const el = domById(id);
         return el ? el.value.trim() : "";
+      }
+
+      function timeLabel(value) {
+        const parts = value.split(":");
+        const hour = Number(parts[0] || 0);
+        const minute = Number(parts[1] || 0);
+        const suffix = hour >= 12 ? "PM" : "AM";
+        const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+        return displayHour + ":" + String(minute).padStart(2, "0") + " " + suffix;
+      }
+
+      function populateTimeSelect(select) {
+        select.innerHTML = "<option value=\"\">Select Time</option>";
+        for (let minutes = 0; minutes < 24 * 60; minutes += 15) {
+          const hour = Math.floor(minutes / 60);
+          const minute = minutes % 60;
+          const value = String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = timeLabel(value);
+          select.appendChild(option);
+        }
+      }
+
+      function setupTimeSelects() {
+        dateTimePairs.forEach(function (pair) {
+          const select = domById(pair.timeId);
+          if (select) populateTimeSelect(select);
+        });
+      }
+
+      function syncDateTimePair(pair) {
+        const dateValue = fieldValue(pair.dateId);
+        const timeValue = fieldValue(pair.timeId);
+        const hidden = domById(pair.hiddenId);
+        if (!hidden) return;
+        hidden.value = dateValue && timeValue ? dateValue + "T" + timeValue : "";
+      }
+
+      function syncAllDateTimePairs() {
+        dateTimePairs.forEach(syncDateTimePair);
+      }
+
+      function dateTimePairByHiddenId(hiddenId) {
+        return dateTimePairs.find(function (pair) { return pair.hiddenId === hiddenId; }) || null;
+      }
+
+      function missingDateTimeField(pair) {
+        if (!fieldValue(pair.dateId)) return pair.dateId;
+        if (!fieldValue(pair.timeId)) return pair.timeId;
+        return pair.hiddenId;
+      }
+
+      function hasPartialDateTime(pair) {
+        const hasDate = !!fieldValue(pair.dateId);
+        const hasTime = !!fieldValue(pair.timeId);
+        return hasDate !== hasTime;
       }
 
       function focusField(id) {
@@ -1209,6 +1375,8 @@
         }
 
         if (index === 2) {
+          syncAllDateTimePairs();
+
           if (!fieldValue("requesterType")) {
             showStepError("Please choose whether you are staff, a member, or other.", "requesterType");
             return false;
@@ -1228,7 +1396,8 @@
           const startDateTime = fieldValue("startDateTime");
           const endDateTime = fieldValue("endDateTime");
           if (!startDateTime || !endDateTime) {
-            showStepError("Please provide both start and end date/time.", !startDateTime ? "startDateTime" : "endDateTime");
+            const missingPair = !startDateTime ? dateTimePairByHiddenId("startDateTime") : dateTimePairByHiddenId("endDateTime");
+            showStepError("Please provide both start and end date/time.", missingPair ? missingDateTimeField(missingPair) : null);
             return false;
           }
 
@@ -1241,12 +1410,22 @@
 
           const setupStartDateTime = fieldValue("setupStartDateTime");
           const breakdownEndDateTime = fieldValue("breakdownEndDateTime");
+          const setupPair = dateTimePairByHiddenId("setupStartDateTime");
+          const breakdownPair = dateTimePairByHiddenId("breakdownEndDateTime");
+          if (setupPair && hasPartialDateTime(setupPair)) {
+            showStepError("Please provide both setup date and setup time, or leave both blank.", missingDateTimeField(setupPair));
+            return false;
+          }
+          if (breakdownPair && hasPartialDateTime(breakdownPair)) {
+            showStepError("Please provide both breakdown date and breakdown time, or leave both blank.", missingDateTimeField(breakdownPair));
+            return false;
+          }
           if (setupStartDateTime && isNaN(new Date(setupStartDateTime).getTime())) {
-            showStepError("Please provide a valid setup date/time.", "setupStartDateTime");
+            showStepError("Please provide a valid setup date/time.", setupPair ? missingDateTimeField(setupPair) : null);
             return false;
           }
           if (breakdownEndDateTime && isNaN(new Date(breakdownEndDateTime).getTime())) {
-            showStepError("Please provide a valid breakdown date/time.", "breakdownEndDateTime");
+            showStepError("Please provide a valid breakdown date/time.", breakdownPair ? missingDateTimeField(breakdownPair) : null);
             return false;
           }
           return true;
@@ -1473,6 +1652,7 @@
       }
 
       function estimateInputsReady() {
+        syncAllDateTimePairs();
         if (!state.pricingReady) return false;
 
         const requesterType = domById("requesterType").value.trim();
@@ -1495,6 +1675,7 @@
       }
 
       function buildEstimatePayload() {
+        syncAllDateTimePairs();
         return {
           teamId: teamId,
           requesterType: domById("requesterType").value.trim(),
@@ -1663,6 +1844,7 @@
 
       loadExternalFormsConfig();
       loadPublicEventSetup();
+      setupTimeSelects();
 
       const phoneInput = domById("requesterPhone");
       phoneInput.addEventListener("input", function () {
@@ -1682,10 +1864,20 @@
       domById("requesterType").addEventListener("change", queueEstimateRefresh);
       domById("eventNature").addEventListener("change", queueEstimateRefresh);
       domById("expectedAttendance").addEventListener("input", queueEstimateRefresh);
-      domById("startDateTime").addEventListener("change", queueEstimateRefresh);
-      domById("endDateTime").addEventListener("change", queueEstimateRefresh);
-      domById("setupStartDateTime").addEventListener("change", queueEstimateRefresh);
-      domById("breakdownEndDateTime").addEventListener("change", queueEstimateRefresh);
+      dateTimePairs.forEach(function (pair) {
+        [pair.dateId, pair.timeId].forEach(function (id) {
+          const control = domById(id);
+          if (!control) return;
+          control.addEventListener("change", function () {
+            syncDateTimePair(pair);
+            queueEstimateRefresh();
+          });
+          control.addEventListener("input", function () {
+            syncDateTimePair(pair);
+            queueEstimateRefresh();
+          });
+        });
+      });
       domById("needsRooms").addEventListener("change", queueEstimateRefresh);
       domById("needsTeardown").addEventListener("change", queueEstimateRefresh);
       domById("needsAV").addEventListener("change", queueEstimateRefresh);
@@ -1729,6 +1921,7 @@
       form.addEventListener("submit", async function (evt) {
         evt.preventDefault();
         clearMessages();
+        syncAllDateTimePairs();
 
         if (state.currentStep !== FINAL_STEP_INDEX) {
           if (validateStep(state.currentStep)) {
@@ -1895,6 +2088,7 @@
           }
 
           form.reset();
+          syncAllDateTimePairs();
           domById("structuredCampus").value = "";
           applySingleCampusDefault();
           setEstimateDisclaimer(state.disclaimer);
