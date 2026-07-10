@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Request a Private Event – ChurchOps</title>
+  <title>Facility Event Request – ChurchOps</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -449,10 +449,10 @@
 <body>
   <div class="page">
     <div class="card">
-      <div class="eyebrow">Private / External Event Request</div>
-      <h1>Request a Private Event</h1>
+      <div class="eyebrow">External Event Request</div>
+      <h1>Facility Event Request</h1>
       <p class="intro">
-        Use this form to request a private event at our church. We’ll review your request, confirm availability,
+        Use this form to request an event at our church. We’ll review your request, confirm availability,
         and follow up with any next steps needed to move forward.
       </p>
 
@@ -499,21 +499,21 @@
 
         <div class="field-row">
           <div class="field">
-            <label for="title">Event Name / Title <span class="req">*</span></label>
-            <input id="title" name="title" type="text" required />
+            <label for="title">Event Name (Optional)</label>
+            <input id="title" name="title" type="text" />
           </div>
         </div>
 
         <div class="field-row">
           <div class="field">
-            <label for="eventNature">Nature of Event</label>
-            <select id="eventNature" name="eventNature">
+            <label for="eventNature">Nature of Event <span class="req">*</span></label>
+            <select id="eventNature" name="eventNature" required>
               <option value="">Select One</option>
-              <option value="memorial_service">Memorial / Funeral Service</option>
+              <option value="birthday_party">Birthday Party</option>
               <option value="wedding">Wedding</option>
               <option value="meeting">Meeting / Training</option>
               <option value="community_event">Community Event</option>
-              <option value="private_event">Private Event</option>
+              <option value="memorial_service">Memorial / Funeral Service</option>
               <option value="other">Other</option>
             </select>
           </div>
@@ -528,19 +528,8 @@
 
         <div class="field-row">
           <div class="field">
-            <label for="expectedAttendance">Estimated Attendance</label>
-            <input id="expectedAttendance" name="expectedAttendance" type="number" min="1" step="1" placeholder="e.g. 40" />
-          </div>
-          <div class="field">
-            <label for="guestCountRange">Guest Count Range</label>
-            <select id="guestCountRange" name="guestCountRange">
-              <option value="">Select a Range</option>
-              <option value="up_to_50">Up to 50 Guests</option>
-              <option value="50_100">50-100 Guests</option>
-              <option value="100_150">100-150 Guests</option>
-              <option value="150_200">150-200 Guests</option>
-              <option value="over_200">Over 200 Guests</option>
-            </select>
+            <label for="expectedAttendance">Estimated Attendance <span class="req">*</span></label>
+            <input id="expectedAttendance" name="expectedAttendance" type="number" min="1" step="1" placeholder="e.g. 40" required />
           </div>
         </div>
 
@@ -997,6 +986,7 @@
         const endDateTime = domById("endDateTime").value;
 
         if (!requesterType || !startDateTime || !endDateTime) return false;
+        if (parseCount("expectedAttendance") <= 0) return false;
         if (!currentCampus()) return false;
         if (selectedRoomIds().length === 0) return false;
 
@@ -1016,7 +1006,6 @@
           requesterType: domById("requesterType").value.trim(),
           eventNature: domById("eventNature").value.trim() || null,
           eventNatureLabel: selectedOptionText("eventNature"),
-          guestCountRange: domById("guestCountRange").value.trim() || null,
           expectedAttendance: domById("expectedAttendance").value.trim()
             ? Number(domById("expectedAttendance").value.trim())
             : null,
@@ -1197,7 +1186,6 @@
       domById("structuredCampus").addEventListener("change", renderRoomsForCampus);
       domById("requesterType").addEventListener("change", queueEstimateRefresh);
       domById("eventNature").addEventListener("change", queueEstimateRefresh);
-      domById("guestCountRange").addEventListener("change", queueEstimateRefresh);
       domById("expectedAttendance").addEventListener("input", queueEstimateRefresh);
       domById("startDateTime").addEventListener("change", queueEstimateRefresh);
       domById("endDateTime").addEventListener("change", queueEstimateRefresh);
@@ -1246,14 +1234,14 @@
         const eventNature = domById("eventNature").value.trim();
         const eventNatureLabel = selectedOptionText("eventNature");
         const orgName = domById("orgName").value.trim();
-        const title = domById("title").value.trim();
+        const titleInput = domById("title").value.trim();
+        const title = titleInput || eventNatureLabel || "Event Request";
         const description = domById("description").value.trim();
         const startDateTime = domById("startDateTime").value;
         const endDateTime = domById("endDateTime").value;
         const setupStartDateTime = domById("setupStartDateTime").value;
         const breakdownEndDateTime = domById("breakdownEndDateTime").value;
         const expectedAttendanceStr = domById("expectedAttendance").value.trim();
-        const guestCountRange = domById("guestCountRange").value.trim();
         const setupNeeded = domById("needsRooms").checked;
         const teardownNeeded = domById("needsTeardown").checked;
         const avNeeded = domById("needsAV").checked;
@@ -1269,7 +1257,8 @@
         if (!requesterEmail) { showError("Please enter your email."); return; }
         if (!requesterPhone) { showError("Please enter your phone number."); return; }
         if (!requesterType) { showError("Please choose whether you are staff, a member, or other."); return; }
-        if (!title) { showError("Please enter an event name."); return; }
+        if (!eventNature) { showError("Please choose the nature of event."); return; }
+        if (parseCount("expectedAttendance") <= 0) { showError("Please enter estimated attendance."); return; }
         if (!startDateTime || !endDateTime) {
           showError("Please provide both start and end date/time.");
           return;
@@ -1347,7 +1336,7 @@
           campusId: campusId,
           roomIds: roomIds,
           roomNames: roomNames,
-          guestCountRange: guestCountRange || null,
+          guestCountRange: null,
           expectedAttendance: expectedAttendance,
           startDate: startDate.toISOString(),
           endDate: endDate.toISOString(),
