@@ -166,7 +166,6 @@
     input[type="text"],
     input[type="email"],
     input[type="tel"],
-    input[type="datetime-local"],
     input[type="date"],
     input[type="number"],
     select,
@@ -216,6 +215,7 @@
 
     .checkbox-row {
       display: flex;
+      flex-wrap: wrap;
       align-items: flex-start;
       gap: 10px;
       font-size: 13px;
@@ -240,10 +240,57 @@
       line-height: 1.35;
     }
 
+    .info-button {
+      width: 22px;
+      height: 22px;
+      border: 1px solid rgba(31, 117, 167, 0.28);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(31, 117, 167, 0.06);
+    }
+
+    .info-button:hover,
+    .info-button[aria-expanded="true"] {
+      border-color: rgba(31, 117, 167, 0.45);
+      background: var(--accent-soft);
+    }
+
+    .info-panel {
+      flex: 0 0 calc(100% - 31px);
+      box-sizing: border-box;
+      margin: 1px 0 0 31px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
     .checkbox-row:has(input:checked) {
       border-color: rgba(31, 117, 167, 0.38);
       background: var(--accent-soft);
       box-shadow: 0 8px 18px rgba(31, 117, 167, 0.08);
+    }
+
+    .checkbox-row.is-locked,
+    .checkbox-row.is-locked:has(input:checked) {
+      border-color: rgba(52, 199, 89, 0.38);
+      background: rgba(52, 199, 89, 0.08);
+      box-shadow: 0 8px 18px rgba(52, 199, 89, 0.08);
+    }
+
+    .checkbox-row.is-locked input {
+      cursor: not-allowed;
     }
 
     .checkbox-group {
@@ -428,6 +475,35 @@
 
     .estimate-line strong {
       white-space: nowrap;
+    }
+
+    .estimate-line-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .estimate-line-title strong {
+      white-space: normal;
+    }
+
+    .estimate-line .info-button {
+      width: 20px;
+      height: 20px;
+      font-size: 11px;
+      flex: 0 0 auto;
+    }
+
+    .estimate-line-info {
+      max-width: 430px;
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(31, 117, 167, 0.07);
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.45;
     }
 
     .estimate-line-meta {
@@ -1041,26 +1117,50 @@
               <div class="checkbox-row">
                 <input id="needsRooms" name="needsRooms" type="checkbox" />
                 <label for="needsRooms">Room / Space Setup</label>
+                <button type="button" class="info-button" data-info-target="needsRoomsInfo" aria-expanded="false" aria-label="More info about Room / Space Setup">i</button>
+                <div id="needsRoomsInfo" class="info-panel" hidden>
+                  Covers preparing the selected room layout and approved setup needs before the event.
+                </div>
               </div>
               <div class="checkbox-row">
                 <input id="needsTeardown" name="needsTeardown" type="checkbox" />
                 <label for="needsTeardown">Teardown Assistance</label>
+                <button type="button" class="info-button" data-info-target="needsTeardownInfo" aria-expanded="false" aria-label="More info about Teardown Assistance">i</button>
+                <div id="needsTeardownInfo" class="info-panel" hidden>
+                  Covers post-event reset or teardown help for the requested room setup.
+                </div>
               </div>
               <div class="checkbox-row">
                 <input id="needsAV" name="needsAV" type="checkbox" />
                 <label for="needsAV">Tech / AV Support (Estimated by Event Duration)</label>
+                <button type="button" class="info-button" data-info-target="needsAVInfo" aria-expanded="false" aria-label="More info about Tech and AV Support">i</button>
+                <div id="needsAVInfo" class="info-panel" hidden>
+                  Covers requested sound, screens, media, or production support. This is estimated from the event duration.
+                </div>
               </div>
               <div class="checkbox-row">
                 <input id="needsCleanup" name="needsCleanup" type="checkbox" />
                 <label for="needsCleanup">Cleanup Service</label>
+                <button type="button" class="info-button" data-info-target="needsCleanupInfo" aria-expanded="false" aria-label="More info about Cleanup Service">i</button>
+                <div id="needsCleanupInfo" class="info-panel" hidden>
+                  Covers additional facility cleaning needs beyond a normal room reset.
+                </div>
               </div>
               <div class="checkbox-row">
                 <input id="needsTablesAndChairs" name="needsTablesAndChairs" type="checkbox" />
                 <label for="needsTablesAndChairs">Tables / Chairs Needed</label>
+                <button type="button" class="info-button" data-info-target="needsTablesAndChairsInfo" aria-expanded="false" aria-label="More info about Tables and Chairs">i</button>
+                <div id="needsTablesAndChairsInfo" class="info-panel" hidden>
+                  Covers setup and breakdown of requested tables and chairs based on the event size.
+                </div>
               </div>
               <div class="checkbox-row">
                 <input id="needsCafe" name="needsCafe" type="checkbox" />
                 <label for="needsCafe">Cafe Service</label>
+                <button type="button" class="info-button" data-info-target="needsCafeInfo" aria-expanded="false" aria-label="More info about Cafe Service">i</button>
+                <div id="needsCafeInfo" class="info-panel" hidden>
+                  Covers standard cafe service and selected cafe add-ons based on the event details.
+                </div>
               </div>
               <div class="help">You can choose more than one if needed.</div>
             </div>
@@ -1167,6 +1267,34 @@
         { hiddenId: "breakdownEndDateTime", dateId: "breakdownEndDate", timeId: "breakdownEndTime", required: false }
       ];
 
+      const SUPPORT_LOCKED_FOR_OTHER = ["needsRooms", "needsTeardown"];
+      const ESTIMATE_LINE_LABELS = {
+        damage_deposit: "Damage Deposit",
+        setup: "Room / Space Setup",
+        teardown: "Teardown Assistance",
+        cleanup: "Cleanup Service",
+        tables_chairs_setup: "Tables / Chairs Setup and Breakdown",
+        av: "Tech / AV Support",
+        cafe_base: "Cafe Standard Service",
+        cafe_attendance: "Cafe Attendance",
+        cafe_additional_hours: "Cafe Additional Hours",
+        cafe_custom_syrups: "Cafe Custom Syrups"
+      };
+      const ESTIMATE_LINE_INFO = {
+        room: "Room rental is based on the selected room and requester type.",
+        damage_deposit: "Damage Deposit is included when the team requires a refundable or payable deposit for this requester type.",
+        setup: "Room / Space Setup covers preparing the requested room layout before the event.",
+        teardown: "Teardown Assistance covers resetting or breaking down the room after the event.",
+        cleanup: "Cleanup Service covers additional facility cleaning needs beyond a normal room reset.",
+        tables_chairs_setup: "Tables / Chairs Setup and Breakdown is based on the event's guest count band.",
+        av: "Tech / AV Support is estimated from the event duration when sound, screens, or production help is requested.",
+        building_attendant: "Building Attendants are required for most requester types and are estimated from guest count and event duration.",
+        cafe_base: "Cafe Standard Service covers the base cafe service package.",
+        cafe_attendance: "Cafe Attendance applies the per-person cafe charge to the selected cafe guest count.",
+        cafe_additional_hours: "Cafe Additional Hours applies when cafe service extends beyond the standard service window.",
+        cafe_custom_syrups: "Cafe Custom Syrups covers requested custom syrup add-ons."
+      };
+
       function formatMoney(cents) {
         const dollars = (Number(cents || 0) / 100);
         return new Intl.NumberFormat("en-US", {
@@ -1243,7 +1371,7 @@
 
       function populateTimeSelect(select) {
         select.innerHTML = "<option value=\"\">Select Time</option>";
-        for (let minutes = 0; minutes < 24 * 60; minutes += 15) {
+        for (let minutes = 0; minutes < 24 * 60; minutes += 30) {
           const hour = Math.floor(minutes / 60);
           const minute = minutes % 60;
           const value = String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
@@ -1258,6 +1386,23 @@
         dateTimePairs.forEach(function (pair) {
           const select = domById(pair.timeId);
           if (select) populateTimeSelect(select);
+        });
+      }
+
+      function bindInfoToggle(button, panel) {
+        if (!button || !panel || button.dataset.infoBound === "true") return;
+        button.dataset.infoBound = "true";
+        button.addEventListener("click", function () {
+          const isOpen = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", String(!isOpen));
+          panel.hidden = isOpen;
+        });
+      }
+
+      function setupInfoToggles(root) {
+        const scope = root || document;
+        scope.querySelectorAll("[data-info-target]").forEach(function (button) {
+          bindInfoToggle(button, domById(button.getAttribute("data-info-target")));
         });
       }
 
@@ -1456,6 +1601,42 @@
         domById("estimateTotal").textContent = formatMoney(0);
       }
 
+      function titleCaseEstimateLabel(value) {
+        return String(value || "").trim().replace(/[A-Za-z][A-Za-z']*/g, function (word) {
+          const lower = word.toLowerCase();
+          if (lower === "av") return "AV";
+          if (["and", "or", "by", "of"].includes(lower)) return lower;
+          return lower.charAt(0).toUpperCase() + lower.slice(1);
+        });
+      }
+
+      function displayEstimateLineLabel(item) {
+        const code = String(item && item.code ? item.code : "");
+        if (code === "room") {
+          return String(item && item.label ? item.label : "").trim();
+        }
+        if (ESTIMATE_LINE_LABELS[code]) {
+          return ESTIMATE_LINE_LABELS[code];
+        }
+        return titleCaseEstimateLabel(item && item.label ? item.label : "");
+      }
+
+      function estimateLineInfo(item) {
+        const code = String(item && item.code ? item.code : "");
+        return ESTIMATE_LINE_INFO[code] || "";
+      }
+
+      function createInlineInfoButton(panelId, label) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "info-button";
+        button.setAttribute("data-info-target", panelId);
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-label", "More info about " + label);
+        button.textContent = "i";
+        return button;
+      }
+
       function renderEstimate(estimate) {
         if (!estimate || estimate.status !== "available") {
           const reason =
@@ -1477,11 +1658,40 @@
           row.className = "estimate-line";
 
           const left = document.createElement("div");
-          left.innerHTML =
-            "<strong>" + escapeHtml(item.label || "") + "</strong>" +
-            "<span class=\"estimate-line-meta\">" +
-            escapeHtml(formatQuantity(item.quantity, item.unitLabel) + " x " + formatMoney(item.rateCents)) +
-            "</span>";
+          const label = displayEstimateLineLabel(item);
+          const title = document.createElement("div");
+          title.className = "estimate-line-title";
+
+          const titleText = document.createElement("strong");
+          titleText.textContent = label;
+          title.appendChild(titleText);
+
+          const infoText = estimateLineInfo(item);
+          if (infoText) {
+            const panelId = "estimateLineInfo" + String(lineItemsEl.children.length);
+            const infoButton = createInlineInfoButton(panelId, label);
+            const infoPanel = document.createElement("div");
+            infoPanel.id = panelId;
+            infoPanel.className = "estimate-line-info";
+            infoPanel.hidden = true;
+            infoPanel.textContent = infoText;
+            title.appendChild(infoButton);
+            left.appendChild(title);
+            bindInfoToggle(infoButton, infoPanel);
+
+            const meta = document.createElement("span");
+            meta.className = "estimate-line-meta";
+            meta.textContent = formatQuantity(item.quantity, item.unitLabel) + " x " + formatMoney(item.rateCents);
+            left.appendChild(meta);
+            left.appendChild(infoPanel);
+          } else {
+            left.appendChild(title);
+
+            const meta = document.createElement("span");
+            meta.className = "estimate-line-meta";
+            meta.textContent = formatQuantity(item.quantity, item.unitLabel) + " x " + formatMoney(item.rateCents);
+            left.appendChild(meta);
+          }
 
           const right = document.createElement("strong");
           right.textContent = formatMoney(item.amountCents);
@@ -1547,6 +1757,24 @@
       function syncCafeVisibility() {
         const visible = domById("needsCafe").checked;
         domById("cafeSection").style.display = visible ? "block" : "none";
+        queueEstimateRefresh();
+      }
+
+      function syncRequesterSupportRequirements() {
+        const requiresSetupSupport = fieldValue("requesterType") === "other";
+        SUPPORT_LOCKED_FOR_OTHER.forEach(function (id) {
+          const input = domById(id);
+          const row = input ? input.closest(".checkbox-row") : null;
+          if (!input) return;
+
+          if (requiresSetupSupport) {
+            input.checked = true;
+          }
+          input.disabled = requiresSetupSupport;
+          if (row) {
+            row.classList.toggle("is-locked", requiresSetupSupport);
+          }
+        });
         queueEstimateRefresh();
       }
 
@@ -1861,7 +2089,7 @@
       });
 
       domById("structuredCampus").addEventListener("change", renderRoomsForCampus);
-      domById("requesterType").addEventListener("change", queueEstimateRefresh);
+      domById("requesterType").addEventListener("change", syncRequesterSupportRequirements);
       domById("eventNature").addEventListener("change", queueEstimateRefresh);
       domById("expectedAttendance").addEventListener("input", queueEstimateRefresh);
       dateTimePairs.forEach(function (pair) {
@@ -2092,6 +2320,7 @@
           domById("structuredCampus").value = "";
           applySingleCampusDefault();
           setEstimateDisclaimer(state.disclaimer);
+          syncRequesterSupportRequirements();
           syncTablesChairsVisibility();
           renderRoomsForCampus();
           setCurrentStep(0);
@@ -2104,6 +2333,8 @@
         }
       });
 
+      setupInfoToggles(document);
+      syncRequesterSupportRequirements();
       syncTablesChairsVisibility();
       setCurrentStep(0, false);
     })();
