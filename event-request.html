@@ -503,17 +503,114 @@
       100% { transform: translateX(250%); }
     }
 
-    .actions {
+    .step-progress {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 26px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface-strong);
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 10px;
+      border-radius: 13px;
+      color: var(--text-muted);
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .step-item.is-active {
+      color: var(--text-main);
+      background: #ffffff;
+      box-shadow: 0 8px 18px rgba(17, 40, 55, 0.08);
+    }
+
+    .step-item.is-complete {
+      color: #176b4d;
+    }
+
+    .step-number {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: inherit;
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .step-item.is-active .step-number {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .step-item.is-complete .step-number {
+      background: #dcf7e8;
+      border-color: #9bd8b5;
+      color: #176b4d;
+    }
+
+    .step-copy {
+      min-width: 0;
+    }
+
+    .step-copy strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .step-copy span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .form-step {
+      display: none;
+    }
+
+    .form-step.is-active {
+      display: block;
+    }
+
+    .step-actions {
       margin-top: 20px;
       padding-top: 18px;
       border-top: 1px solid rgba(31, 41, 51, 0.08);
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       gap: 10px;
       align-items: center;
     }
 
-    .button-primary {
+    .step-action-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .button-primary,
+    .button-secondary {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -530,17 +627,30 @@
       transition: box-shadow 0.15s ease, transform 0.08s ease, background-color 0.15s ease;
     }
 
+    .button-secondary {
+      background: #ffffff;
+      color: var(--accent-strong);
+      border: 1px solid rgba(31, 117, 167, 0.24);
+      box-shadow: none;
+    }
+
     .button-primary:hover {
       background: #16658f;
       box-shadow: 0 14px 28px rgba(31, 117, 167, 0.32);
     }
 
-    .button-primary:active {
+    .button-secondary:hover {
+      background: var(--accent-soft);
+    }
+
+    .button-primary:active,
+    .button-secondary:active {
       transform: translateY(1px);
       box-shadow: 0 4px 8px rgba(37, 99, 242, 0.2);
     }
 
-    .button-primary[disabled] {
+    .button-primary[disabled],
+    .button-secondary[disabled] {
       opacity: 0.5;
       cursor: default;
       box-shadow: none;
@@ -580,11 +690,26 @@
         grid-template-columns: 1fr;
       }
 
-      .actions {
-        justify-content: stretch;
+      .step-progress {
+        grid-template-columns: 1fr 1fr;
       }
 
-      .button-primary {
+      .step-copy span {
+        display: none;
+      }
+
+      .step-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .step-action-group {
+        width: 100%;
+        flex-direction: column-reverse;
+      }
+
+      .button-primary,
+      .button-secondary {
         width: 100%;
       }
     }
@@ -617,6 +742,38 @@
         </div>
 
         <form id="eventForm" novalidate>
+        <div class="step-progress" aria-label="Request steps">
+          <div class="step-item is-active" data-step-indicator="0">
+            <span class="step-number">1</span>
+            <span class="step-copy">
+              <strong>Contact</strong>
+              <span>Who to follow up with</span>
+            </span>
+          </div>
+          <div class="step-item" data-step-indicator="1">
+            <span class="step-number">2</span>
+            <span class="step-copy">
+              <strong>Event</strong>
+              <span>What you are planning</span>
+            </span>
+          </div>
+          <div class="step-item" data-step-indicator="2">
+            <span class="step-number">3</span>
+            <span class="step-copy">
+              <strong>Space</strong>
+              <span>Rooms and timing</span>
+            </span>
+          </div>
+          <div class="step-item" data-step-indicator="3">
+            <span class="step-number">4</span>
+            <span class="step-copy">
+              <strong>Estimate</strong>
+              <span>Support and review</span>
+            </span>
+          </div>
+        </div>
+
+        <section class="form-step is-active" data-step="0">
         <div class="section-label">Contact Information</div>
 
         <div class="field-row">
@@ -644,7 +801,9 @@
             <input id="orgName" name="orgName" type="text" />
           </div>
         </div>
+        </section>
 
+        <section class="form-step" data-step="1">
         <div class="section-label">Event Details</div>
 
         <div class="field-row">
@@ -683,10 +842,12 @@
             <div class="help attendance-help">Use your best estimate. This number helps calculate seating, setup, and attendant pricing.</div>
           </div>
         </div>
+        </section>
 
-        <div class="section-label">Estimate Details</div>
+        <section class="form-step" data-step="2">
+        <div class="section-label">Space &amp; Timing</div>
         <p class="section-note">
-          Fill out the fields in this section to generate a live estimate. Requester type, rooms, date/time, and support selections all affect pricing.
+          Choose the requester type, rooms, and schedule. These details help calculate the estimate on the final step.
         </p>
 
         <div class="field-row">
@@ -767,7 +928,9 @@
             <input id="breakdownEndDateTime" name="breakdownEndDateTime" type="datetime-local" />
           </div>
         </div>
+        </section>
 
+        <section class="form-step" data-step="3">
         <div class="section-label">Support Needed</div>
         <div class="field-row">
           <div class="field">
@@ -852,8 +1015,14 @@
           </div>
         </div>
 
-        <div class="actions">
-          <button type="submit" id="submitButton" class="button-primary">Submit Event Request</button>
+        </section>
+
+        <div class="step-actions">
+          <button type="button" id="backButton" class="button-secondary">Back</button>
+          <div class="step-action-group">
+            <button type="button" id="nextButton" class="button-primary">Continue</button>
+            <button type="submit" id="submitButton" class="button-primary">Submit Event Request</button>
+          </div>
         </div>
         </form>
       </div>
@@ -871,7 +1040,7 @@
       const ESTIMATE_URL = "https://us-central1-crswlkoperations.cloudfunctions.net/estimateExternalEventRequest";
       const SUBMIT_URL = "https://us-central1-crswlkoperations.cloudfunctions.net/submitExternalEventRequest";
       const ESTIMATE_REQUIREMENTS_HINT =
-        "Fill out the fields in the Estimate Details section to generate a live estimate.";
+        "Complete the previous steps to generate a live estimate.";
 
       function domById(id) { return document.getElementById(id); }
 
@@ -883,8 +1052,11 @@
         campuses: [],
         disclaimer: DEFAULT_DISCLAIMER,
         estimateToken: 0,
-        estimateTimer: null
+        estimateTimer: null,
+        currentStep: 0
       };
+
+      const FINAL_STEP_INDEX = 3;
 
       function formatMoney(cents) {
         const dollars = (Number(cents || 0) / 100);
@@ -944,6 +1116,151 @@
         if (el) {
           el.style.display = "none";
         }
+      }
+
+      function fieldValue(id) {
+        const el = domById(id);
+        return el ? el.value.trim() : "";
+      }
+
+      function focusField(id) {
+        const el = domById(id);
+        if (el && typeof el.focus === "function") {
+          window.setTimeout(function () { el.focus(); }, 0);
+        }
+      }
+
+      function showStepError(message, fieldId) {
+        showError(message);
+        if (fieldId) focusField(fieldId);
+      }
+
+      function setCurrentStep(index, shouldScroll) {
+        const nextStep = Math.max(0, Math.min(FINAL_STEP_INDEX, index));
+        state.currentStep = nextStep;
+
+        document.querySelectorAll(".form-step").forEach(function (step) {
+          step.classList.toggle("is-active", Number(step.dataset.step) === nextStep);
+        });
+
+        document.querySelectorAll("[data-step-indicator]").forEach(function (item) {
+          const itemStep = Number(item.dataset.stepIndicator);
+          item.classList.toggle("is-active", itemStep === nextStep);
+          item.classList.toggle("is-complete", itemStep < nextStep);
+        });
+
+        const backButton = domById("backButton");
+        const nextButton = domById("nextButton");
+        const submitButton = domById("submitButton");
+
+        if (backButton) {
+          backButton.disabled = nextStep === 0;
+          backButton.style.display = nextStep === 0 ? "none" : "inline-flex";
+        }
+        if (nextButton) {
+          nextButton.style.display = nextStep === FINAL_STEP_INDEX ? "none" : "inline-flex";
+        }
+        if (submitButton) {
+          submitButton.style.display = nextStep === FINAL_STEP_INDEX ? "inline-flex" : "none";
+        }
+
+        if (nextStep === FINAL_STEP_INDEX) {
+          queueEstimateRefresh();
+        }
+
+        const formBody = document.querySelector(".form-body");
+        if (formBody && shouldScroll !== false) {
+          formBody.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      function validateStep(index) {
+        if (index === 0) {
+          if (!fieldValue("requesterName")) {
+            showStepError("Please enter your name.", "requesterName");
+            return false;
+          }
+          const emailInput = domById("requesterEmail");
+          if (!fieldValue("requesterEmail") || (emailInput && !emailInput.checkValidity())) {
+            showStepError("Please enter a valid email address.", "requesterEmail");
+            return false;
+          }
+          if (!fieldValue("requesterPhone")) {
+            showStepError("Please enter your phone number.", "requesterPhone");
+            return false;
+          }
+          return true;
+        }
+
+        if (index === 1) {
+          if (!fieldValue("eventNature")) {
+            showStepError("Please choose the nature of event.", "eventNature");
+            return false;
+          }
+          if (!fieldValue("description")) {
+            showStepError("Please describe what this event is for.", "description");
+            return false;
+          }
+          if (parseCount("expectedAttendance") <= 0) {
+            showStepError("Please enter estimated attendance.", "expectedAttendance");
+            return false;
+          }
+          return true;
+        }
+
+        if (index === 2) {
+          if (!fieldValue("requesterType")) {
+            showStepError("Please choose whether you are staff, a member, or other.", "requesterType");
+            return false;
+          }
+
+          if (state.pricingReady) {
+            if (!currentCampus()) {
+              showStepError("Please choose a campus.", "structuredCampus");
+              return false;
+            }
+            if (selectedRoomIds().length === 0) {
+              showStepError("Please choose at least one room.", "roomList");
+              return false;
+            }
+          }
+
+          const startDateTime = fieldValue("startDateTime");
+          const endDateTime = fieldValue("endDateTime");
+          if (!startDateTime || !endDateTime) {
+            showStepError("Please provide both start and end date/time.", !startDateTime ? "startDateTime" : "endDateTime");
+            return false;
+          }
+
+          const startDate = new Date(startDateTime);
+          const endDate = new Date(endDateTime);
+          if (!(endDate > startDate)) {
+            showStepError("End date/time must be after the start date/time.", "endDateTime");
+            return false;
+          }
+
+          const setupStartDateTime = fieldValue("setupStartDateTime");
+          const breakdownEndDateTime = fieldValue("breakdownEndDateTime");
+          if (setupStartDateTime && isNaN(new Date(setupStartDateTime).getTime())) {
+            showStepError("Please provide a valid setup date/time.", "setupStartDateTime");
+            return false;
+          }
+          if (breakdownEndDateTime && isNaN(new Date(breakdownEndDateTime).getTime())) {
+            showStepError("Please provide a valid breakdown date/time.", "breakdownEndDateTime");
+            return false;
+          }
+          return true;
+        }
+
+        if (index === FINAL_STEP_INDEX) {
+          if (domById("needsTablesAndChairs").checked && parseCount("tablesCount") <= 0 && parseCount("chairsCount") <= 0) {
+            showStepError("Enter at least one table or chair quantity.", "tablesCount");
+            return false;
+          }
+          return true;
+        }
+
+        return true;
       }
 
       function setEstimateDisclaimer(text) {
@@ -1211,6 +1528,7 @@
 
       async function refreshEstimate() {
         if (!teamId) return;
+        if (state.currentStep !== FINAL_STEP_INDEX) return;
 
         if (!state.pricingReady) {
           setEstimateHint("Room-based pricing is still being configured for this form. You can still submit a request and our team will follow up with an estimate.");
@@ -1380,8 +1698,21 @@
       domById("cafeCustomSyrupCount").addEventListener("input", queueEstimateRefresh);
 
       const form = domById("eventForm");
+      const backButton = domById("backButton");
+      const nextButton = domById("nextButton");
       const submitButton = domById("submitButton");
       const defaultSubmitButtonText = submitButton.textContent.trim();
+
+      backButton.addEventListener("click", function () {
+        clearMessages();
+        setCurrentStep(state.currentStep - 1);
+      });
+
+      nextButton.addEventListener("click", function () {
+        clearMessages();
+        if (!validateStep(state.currentStep)) return;
+        setCurrentStep(state.currentStep + 1);
+      });
 
       function startSubmitting(message) {
         submitButton.disabled = true;
@@ -1398,6 +1729,17 @@
       form.addEventListener("submit", async function (evt) {
         evt.preventDefault();
         clearMessages();
+
+        if (state.currentStep !== FINAL_STEP_INDEX) {
+          if (validateStep(state.currentStep)) {
+            setCurrentStep(state.currentStep + 1);
+          }
+          return;
+        }
+
+        if (!validateStep(FINAL_STEP_INDEX)) {
+          return;
+        }
 
         if (!teamId) {
           showError("This form is missing the team id. Please use the link provided by your church.");
@@ -1558,6 +1900,7 @@
           setEstimateDisclaimer(state.disclaimer);
           syncTablesChairsVisibility();
           renderRoomsForCampus();
+          setCurrentStep(0);
           showSuccess("Thank you. Your event request has been submitted, and our team will follow up soon.");
         } catch (err) {
           console.error("submitExternalEventRequest error", err);
@@ -1568,6 +1911,7 @@
       });
 
       syncTablesChairsVisibility();
+      setCurrentStep(0, false);
     })();
   </script>
 </body>
