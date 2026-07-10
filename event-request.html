@@ -651,6 +651,10 @@
                 <input id="needsTablesAndChairs" name="needsTablesAndChairs" type="checkbox" />
                 <label for="needsTablesAndChairs">Tables / Chairs Needed</label>
               </div>
+              <div class="checkbox-row">
+                <input id="needsCafe" name="needsCafe" type="checkbox" />
+                <label for="needsCafe">Cafe Service</label>
+              </div>
               <div class="help">You can choose more than one if needed.</div>
             </div>
           </div>
@@ -668,6 +672,20 @@
             </div>
           </div>
           <div class="help">Enter at least one table or chair quantity if this option is selected.</div>
+        </div>
+
+        <div id="cafeSection" style="display:none;">
+          <div class="field-row">
+            <div class="field">
+              <label for="cafeGuestCount">Cafe Guest Count</label>
+              <input id="cafeGuestCount" name="cafeGuestCount" type="number" min="0" step="1" placeholder="Use attendance if blank" />
+            </div>
+            <div class="field">
+              <label for="cafeCustomSyrupCount">Custom Syrups</label>
+              <input id="cafeCustomSyrupCount" name="cafeCustomSyrupCount" type="number" min="0" step="1" placeholder="0" />
+            </div>
+          </div>
+          <div class="help">Cafe pricing uses the event duration plus the guest count attending cafe service.</div>
         </div>
 
         <div class="estimate-card">
@@ -888,6 +906,12 @@
         queueEstimateRefresh();
       }
 
+      function syncCafeVisibility() {
+        const visible = domById("needsCafe").checked;
+        domById("cafeSection").style.display = visible ? "block" : "none";
+        queueEstimateRefresh();
+      }
+
       function setLocationMode(pricingReady) {
         state.pricingReady = pricingReady === true;
         domById("structuredLocationSection").style.display = state.pricingReady ? "block" : "none";
@@ -1012,7 +1036,10 @@
           needsCleanup: domById("needsCleanup").checked,
           needsTablesAndChairs: domById("needsTablesAndChairs").checked,
           tablesCount: parseCount("tablesCount"),
-          chairsCount: parseCount("chairsCount")
+          chairsCount: parseCount("chairsCount"),
+          needsCafe: domById("needsCafe").checked,
+          cafeGuestCount: parseCount("cafeGuestCount") || null,
+          cafeCustomSyrupCount: parseCount("cafeCustomSyrupCount")
         };
       }
 
@@ -1183,6 +1210,9 @@
       domById("needsTablesAndChairs").addEventListener("change", syncTablesChairsVisibility);
       domById("tablesCount").addEventListener("input", queueEstimateRefresh);
       domById("chairsCount").addEventListener("input", queueEstimateRefresh);
+      domById("needsCafe").addEventListener("change", syncCafeVisibility);
+      domById("cafeGuestCount").addEventListener("input", queueEstimateRefresh);
+      domById("cafeCustomSyrupCount").addEventListener("input", queueEstimateRefresh);
 
       const form = domById("eventForm");
       const submitButton = domById("submitButton");
@@ -1231,6 +1261,9 @@
         const needsTablesAndChairs = domById("needsTablesAndChairs").checked;
         const tablesCount = parseCount("tablesCount");
         const chairsCount = parseCount("chairsCount");
+        const needsCafe = domById("needsCafe").checked;
+        const cafeGuestCount = parseCount("cafeGuestCount");
+        const cafeCustomSyrupCount = parseCount("cafeCustomSyrupCount");
 
         if (!requesterName) { showError("Please enter your name."); return; }
         if (!requesterEmail) { showError("Please enter your email."); return; }
@@ -1327,7 +1360,10 @@
           needsCleanup: cleanupNeeded,
           needsTablesAndChairs: needsTablesAndChairs,
           tablesCount: needsTablesAndChairs ? tablesCount : null,
-          chairsCount: needsTablesAndChairs ? chairsCount : null
+          chairsCount: needsTablesAndChairs ? chairsCount : null,
+          needsCafe: needsCafe,
+          cafeGuestCount: needsCafe && cafeGuestCount > 0 ? cafeGuestCount : null,
+          cafeCustomSyrupCount: needsCafe ? cafeCustomSyrupCount : null
         };
 
         startSubmitting("Submitting your event request...");
