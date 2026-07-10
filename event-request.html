@@ -375,7 +375,7 @@
       color: var(--text-main);
     }
 
-    .schedule-card-title span {
+    .schedule-card-title > span {
       display: block;
       margin-top: 3px;
       font-size: 12px;
@@ -1086,37 +1086,37 @@
         </div>
 
         <div class="schedule-grid">
-          <div class="schedule-card">
+          <div id="setupScheduleCard" class="schedule-card" hidden>
             <div class="schedule-card-title">
-              <strong>Requested Setup Start</strong>
-              <span>Optional. Use if you need access before the event.</span>
+              <strong>Requested Setup Start <span class="req">*</span></strong>
+              <span>Required. Choose when setup access should begin.</span>
             </div>
-            <input id="setupStartDateTime" name="setupStartDateTime" type="hidden" />
+            <input id="setupStartDateTime" name="setupStartDateTime" type="hidden" required />
             <div class="date-time-controls">
               <div>
-                <label for="setupStartDate">Date</label>
+                <label for="setupStartDate">Date <span class="req">*</span></label>
                 <input id="setupStartDate" name="setupStartDate" type="date" />
               </div>
               <div>
-                <label for="setupStartTime">Time</label>
+                <label for="setupStartTime">Time <span class="req">*</span></label>
                 <select id="setupStartTime" name="setupStartTime"></select>
               </div>
             </div>
           </div>
 
-          <div class="schedule-card">
+          <div id="breakdownScheduleCard" class="schedule-card" hidden>
             <div class="schedule-card-title">
-              <strong>Requested Breakdown End</strong>
-              <span>Optional. Use if cleanup/load-out needs extra time.</span>
+              <strong>Requested Breakdown End <span class="req">*</span></strong>
+              <span>Required. Choose when cleanup/load-out should finish.</span>
             </div>
-            <input id="breakdownEndDateTime" name="breakdownEndDateTime" type="hidden" />
+            <input id="breakdownEndDateTime" name="breakdownEndDateTime" type="hidden" required />
             <div class="date-time-controls">
               <div>
-                <label for="breakdownEndDate">Date</label>
+                <label for="breakdownEndDate">Date <span class="req">*</span></label>
                 <input id="breakdownEndDate" name="breakdownEndDate" type="date" />
               </div>
               <div>
-                <label for="breakdownEndTime">Time</label>
+                <label for="breakdownEndTime">Time <span class="req">*</span></label>
                 <select id="breakdownEndTime" name="breakdownEndTime"></select>
               </div>
             </div>
@@ -1278,9 +1278,12 @@
       const dateTimePairs = [
         { hiddenId: "startDateTime", dateId: "startDate", timeId: "startTime", required: true },
         { hiddenId: "endDateTime", dateId: "endDate", timeId: "endTime", required: true },
-        { hiddenId: "setupStartDateTime", dateId: "setupStartDate", timeId: "setupStartTime", required: false },
-        { hiddenId: "breakdownEndDateTime", dateId: "breakdownEndDate", timeId: "breakdownEndTime", required: false }
+        { hiddenId: "setupStartDateTime", dateId: "setupStartDate", timeId: "setupStartTime", required: true },
+        { hiddenId: "breakdownEndDateTime", dateId: "breakdownEndDate", timeId: "breakdownEndTime", required: true }
       ];
+
+      const TIME_OPTION_START_MINUTES = 6 * 60;
+      const TIME_OPTION_END_MINUTES = (23 * 60) + 30;
 
       const SUPPORT_LOCKED_FOR_OTHER = ["needsRooms", "needsTeardown"];
       const ESTIMATE_LINE_LABELS = {
@@ -1386,7 +1389,7 @@
 
       function populateTimeSelect(select) {
         select.innerHTML = "<option value=\"\">Select Time</option>";
-        for (let minutes = 0; minutes < 24 * 60; minutes += 30) {
+        for (let minutes = TIME_OPTION_START_MINUTES; minutes <= TIME_OPTION_END_MINUTES; minutes += 30) {
           const hour = Math.floor(minutes / 60);
           const minute = minutes % 60;
           const value = String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
@@ -1431,6 +1434,34 @@
 
       function syncAllDateTimePairs() {
         dateTimePairs.forEach(syncDateTimePair);
+      }
+
+      function setDateIfBlank(targetId, sourceId) {
+        const target = domById(targetId);
+        const sourceValue = fieldValue(sourceId);
+        if (target && sourceValue && !target.value) {
+          target.value = sourceValue;
+        }
+      }
+
+      function syncDependentScheduleCards() {
+        const hasEventStart = !!fieldValue("startDateTime");
+        const hasEventEnd = !!fieldValue("endDateTime");
+        const setupCard = domById("setupScheduleCard");
+        const breakdownCard = domById("breakdownScheduleCard");
+
+        if (setupCard) setupCard.hidden = !hasEventStart;
+        if (breakdownCard) breakdownCard.hidden = !hasEventEnd;
+
+        if (hasEventStart) {
+          setDateIfBlank("setupStartDate", "startDate");
+        }
+        if (hasEventEnd) {
+          setDateIfBlank("breakdownEndDate", "endDate");
+        }
+
+        syncDateTimePair(dateTimePairByHiddenId("setupStartDateTime"));
+        syncDateTimePair(dateTimePairByHiddenId("breakdownEndDateTime"));
       }
 
       function dateTimePairByHiddenId(hiddenId) {
@@ -1527,6 +1558,20 @@
         setCurrentStep(nextStep);
       }
 
+      function validateStepsForSubmit() {
+        for (let step = 0; step <= FINAL_STEP_INDEX; step += 1) {
+          if (state.currentStep !== step) {
+            setCurrentStep(step, false);
+          }
+          if (!validateStep(step)) {
+            return false;
+          }
+        }
+
+        setCurrentStep(FINAL_STEP_INDEX, false);
+        return true;
+      }
+
       function validateStep(index) {
         if (index === 0) {
           if (!fieldValue("requesterName")) {
@@ -1563,6 +1608,7 @@
 
         if (index === 2) {
           syncAllDateTimePairs();
+          syncDependentScheduleCards();
 
           if (!fieldValue("requesterType")) {
             showStepError("Please choose whether you are staff, a member, or other.", "requesterType");
@@ -1599,20 +1645,31 @@
           const breakdownEndDateTime = fieldValue("breakdownEndDateTime");
           const setupPair = dateTimePairByHiddenId("setupStartDateTime");
           const breakdownPair = dateTimePairByHiddenId("breakdownEndDateTime");
-          if (setupPair && hasPartialDateTime(setupPair)) {
-            showStepError("Please provide both setup date and setup time, or leave both blank.", missingDateTimeField(setupPair));
+          if (!setupStartDateTime) {
+            showStepError("Please provide the requested setup start date/time.", setupPair ? missingDateTimeField(setupPair) : null);
             return false;
           }
-          if (breakdownPair && hasPartialDateTime(breakdownPair)) {
-            showStepError("Please provide both breakdown date and breakdown time, or leave both blank.", missingDateTimeField(breakdownPair));
+          if (!breakdownEndDateTime) {
+            showStepError("Please provide the requested breakdown end date/time.", breakdownPair ? missingDateTimeField(breakdownPair) : null);
             return false;
           }
-          if (setupStartDateTime && isNaN(new Date(setupStartDateTime).getTime())) {
+
+          const setupStartDate = new Date(setupStartDateTime);
+          const breakdownEndDate = new Date(breakdownEndDateTime);
+          if (isNaN(setupStartDate.getTime())) {
             showStepError("Please provide a valid setup date/time.", setupPair ? missingDateTimeField(setupPair) : null);
             return false;
           }
-          if (breakdownEndDateTime && isNaN(new Date(breakdownEndDateTime).getTime())) {
+          if (isNaN(breakdownEndDate.getTime())) {
             showStepError("Please provide a valid breakdown date/time.", breakdownPair ? missingDateTimeField(breakdownPair) : null);
+            return false;
+          }
+          if (setupStartDate > startDate) {
+            showStepError("Setup start cannot be after the event start.", setupPair ? missingDateTimeField(setupPair) : null);
+            return false;
+          }
+          if (breakdownEndDate < endDate) {
+            showStepError("Breakdown end cannot be before the event end.", breakdownPair ? missingDateTimeField(breakdownPair) : null);
             return false;
           }
           return true;
@@ -2140,10 +2197,12 @@
           if (!control) return;
           control.addEventListener("change", function () {
             syncDateTimePair(pair);
+            syncDependentScheduleCards();
             queueEstimateRefresh();
           });
           control.addEventListener("input", function () {
             syncDateTimePair(pair);
+            syncDependentScheduleCards();
             queueEstimateRefresh();
           });
         });
@@ -2198,15 +2257,9 @@
         evt.preventDefault();
         clearMessages();
         syncAllDateTimePairs();
+        syncDependentScheduleCards();
 
-        if (state.currentStep !== FINAL_STEP_INDEX) {
-          if (validateStep(state.currentStep)) {
-            setCurrentStep(state.currentStep + 1);
-          }
-          return;
-        }
-
-        if (!validateStep(FINAL_STEP_INDEX)) {
+        if (!validateStepsForSubmit()) {
           return;
         }
 
@@ -2248,10 +2301,22 @@
         if (!eventNature) { showError("Please choose the nature of event."); return; }
         if (parseCount("expectedAttendance") <= 0) { showError("Please enter estimated attendance."); return; }
         if (!startDateTime || !endDateTime) {
+          setCurrentStep(2, false);
           showError("Please provide both start and end date/time.");
           return;
         }
+        if (!setupStartDateTime) {
+          setCurrentStep(2, false);
+          showStepError("Please provide the requested setup start date/time.", "setupStartTime");
+          return;
+        }
+        if (!breakdownEndDateTime) {
+          setCurrentStep(2, false);
+          showStepError("Please provide the requested breakdown end date/time.", "breakdownEndTime");
+          return;
+        }
         if (!description) {
+          setCurrentStep(1, false);
           showError("Please describe what this event is for.");
           return;
         }
@@ -2262,13 +2327,15 @@
           showError("End date/time must be after the start date/time.");
           return;
         }
-        const setupStartDate = setupStartDateTime ? new Date(setupStartDateTime) : null;
-        if (setupStartDate && isNaN(setupStartDate.getTime())) {
+        const setupStartDate = new Date(setupStartDateTime);
+        if (isNaN(setupStartDate.getTime())) {
+          setCurrentStep(2, false);
           showError("Please provide a valid setup date/time.");
           return;
         }
-        const breakdownEndDate = breakdownEndDateTime ? new Date(breakdownEndDateTime) : null;
-        if (breakdownEndDate && isNaN(breakdownEndDate.getTime())) {
+        const breakdownEndDate = new Date(breakdownEndDateTime);
+        if (isNaN(breakdownEndDate.getTime())) {
+          setCurrentStep(2, false);
           showError("Please provide a valid breakdown date/time.");
           return;
         }
@@ -2328,8 +2395,8 @@
           expectedAttendance: expectedAttendance,
           startDate: startDate.toISOString(),
           endDate: endDate.toISOString(),
-          setupStartDate: setupStartDate ? setupStartDate.toISOString() : null,
-          breakdownEndDate: breakdownEndDate ? breakdownEndDate.toISOString() : null,
+          setupStartDate: setupStartDate.toISOString(),
+          breakdownEndDate: breakdownEndDate.toISOString(),
           needsSetup: setupNeeded,
           needsRooms: setupNeeded,
           needsTeardown: teardownNeeded,
@@ -2365,6 +2432,7 @@
 
           form.reset();
           syncAllDateTimePairs();
+          syncDependentScheduleCards();
           domById("structuredCampus").value = "";
           applySingleCampusDefault();
           setEstimateDisclaimer(state.disclaimer);
@@ -2382,6 +2450,7 @@
       });
 
       setupInfoToggles(document);
+      syncDependentScheduleCards();
       syncRequesterSupportRequirements();
       syncTablesChairsVisibility();
       setCurrentStep(0, false);
