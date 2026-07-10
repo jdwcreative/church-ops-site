@@ -635,6 +635,11 @@
     }
 
     .step-item {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font: inherit;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -642,7 +647,17 @@
       padding: 10px;
       border-radius: 13px;
       color: var(--text-muted);
+      cursor: pointer;
       transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .step-item:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(31, 117, 167, 0.16);
+    }
+
+    .step-item:hover {
+      background: rgba(255, 255, 255, 0.62);
     }
 
     .step-item.is-active {
@@ -868,34 +883,34 @@
 
         <form id="eventForm" novalidate>
         <div class="step-progress" aria-label="Request steps">
-          <div class="step-item is-active" data-step-indicator="0">
+          <button type="button" class="step-item is-active" data-step-indicator="0">
             <span class="step-number">1</span>
             <span class="step-copy">
               <strong>Contact</strong>
               <span>Who to follow up with</span>
             </span>
-          </div>
-          <div class="step-item" data-step-indicator="1">
+          </button>
+          <button type="button" class="step-item" data-step-indicator="1">
             <span class="step-number">2</span>
             <span class="step-copy">
               <strong>Event</strong>
               <span>What you are planning</span>
             </span>
-          </div>
-          <div class="step-item" data-step-indicator="2">
+          </button>
+          <button type="button" class="step-item" data-step-indicator="2">
             <span class="step-number">3</span>
             <span class="step-copy">
               <strong>Space</strong>
               <span>Rooms and timing</span>
             </span>
-          </div>
-          <div class="step-item" data-step-indicator="3">
+          </button>
+          <button type="button" class="step-item" data-step-indicator="3">
             <span class="step-number">4</span>
             <span class="step-copy">
               <strong>Estimate</strong>
               <span>Support and review</span>
             </span>
-          </div>
+          </button>
         </div>
 
         <section class="form-step is-active" data-step="0">
@@ -1458,6 +1473,11 @@
           const itemStep = Number(item.dataset.stepIndicator);
           item.classList.toggle("is-active", itemStep === nextStep);
           item.classList.toggle("is-complete", itemStep < nextStep);
+          if (itemStep === nextStep) {
+            item.setAttribute("aria-current", "step");
+          } else {
+            item.removeAttribute("aria-current");
+          }
         });
 
         const backButton = domById("backButton");
@@ -1483,6 +1503,28 @@
         if (formBody && shouldScroll !== false) {
           formBody.scrollIntoView({ behavior: "smooth", block: "start" });
         }
+      }
+
+      function navigateToStep(targetStep) {
+        const nextStep = Math.max(0, Math.min(FINAL_STEP_INDEX, Number(targetStep)));
+        if (!Number.isFinite(nextStep) || nextStep === state.currentStep) return;
+
+        clearMessages();
+        if (nextStep < state.currentStep) {
+          setCurrentStep(nextStep);
+          return;
+        }
+
+        for (let step = 0; step < nextStep; step += 1) {
+          if (state.currentStep !== step) {
+            setCurrentStep(step, false);
+          }
+          if (!validateStep(step)) {
+            return;
+          }
+        }
+
+        setCurrentStep(nextStep);
       }
 
       function validateStep(index) {
@@ -2132,6 +2174,12 @@
         clearMessages();
         if (!validateStep(state.currentStep)) return;
         setCurrentStep(state.currentStep + 1);
+      });
+
+      document.querySelectorAll("[data-step-indicator]").forEach(function (item) {
+        item.addEventListener("click", function () {
+          navigateToStep(Number(item.dataset.stepIndicator));
+        });
       });
 
       function startSubmitting(message) {
