@@ -506,6 +506,21 @@
 
         <div class="field-row">
           <div class="field">
+            <label for="eventNature">Nature of Event</label>
+            <select id="eventNature" name="eventNature">
+              <option value="">Select One</option>
+              <option value="memorial_service">Memorial / Funeral Service</option>
+              <option value="wedding">Wedding</option>
+              <option value="meeting">Meeting / Training</option>
+              <option value="community_event">Community Event</option>
+              <option value="private_event">Private Event</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
             <label for="description">What Is This Event For? <span class="req">*</span></label>
             <textarea id="description" name="description" rows="3" required></textarea>
           </div>
@@ -515,6 +530,17 @@
           <div class="field">
             <label for="expectedAttendance">Estimated Attendance</label>
             <input id="expectedAttendance" name="expectedAttendance" type="number" min="1" step="1" placeholder="e.g. 40" />
+          </div>
+          <div class="field">
+            <label for="guestCountRange">Guest Count Range</label>
+            <select id="guestCountRange" name="guestCountRange">
+              <option value="">Select a Range</option>
+              <option value="up_to_50">Up to 50 Guests</option>
+              <option value="50_100">50-100 Guests</option>
+              <option value="100_150">100-150 Guests</option>
+              <option value="150_200">150-200 Guests</option>
+              <option value="over_200">Over 200 Guests</option>
+            </select>
           </div>
         </div>
 
@@ -587,6 +613,17 @@
           <div class="field">
             <label for="endDateTime">End Date &amp; Time <span class="req">*</span></label>
             <input id="endDateTime" name="endDateTime" type="datetime-local" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="setupStartDateTime">Requested Setup Start (Optional)</label>
+            <input id="setupStartDateTime" name="setupStartDateTime" type="datetime-local" />
+          </div>
+          <div class="field">
+            <label for="breakdownEndDateTime">Requested Breakdown End (Optional)</label>
+            <input id="breakdownEndDateTime" name="breakdownEndDateTime" type="datetime-local" />
           </div>
         </div>
 
@@ -837,6 +874,14 @@
         return domById("structuredCampus").value.trim();
       }
 
+      function selectedOptionText(id) {
+        const el = domById(id);
+        if (!el || el.selectedIndex < 0) return null;
+        const option = el.options[el.selectedIndex];
+        const text = option ? option.textContent.trim() : "";
+        return text && el.value.trim() ? text : null;
+      }
+
       function syncTablesChairsVisibility() {
         const visible = domById("needsTablesAndChairs").checked;
         domById("tablesChairsSection").style.display = visible ? "block" : "none";
@@ -945,10 +990,22 @@
         return {
           teamId: teamId,
           requesterType: domById("requesterType").value.trim(),
+          eventNature: domById("eventNature").value.trim() || null,
+          eventNatureLabel: selectedOptionText("eventNature"),
+          guestCountRange: domById("guestCountRange").value.trim() || null,
+          expectedAttendance: domById("expectedAttendance").value.trim()
+            ? Number(domById("expectedAttendance").value.trim())
+            : null,
           campusId: currentCampus() || null,
           roomIds: selectedRoomIds(),
           startDate: new Date(domById("startDateTime").value).toISOString(),
           endDate: new Date(domById("endDateTime").value).toISOString(),
+          setupStartDate: domById("setupStartDateTime").value
+            ? new Date(domById("setupStartDateTime").value).toISOString()
+            : null,
+          breakdownEndDate: domById("breakdownEndDateTime").value
+            ? new Date(domById("breakdownEndDateTime").value).toISOString()
+            : null,
           needsSetup: domById("needsRooms").checked,
           needsAV: domById("needsAV").checked,
           needsTeardown: domById("needsTeardown").checked,
@@ -1112,8 +1169,13 @@
 
       domById("structuredCampus").addEventListener("change", renderRoomsForCampus);
       domById("requesterType").addEventListener("change", queueEstimateRefresh);
+      domById("eventNature").addEventListener("change", queueEstimateRefresh);
+      domById("guestCountRange").addEventListener("change", queueEstimateRefresh);
+      domById("expectedAttendance").addEventListener("input", queueEstimateRefresh);
       domById("startDateTime").addEventListener("change", queueEstimateRefresh);
       domById("endDateTime").addEventListener("change", queueEstimateRefresh);
+      domById("setupStartDateTime").addEventListener("change", queueEstimateRefresh);
+      domById("breakdownEndDateTime").addEventListener("change", queueEstimateRefresh);
       domById("needsRooms").addEventListener("change", queueEstimateRefresh);
       domById("needsTeardown").addEventListener("change", queueEstimateRefresh);
       domById("needsAV").addEventListener("change", queueEstimateRefresh);
@@ -1151,12 +1213,17 @@
         const requesterEmail = domById("requesterEmail").value.trim();
         const requesterPhone = domById("requesterPhone").value.trim();
         const requesterType = domById("requesterType").value.trim();
+        const eventNature = domById("eventNature").value.trim();
+        const eventNatureLabel = selectedOptionText("eventNature");
         const orgName = domById("orgName").value.trim();
         const title = domById("title").value.trim();
         const description = domById("description").value.trim();
         const startDateTime = domById("startDateTime").value;
         const endDateTime = domById("endDateTime").value;
+        const setupStartDateTime = domById("setupStartDateTime").value;
+        const breakdownEndDateTime = domById("breakdownEndDateTime").value;
         const expectedAttendanceStr = domById("expectedAttendance").value.trim();
+        const guestCountRange = domById("guestCountRange").value.trim();
         const setupNeeded = domById("needsRooms").checked;
         const teardownNeeded = domById("needsTeardown").checked;
         const avNeeded = domById("needsAV").checked;
@@ -1183,6 +1250,16 @@
         const endDate = new Date(endDateTime);
         if (!(endDate > startDate)) {
           showError("End date/time must be after the start date/time.");
+          return;
+        }
+        const setupStartDate = setupStartDateTime ? new Date(setupStartDateTime) : null;
+        if (setupStartDate && isNaN(setupStartDate.getTime())) {
+          showError("Please provide a valid setup date/time.");
+          return;
+        }
+        const breakdownEndDate = breakdownEndDateTime ? new Date(breakdownEndDateTime) : null;
+        if (breakdownEndDate && isNaN(breakdownEndDate.getTime())) {
+          showError("Please provide a valid breakdown date/time.");
           return;
         }
 
@@ -1228,6 +1305,8 @@
           requesterEmail: requesterEmail,
           requesterPhone: requesterPhone,
           requesterType: requesterType,
+          eventNature: eventNature || null,
+          eventNatureLabel: eventNatureLabel,
           organizationName: orgName || null,
           description: description,
           locationName: locationName,
@@ -1235,9 +1314,12 @@
           campusId: campusId,
           roomIds: roomIds,
           roomNames: roomNames,
+          guestCountRange: guestCountRange || null,
           expectedAttendance: expectedAttendance,
           startDate: startDate.toISOString(),
           endDate: endDate.toISOString(),
+          setupStartDate: setupStartDate ? setupStartDate.toISOString() : null,
+          breakdownEndDate: breakdownEndDate ? breakdownEndDate.toISOString() : null,
           needsSetup: setupNeeded,
           needsRooms: setupNeeded,
           needsTeardown: teardownNeeded,
