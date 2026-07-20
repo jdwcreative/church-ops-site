@@ -301,6 +301,102 @@
       margin-top: 8px;
     }
 
+    .attachment-drop-zone {
+      padding: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .attachment-drop-zone.is-dragover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .attachment-picker {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .attachment-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .attachment-picker-button {
+      min-height: 32px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f7f9fc;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .attachment-count,
+    .attachment-size {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .attachment-list {
+      display: none;
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f9fbff;
+    }
+
+    .attachment-list.has-items { display: block; }
+
+    .attachment-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .attachment-item:first-child { border-top: none; }
+
+    .attachment-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 13px;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .attachment-remove {
+      border: none;
+      background: transparent;
+      color: #b91c1c;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .attachment-notice {
+      display: none;
+      margin-top: 6px;
+      color: #8b1c1c;
+      font-size: 12px;
+    }
+
     .badge-warning {
       display: inline-flex;
       align-items: center;
@@ -479,13 +575,19 @@
         </div>
 
         <div class="field-row attachment-field">
-          <div class="field">
+          <div id="invoiceDropZone" class="field attachment-drop-zone">
             <label for="invoiceFile">
               Upload Invoice / Attachment (Optional)
             </label>
-            <input id="invoiceFile" name="invoiceFile" type="file" accept=".pdf,image/*" />
+            <div class="attachment-picker">
+              <input id="invoiceFile" class="attachment-input" name="invoiceFile" type="file" accept=".pdf,image/*" multiple />
+              <button id="invoicePickerButton" class="attachment-picker-button" type="button">Choose photos or files</button>
+              <span id="invoiceAttachmentCount" class="attachment-count">No attachments selected</span>
+            </div>
+            <ul id="invoiceAttachmentList" class="attachment-list" aria-live="polite"></ul>
+            <div id="invoiceAttachmentNotice" class="attachment-notice"></div>
             <div class="help">
-              You can attach a PDF or image of your invoice. Max 10 MB.
+              Choose more than once, or drag and drop on desktop. Up to 10 PDFs or images, 10 MB each.
             </div>
           </div>
         </div>
@@ -567,19 +669,135 @@
       const formDisabledNotice = domById("formDisabledNotice");
       const form = domById("invoiceForm");
       const submitButton = domById("submitButton");
+      const invoiceFileInput = domById("invoiceFile");
+      const invoicePickerButton = domById("invoicePickerButton");
+      const invoiceDropZone = domById("invoiceDropZone");
+      const invoiceAttachmentCount = domById("invoiceAttachmentCount");
+      const invoiceAttachmentList = domById("invoiceAttachmentList");
+      const invoiceAttachmentNotice = domById("invoiceAttachmentNotice");
       const defaultSubmitButtonText = submitButton.textContent.trim();
+      const selectedInvoiceFiles = [];
+      const maxInvoiceFiles = 10;
+      let isSubmitting = false;
 
       function startSubmitting(message) {
+        isSubmitting = true;
         submitButton.disabled = true;
         submitButton.textContent = "Submitting...";
+        renderInvoiceFiles();
         setSubmitProgress(message);
       }
 
       function finishSubmitting() {
+        isSubmitting = false;
         submitButton.disabled = false;
         submitButton.textContent = defaultSubmitButtonText;
+        renderInvoiceFiles();
         hideSubmitProgress();
       }
+
+      function invoiceFileKey(file) {
+        return [file.name || "", file.size || 0, file.lastModified || 0].join("|");
+      }
+
+      function invoiceFileSize(bytes) {
+        return bytes < 1024 * 1024
+          ? Math.max(1, Math.round(bytes / 1024)) + " KB"
+          : (bytes / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      function setInvoiceAttachmentNotice(message) {
+        invoiceAttachmentNotice.textContent = message || "";
+        invoiceAttachmentNotice.style.display = message ? "block" : "none";
+      }
+
+      function renderInvoiceFiles() {
+        const count = selectedInvoiceFiles.length;
+        invoiceAttachmentCount.textContent = count === 0
+          ? "No attachments selected"
+          : count + " attachment" + (count === 1 ? "" : "s") + " selected";
+        invoicePickerButton.disabled = isSubmitting || count >= maxInvoiceFiles;
+        invoicePickerButton.textContent = count === 0 ? "Choose photos or files" : "Add more";
+        invoiceAttachmentList.innerHTML = "";
+        invoiceAttachmentList.classList.toggle("has-items", count > 0);
+        selectedInvoiceFiles.forEach(function (file, index) {
+          const item = document.createElement("li");
+          item.className = "attachment-item";
+          const name = document.createElement("span");
+          name.className = "attachment-name";
+          name.textContent = file.name || "Attachment " + (index + 1);
+          const size = document.createElement("span");
+          size.className = "attachment-size";
+          size.textContent = invoiceFileSize(file.size || 0);
+          const remove = document.createElement("button");
+          remove.className = "attachment-remove";
+          remove.type = "button";
+          remove.textContent = "Remove";
+          remove.disabled = isSubmitting;
+          remove.setAttribute("data-index", String(index));
+          item.appendChild(name);
+          item.appendChild(size);
+          item.appendChild(remove);
+          invoiceAttachmentList.appendChild(item);
+        });
+      }
+
+      function addInvoiceFiles(files) {
+        const existingKeys = new Set(selectedInvoiceFiles.map(invoiceFileKey));
+        let notice = "";
+        Array.from(files || []).forEach(function (file) {
+          const fileName = String(file.name || "").toLowerCase();
+          const isSupported = file.type === "application/pdf"
+            || String(file.type || "").startsWith("image/")
+            || /\.(pdf|jpe?g|png|gif|webp|heic|heif)$/i.test(fileName);
+          if (!isSupported) {
+            notice = "Choose PDF or image attachments.";
+          } else if (Number(file.size || 0) > 10 * 1024 * 1024) {
+            notice = "Attachments must be 10 MB or smaller.";
+          } else if (selectedInvoiceFiles.length >= maxInvoiceFiles) {
+            notice = "You can attach up to " + maxInvoiceFiles + " files.";
+          } else if (!existingKeys.has(invoiceFileKey(file))) {
+            selectedInvoiceFiles.push(file);
+            existingKeys.add(invoiceFileKey(file));
+          }
+        });
+        setInvoiceAttachmentNotice(notice);
+        renderInvoiceFiles();
+      }
+
+      invoicePickerButton.addEventListener("click", function () {
+        if (!isSubmitting && selectedInvoiceFiles.length < maxInvoiceFiles) invoiceFileInput.click();
+      });
+      invoiceFileInput.addEventListener("change", function () {
+        addInvoiceFiles(this.files);
+        this.value = "";
+      });
+      invoiceAttachmentList.addEventListener("click", function (evt) {
+        const target = evt.target;
+        if (!target.matches || !target.matches(".attachment-remove") || isSubmitting) return;
+        const index = Number(target.getAttribute("data-index"));
+        if (Number.isInteger(index) && index >= 0 && index < selectedInvoiceFiles.length) {
+          selectedInvoiceFiles.splice(index, 1);
+          setInvoiceAttachmentNotice("");
+          renderInvoiceFiles();
+        }
+      });
+      ["dragenter", "dragover"].forEach(function (eventName) {
+        invoiceDropZone.addEventListener(eventName, function (evt) {
+          evt.preventDefault();
+          if (!isSubmitting) invoiceDropZone.classList.add("is-dragover");
+        });
+      });
+      ["dragleave", "dragend"].forEach(function (eventName) {
+        invoiceDropZone.addEventListener(eventName, function () {
+          invoiceDropZone.classList.remove("is-dragover");
+        });
+      });
+      invoiceDropZone.addEventListener("drop", function (evt) {
+        evt.preventDefault();
+        invoiceDropZone.classList.remove("is-dragover");
+        if (!isSubmitting) addInvoiceFiles(evt.dataTransfer ? evt.dataTransfer.files : []);
+      });
 
       // Initialize Firebase + Firestore + Storage for reading externalForms config and uploads
       let db = null;
@@ -650,21 +868,38 @@
       // Kick off config load (non-blocking)
       loadExternalFormsConfig();
 
-      // Helper to upload the selected file to Storage
-      async function uploadInvoiceFile(teamId, file) {
+      function createInvoiceRequestId() {
+        return "inv_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+      }
+
+      // Helper to upload selected files to Storage under one invoice request folder.
+      async function uploadInvoiceFile(teamId, requestId, file, index) {
         if (!file || !storage) {
           return null;
         }
 
-        const requestId =
-          "inv_" + Date.now() + "_" + Math.random().toString(36).slice(2);
-        const safeName = encodeURIComponent(file.name);
+        const prefix = String(index + 1).padStart(2, "0");
+        const safeName = prefix + "_" + encodeURIComponent(file.name || "invoice");
         const filePath = `teams/${teamId}/external_attachments/${requestId}/${safeName}`;
 
         const ref = storage.ref().child(filePath);
         await ref.put(file);
 
         return { filePath, requestId };
+      }
+
+      async function uploadInvoiceFiles(teamId, requestId, files) {
+        const uploaded = [];
+        for (let i = 0; i < files.length; i += 1) {
+          const file = files[i];
+          setSubmitProgress("Uploading attachment " + (i + 1) + " of " + files.length + "...");
+          const attachmentInfo = await uploadInvoiceFile(teamId, requestId, file, i);
+          if (!attachmentInfo || !attachmentInfo.filePath) {
+            throw new Error("Invoice attachment upload did not return a Storage path.");
+          }
+          uploaded.push(attachmentInfo);
+        }
+        return uploaded;
       }
 
       function updatePaymentUI() {
@@ -791,21 +1026,31 @@
 
         startSubmitting("Preparing your invoice...");
 
-        // Handle optional attachment upload
-        const fileInput = domById("invoiceFile");
-        const file = fileInput && fileInput.files ? fileInput.files[0] : null;
+        // Handle optional attachment uploads
+        const selectedFiles = selectedInvoiceFiles.slice();
 
-        let attachmentInfo = null;
-        if (file) {
+        let uploadedAttachments = [];
+        let clientRequestId = null;
+        if (selectedFiles.length > 0) {
+          clientRequestId = createInvoiceRequestId();
           try {
-            setSubmitProgress("Uploading your attachment...");
-            attachmentInfo = await uploadInvoiceFile(teamId, file);
+            uploadedAttachments = await uploadInvoiceFiles(teamId, clientRequestId, selectedFiles);
           } catch (uploadErr) {
-            console.error("uploadInvoiceFile error", uploadErr);
+            console.error("uploadInvoiceFiles error", uploadErr);
             finishSubmitting();
-            showError("There was an error uploading your attachment. Please try again.");
+            showError("There was an error uploading your attachments. Please try again.");
             return;
           }
+        }
+
+        const attachments = uploadedAttachments
+          .map((info) => info.filePath)
+          .filter((path) => !!path);
+
+        if (attachments.length !== uploadedAttachments.length) {
+          finishSubmitting();
+          showError("There was an error preparing your uploaded attachments. Please try again.");
+          return;
         }
 
         const amountCents = Math.round(Number(amountStr) * 100);
@@ -833,8 +1078,8 @@
             paymentMethod === "direct_deposit" && !useExisting ? account : null,
           payToName: paymentMethod === "mail_check" ? payToName : null,
           mailingAddress: paymentMethod === "mail_check" ? mailingAddress : null,
-          attachments: attachmentInfo ? [attachmentInfo.filePath] : [],
-          clientRequestId: attachmentInfo ? attachmentInfo.requestId : null
+          attachments: attachments,
+          clientRequestId: clientRequestId
         };
 
         setSubmitProgress("Submitting your invoice...");
@@ -862,6 +1107,9 @@
           }
 
           form.reset();
+          selectedInvoiceFiles.splice(0, selectedInvoiceFiles.length);
+          setInvoiceAttachmentNotice("");
+          renderInvoiceFiles();
           updatePaymentUI();
           updateDdFields();
           showSuccess("Thank you! Your invoice has been submitted successfully.");
@@ -872,6 +1120,7 @@
           finishSubmitting();
         }
       });
+      renderInvoiceFiles();
     })();
   </script>
 </body>

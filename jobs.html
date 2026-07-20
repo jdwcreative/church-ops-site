@@ -437,6 +437,15 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      padding: 14px;
+      border: 1px dashed rgba(143, 106, 40, 0.32);
+      border-radius: 16px;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .file-field.is-dragover {
+      border-color: var(--accent);
+      background: rgba(143, 106, 40, 0.08);
     }
 
     input[type="file"] {
@@ -701,10 +710,10 @@
                       required
                     ></textarea>
                   </div>
-                  <div class="field full file-field">
+                  <div id="resumeDropZone" class="field full file-field">
                     <label for="resumeFile">Resume <span class="req">*</span></label>
-                    <input id="resumeFile" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
-                    <div class="field-help">Upload a PDF, DOC, or DOCX file up to 10 MB.</div>
+                    <input id="resumeFile" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                    <div id="resumeFileStatus" class="field-help">Choose a PDF, DOC, or DOCX file up to 10 MB, or drag and drop it here on desktop.</div>
                   </div>
                 </div>
 
@@ -764,12 +773,29 @@
         applicantPhone: document.getElementById("applicantPhone"),
         availability: document.getElementById("availability"),
         references: document.getElementById("references"),
-        resumeFile: document.getElementById("resumeFile")
+        resumeFile: document.getElementById("resumeFile"),
+        resumeDropZone: document.getElementById("resumeDropZone"),
+        resumeFileStatus: document.getElementById("resumeFileStatus")
       };
 
       let boardDisabled = false;
       let jobs = [];
       let selectedJob = null;
+      let selectedResumeFile = null;
+
+      function setResumeFile(file) {
+        const error = file ? validateResumeFile(file) : "";
+        if (error) {
+          selectedResumeFile = null;
+          dom.resumeFile.value = "";
+          dom.resumeFileStatus.textContent = error;
+          return;
+        }
+        selectedResumeFile = file || null;
+        dom.resumeFileStatus.textContent = selectedResumeFile
+          ? (selectedResumeFile.name || "Resume selected")
+          : "Choose a PDF, DOC, or DOCX file up to 10 MB, or drag and drop it here on desktop.";
+      }
 
       function formatLabel(value) {
         return String(value || "")
@@ -933,6 +959,7 @@
         renderBulletList(dom.jobResponsibilities, selectedJob.responsibilities, dom.responsibilitiesSection);
         renderBulletList(dom.jobRequirements, selectedJob.requirements, dom.requirementsSection);
         dom.form.reset();
+        setResumeFile(null);
         setPrimaryState("detail");
         updateUrl(selectedJob);
       }
@@ -1067,7 +1094,7 @@
         const applicantPhone = formatPhoneNumber(dom.applicantPhone.value);
         const availability = dom.availability.value.trim();
         const references = dom.references.value.trim();
-        const file = dom.resumeFile.files && dom.resumeFile.files[0] ? dom.resumeFile.files[0] : null;
+        const file = selectedResumeFile;
 
         if (!applicantName) {
           showError("Please enter your full name.");
@@ -1122,6 +1149,7 @@
           }
 
           dom.form.reset();
+          setResumeFile(null);
           dom.applicantPhone.value = "";
           showSuccess(
             data.confirmationEmailSent === false
@@ -1138,6 +1166,28 @@
 
       dom.applicantPhone.addEventListener("input", function () {
         dom.applicantPhone.value = formatPhoneNumber(dom.applicantPhone.value);
+      });
+
+      dom.resumeFile.addEventListener("change", function () {
+        setResumeFile(this.files && this.files[0] ? this.files[0] : null);
+      });
+
+      ["dragenter", "dragover"].forEach(function (eventName) {
+        dom.resumeDropZone.addEventListener(eventName, function (event) {
+          event.preventDefault();
+          dom.resumeDropZone.classList.add("is-dragover");
+        });
+      });
+      ["dragleave", "dragend"].forEach(function (eventName) {
+        dom.resumeDropZone.addEventListener(eventName, function () {
+          dom.resumeDropZone.classList.remove("is-dragover");
+        });
+      });
+      dom.resumeDropZone.addEventListener("drop", function (event) {
+        event.preventDefault();
+        dom.resumeDropZone.classList.remove("is-dragover");
+        const files = event.dataTransfer ? event.dataTransfer.files : null;
+        setResumeFile(files && files[0] ? files[0] : null);
       });
 
       loadJobsBoard();

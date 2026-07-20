@@ -249,6 +249,18 @@
       line-height: 1.35;
     }
 
+    .receipt-drop-zone {
+      padding: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .receipt-drop-zone.is-dragover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
     .payment-options {
       display: flex;
       flex-wrap: wrap;
@@ -503,17 +515,17 @@
         <!-- Receipts / attachments -->
         <div class="section-label">Receipts (Required)</div>
         <div class="field-row">
-          <div class="field">
+          <div id="receiptDropZone" class="field receipt-drop-zone">
             <label for="receiptFile">Upload Receipts or Invoices</label>
             <div class="receipt-picker">
-              <input id="receiptFile" class="receipt-input" name="receiptFile" type="file" accept=".pdf,image/*" multiple required />
+              <input id="receiptFile" class="receipt-input" name="receiptFile" type="file" accept=".pdf,image/*" multiple />
               <button id="receiptPickerButton" class="file-button" type="button">Choose receipts</button>
               <span id="receiptCount" class="receipt-count">No receipts selected</span>
             </div>
             <ul id="receiptList" class="receipt-list" aria-live="polite"></ul>
             <div id="receiptNotice" class="receipt-notice"></div>
             <div class="help">
-              Attach up to 6 clear photos or PDFs. You can choose more than once before submitting.
+              Choose photos or PDFs, or drag and drop them here on desktop. Up to 10 files, 10 MB each.
             </div>
           </div>
         </div>
@@ -730,7 +742,7 @@
       // Kick off config load (non-blocking)
       loadExternalFormsConfig();
 
-      const maxReceiptFiles = 6;
+      const maxReceiptFiles = 10;
 
       function randomRequestToken() {
         if (window.crypto && typeof window.crypto.randomUUID === "function") {
@@ -844,6 +856,7 @@
       const receiptCount = domById("receiptCount");
       const receiptList = domById("receiptList");
       const receiptNotice = domById("receiptNotice");
+      const receiptDropZone = domById("receiptDropZone");
       const defaultSubmitButtonText = submitButton.textContent.trim();
       const selectedReceiptFiles = [];
       let isSubmitting = false;
@@ -937,9 +950,23 @@
         let added = 0;
         let skippedDuplicates = 0;
         let skippedLimit = 0;
+        let skippedInvalid = 0;
+        let skippedTooLarge = 0;
 
         incomingFiles.forEach((file) => {
           if (!file) {
+            return;
+          }
+          const fileName = String(file.name || "").toLowerCase();
+          const isSupported = file.type === "application/pdf"
+            || String(file.type || "").startsWith("image/")
+            || /\.(pdf|jpe?g|png|gif|webp|heic|heif)$/i.test(fileName);
+          if (!isSupported) {
+            skippedInvalid += 1;
+            return;
+          }
+          if (Number(file.size || 0) > 10 * 1024 * 1024) {
+            skippedTooLarge += 1;
             return;
           }
           const key = receiptFileKey(file);
@@ -956,7 +983,11 @@
           added += 1;
         });
 
-        if (skippedLimit > 0) {
+        if (skippedTooLarge > 0) {
+          setReceiptNotice("Receipts must be 10 MB or smaller.");
+        } else if (skippedInvalid > 0) {
+          setReceiptNotice("Choose PDF or image receipts.");
+        } else if (skippedLimit > 0) {
           setReceiptNotice("You can attach up to " + maxReceiptFiles + " receipts. Extra files were not added.");
         } else if (skippedDuplicates > 0 && added === 0) {
           setReceiptNotice("That receipt is already selected.");
@@ -980,6 +1011,30 @@
         receiptInput.addEventListener("change", function () {
           addReceiptFiles(this.files);
           this.value = "";
+        });
+      }
+
+      if (receiptDropZone) {
+        ["dragenter", "dragover"].forEach(function (eventName) {
+          receiptDropZone.addEventListener(eventName, function (evt) {
+            evt.preventDefault();
+            if (!isSubmitting && selectedReceiptFiles.length < maxReceiptFiles) {
+              receiptDropZone.classList.add("is-dragover");
+            }
+          });
+        });
+        ["dragleave", "dragend"].forEach(function (eventName) {
+          receiptDropZone.addEventListener(eventName, function () {
+            receiptDropZone.classList.remove("is-dragover");
+          });
+        });
+        receiptDropZone.addEventListener("drop", function (evt) {
+          evt.preventDefault();
+          receiptDropZone.classList.remove("is-dragover");
+          if (isSubmitting || selectedReceiptFiles.length >= maxReceiptFiles) {
+            return;
+          }
+          addReceiptFiles(evt.dataTransfer ? evt.dataTransfer.files : []);
         });
       }
 
