@@ -473,6 +473,19 @@
       border-bottom: 0;
     }
 
+    .estimate-line.is-deposit {
+      margin: 5px 0;
+      padding: 11px 12px;
+      border: 1px solid rgba(180, 124, 25, 0.28);
+      border-radius: 12px;
+      background: rgba(255, 244, 214, 0.62);
+    }
+
+    .estimate-line.is-deposit .estimate-line-title strong,
+    .estimate-line.is-deposit > strong {
+      color: #7a4f00;
+    }
+
     .estimate-line strong {
       white-space: nowrap;
     }
@@ -1147,10 +1160,10 @@
               </div>
               <div class="checkbox-row">
                 <input id="needsAV" name="needsAV" type="checkbox" />
-                <label for="needsAV">Tech / AV Support (Estimated by Event Duration)</label>
+                <label for="needsAV">Tech / AV Support (1 Attendant Estimate)</label>
                 <button type="button" class="info-button" data-info-target="needsAVInfo" aria-expanded="false" aria-label="More info about Tech and AV Support">i</button>
                 <div id="needsAVInfo" class="info-panel" hidden>
-                  Covers requested sound, screens, media, or production support. This is estimated from the event duration.
+                  The public estimate includes one tech attendant during event hours. The church determines final staffing after reviewing the event details.
                 </div>
               </div>
               <div class="checkbox-row">
@@ -1207,7 +1220,7 @@
               <input id="cafeCustomSyrupCount" name="cafeCustomSyrupCount" type="number" min="0" step="1" placeholder="0" />
             </div>
           </div>
-          <div class="help">Cafe pricing uses the event duration plus the guest count attending cafe service.</div>
+          <div class="help">Cafe pricing uses the event duration plus the guest count attending cafe service. Time beyond the included two hours is billed in 30-minute increments.</div>
         </div>
 
         <div class="estimate-card">
@@ -1287,12 +1300,12 @@
 
       const SUPPORT_LOCKED_FOR_OTHER = ["needsRooms", "needsTeardown"];
       const ESTIMATE_LINE_LABELS = {
-        damage_deposit: "Damage Deposit",
+        damage_deposit: "Damage Deposit (Included in Estimated Total)",
         setup: "Room / Space Setup",
         teardown: "Teardown Assistance",
         cleanup: "Cleanup Service",
         tables_chairs_setup: "Tables / Chairs Setup and Breakdown",
-        av: "Tech / AV Support",
+        av: "Tech / AV Support (1 Attendant Estimate)",
         cafe_base: "Cafe Standard Service",
         cafe_attendance: "Cafe Attendance",
         cafe_additional_hours: "Cafe Additional Hours",
@@ -1300,16 +1313,16 @@
       };
       const ESTIMATE_LINE_INFO = {
         room: "Room rental is based on the selected room and requester type.",
-        damage_deposit: "Damage Deposit is included when the team requires a refundable or payable deposit for this requester type.",
+        damage_deposit: "This Damage Deposit is included in the Estimated Total. The church will confirm payment and return terms during review.",
         setup: "Room / Space Setup covers preparing the requested room layout before the event.",
         teardown: "Teardown Assistance covers resetting or breaking down the room after the event.",
         cleanup: "Cleanup Service covers additional facility cleaning needs beyond a normal room reset.",
         tables_chairs_setup: "Tables / Chairs Setup and Breakdown follows the event's guest count band.",
-        av: "Tech / AV Support is estimated from the event duration when sound, screens, or production help is requested.",
+        av: "Tech / AV Support includes one attendant during event hours in the public estimate. The church determines final staffing after reviewing the event details.",
         building_attendant: "Building Attendants are estimated from requester type, guest count, and the requested facility access window.",
         cafe_base: "Cafe Standard Service covers the base cafe service package.",
         cafe_attendance: "Cafe Attendance applies the per-person cafe charge to the selected cafe guest count.",
-        cafe_additional_hours: "Cafe Additional Hours applies when cafe service extends beyond the standard service window.",
+        cafe_additional_hours: "Cafe Additional Hours applies after the included two-hour service window and is billed in 30-minute increments.",
         cafe_custom_syrups: "Cafe Custom Syrups covers requested custom syrup add-ons."
       };
 
@@ -1755,6 +1768,9 @@
         lines.forEach(function (item) {
           const row = document.createElement("div");
           row.className = "estimate-line";
+          if (String(item && item.code ? item.code : "") === "damage_deposit") {
+            row.classList.add("is-deposit");
+          }
 
           const left = document.createElement("div");
           const label = displayEstimateLineLabel(item);
