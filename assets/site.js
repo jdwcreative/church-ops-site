@@ -68,14 +68,7 @@
       field.focus();
     }
   });
-  document.getElementById('contact-form')?.addEventListener('submit', event => {
-    event.preventDefault();
-    const values = new FormData(event.currentTarget);
-    const subject = `ChurchOps inquiry: ${values.get('interest')}`;
-    const body = `Hello ChurchOps,\n\nMy name is ${String(values.get('name')).trim()} from ${String(values.get('church')).trim()}.\n\nI’m interested in ${values.get('interest')}.\n\n${String(values.get('message')).trim()}\n\nThank you!`;
-    document.getElementById('contact-feedback').textContent = 'Your email app will open with a draft to review. If it doesn’t open, email hello@church-ops.com directly. Nothing has been sent by this website.';
-    window.location.href = `mailto:hello@church-ops.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  });
+
 })();
 
 // Each choice reveals an actual product screen; links work without JavaScript.
@@ -136,4 +129,27 @@ document.querySelectorAll('[data-tour]').forEach(tour => {
   if (!['devices','answers'].includes(requested)) return;
   const panel = document.getElementById(requested);
   if (panel?.matches?.('details.product-detail-disclosure')) panel.open = true;
+})();
+
+// Expand screenshots without losing the product page; native dialog traps focus.
+(() => {
+  if (!document.querySelector('[data-enlarge]')) return;
+  const dialog = document.createElement('dialog');
+  dialog.className = 'image-dialog';
+  dialog.setAttribute('aria-label', 'Product screenshot');
+  const bar = document.createElement('div'); bar.className = 'image-dialog-top';
+  const caption = document.createElement('p');
+  const close = document.createElement('button'); close.type = 'button'; close.textContent = 'Close ×';
+  bar.append(caption, close);
+  const img = document.createElement('img');
+  const original = document.createElement('a'); original.textContent = 'Open Original Image ↗';
+  dialog.append(bar, img, original); document.body.append(dialog);
+  close.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  document.querySelectorAll('[data-enlarge]').forEach(link => link.addEventListener('click', event => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    img.src = link.href; img.alt = link.querySelector('img')?.alt || 'ChurchOps product screen';
+    caption.textContent = img.alt; original.href = link.href; dialog.showModal();
+  }));
 })();

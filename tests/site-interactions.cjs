@@ -26,8 +26,6 @@ for (const invalid of ['https://evil.example/invoice.html?teamId=sample','javasc
 app=boot();assert.ok(app.links.every(link=>link.hidden));checks++;
 app=boot('?teamId=sample-church');assert.ok(app.links.every(link=>!link.hidden&&link.href.endsWith('?teamId=sample-church')));checks++;
 app=boot('?teamId=%3Cscript%3E');assert.ok(app.links.every(link=>link.hidden));checks++;
-app=boot();app.handlers['contact-form:submit']({preventDefault(){},currentTarget:{name:'Jordan & Lee',church:'Example Church',interest:'ChurchOps Hub',message:'A browser home for our team.\nCan we talk?'}});
-const draft=new URL(app.destination());assert.equal(draft.protocol,'mailto:');assert.equal(draft.pathname,'hello@church-ops.com');assert.equal(draft.searchParams.get('subject'),'ChurchOps inquiry: ChurchOps Hub');assert.ok(draft.searchParams.get('body').includes('Jordan & Lee'));assert.ok(draft.searchParams.get('body').includes('\nCan we talk?'));assert.match(app.nodes['contact-feedback'].textContent,/Nothing has been sent/);checks++;
 for(const interest of ['ChurchOps Live','ChurchOps Music','Complete Suite — Pricing Preview']){app=boot('?interest='+encodeURIComponent(interest));assert.equal(app.nodes['contact-interest'].value,interest);checks++;}
 app=boot('?interest=Unrecognized');assert.equal(app.nodes['contact-interest'].value,'The ChurchOps Suite');checks++;
 
@@ -40,4 +38,4 @@ app=boot('','/resources.html','#access');assert.equal(app.destination(),undefine
 app=boot('','/resources.html','#https://evil.example');assert.equal(app.destination(),undefined);checks++;
 app=boot('?teamId=sample-church');assert.ok(app.resourceNav.every(link=>link.href.endsWith('?teamId=sample-church')));checks++;
 app=boot('?teamId=%3Cscript%3E');assert.ok(app.resourceNav.every(link=>!link.href.includes('?')));checks++;
-console.log(JSON.stringify({checks,result:'passed',scope:'safe form-link handling, category navigation, legacy bookmarks, team context, email draft encoding; no network or messages'},null,2));
+console.log(JSON.stringify({checks,result:'passed',scope:'safe form-link handling, category navigation, legacy bookmarks, team context, product selection; no network or messages'},null,2));

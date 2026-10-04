@@ -81,3 +81,15 @@ The product family is Hub, Live, Music, and Count. Staff Portal and Request Port
 ## Shared product icon family
 
 At the user’s request, all four website product icons now share the existing two-stroke vector paths from Live’s public icon. Geometry, mark scale, placement, and tile shape are identical; palettes distinguish Hub (blue/purple/aqua), Live (orange), Music (olive on cream), and Count (white and blue on black). The SVG files are named `*-family-icon.svg` and used throughout the marketing pages and website favicon. Original native PNG assets are retained; native app bundles and App Store listings were not changed by this website release.
+
+## October 4 audit revision
+
+The homepage now introduces the suite with a visible Live demonstration and compact, product-led cards. Products is a comparison page; Resources routes to access, forms, or support; `sign-in.html` is the direct customer entry page. Product tours expose their explanations and provide accessible in-page screenshot enlargement. Devices and individual FAQs are visible without outer disclosures. Original feature content and all six-platform notes remain.
+
+Current Hub subscriptions stay on `pricing.html`. The substantive `suite-pricing.html` holds all proposed product and bundle prices and their qualifications. No subscriptions or entitlements were activated by this marketing update.
+
+The contact form now posts to the independently deployed `websiteInquiry` function in Firebase codebase `website-inquiry` (project `crswlkoperations`). It delivers only to `hello@church-ops.com`, with the visitor address as reply-to. It uses server-held Resend credentials, bounded persistent rate limits, validated fields, and idempotency. The browser confirms provider acceptance and retains input on failure. Website inquiry handling is described in `website-privacy.html`. Service source is maintained separately in the ChurchOps workspace at `scripts/website-inquiry-service/`; never deploy the shared application Functions package to publish this site.
+
+Support, privacy, and terms pages received presentation/navigation changes only; their original article text is verified by `tests/preserved-document-content.json`. The other 15 original files remain byte-identical. The original legal wording has not been expanded into promises about newer products; `help.html` routes to the appropriate product details.
+
+Additional verification: `node --test tests/contact-interactions.cjs`. The isolated service has its own validation/delivery-failure tests. Local test fixtures are excluded from releases. Keep cache-busted CSS/JS references and social preview dimensions current. Domain DNS/certificate repair and real inbox delivery require their own evidence, separate from a successful Pages build.

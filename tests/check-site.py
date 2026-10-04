@@ -26,7 +26,22 @@ original=json.loads((ROOT/'tests/original-files.json').read_text())
 for name,digest in original.items():
  p=ROOT/('support-center.html' if name=='index.html' else name)
  checks+=1
- if not p.exists() or hashlib.sha256(p.read_bytes()).hexdigest()!=digest:errors.append('Original content changed/missing: '+name)
+ if name not in ['support.html','privacy.html','terms.html'] and (not p.exists() or hashlib.sha256(p.read_bytes()).hexdigest()!=digest):errors.append('Original content changed/missing: '+name)
+class ArticleText(HTMLParser):
+ def __init__(self):
+  super().__init__(); self.depth=0; self.parts=[]; self.articles=[]
+ def handle_starttag(self,tag,attrs):
+  if self.depth: self.depth+=tag not in ['br','img','input','meta','link','hr']
+  elif 'content-card' in dict(attrs).get('class','').split(): self.depth=1;self.parts=[]
+ def handle_endtag(self,tag):
+  if self.depth:
+   self.depth-=1
+   if self.depth==0:self.articles.append(' '.join(' '.join(self.parts).split()))
+ def handle_data(self,data):
+  if self.depth:self.parts.append(data)
+for name,expected in json.loads((ROOT/'tests/preserved-document-content.json').read_text()).items():
+ parser=ArticleText();parser.feed((ROOT/name).read_text());checks+=1
+ if parser.articles!=expected:errors.append(name+': original policy/support article text changed')
 parsed={}
 for p in ROOT.glob('*.html'):
  parser=Page();parser.feed(p.read_text());parsed[p.name]=parser
