@@ -8,7 +8,7 @@ python3 -m http.server 8768 --bind 127.0.0.1
 
 ## Product pages
 
-- `index.html`: suite introduction, real app icons, selectable product screens, and four core products plus the two portals.
+- `index.html`: suite introduction, real app icons, selectable product screens, and four products, with the two portals belonging to Hub.
 - `churchops.html`: ChurchOps workflows, native app downloads, subscription/access guidance.
 - `live.html`: service teams, equipment, screens, preview availability, and source-aligned Basic/Pro pricing.
 - `music.html`: songwriting, lyrics, recording feedback, plans, separate access and support.
@@ -58,7 +58,7 @@ The user requested all products, correct capitalization, actual icons and app vi
 - Live draft: Basic $19/$190 for 1 room and 1 operator; Pro $59/$590 for 3 rooms and 3 operators. Pro additions $12/$120 per operator and $15/$150 per room. Source: Live `src/entitlements.mjs`, draft catalog 2026-10-01.
 - Music proposed commercial team plan: $29/$290 for 10 collaborators. Existing invited workspace remains free. This new commercial model requires product, hosting/storage cost, and billing implementation review before activation.
 - Count proposed: $19/$190 per campus; service-scoped counters are not Hub staff seats. Counter and service technical limits still apply.
-- Complete Suite proposed: $149/$1,490 with Hub Team, Live Pro, Music team, Count for 1 campus, and portal subscription access. Setup, migration, and custom work are separately scoped. Individual monthly components total $186.99, so proposed monthly savings are $37.99. Annual components total $1,869.99, so proposed annual savings are $379.99.
+- Complete Suite proposed: $149/$1,490 with Hub Team, Live Pro, Music team, Count for 1 campus, including Hub’s Staff and Request Portals. Setup, migration, and custom work are separately scoped. Individual monthly components total $186.99, so proposed monthly savings are $37.99. Annual components total $1,869.99, so proposed annual savings are $379.99.
 
 Rationale: preserve an inexpensive operations entry point, make songwriting/attendance approachable, charge Live by production capacity, and provide a meaningful bundle discount. This is a positioning and pricing hypothesis, not validated unit economics. Before selling the bundle, review storage/streaming/support costs and limits, enable paid products, define refunds/taxes and seat transitions, and implement a confirmed migration from existing App Store billing to avoid double billing. The site explicitly distinguishes separate accounts and permissions from a future purchasing bundle. No promise of unified sign-in or automatic cross-product data exchange is made.
 
@@ -66,10 +66,14 @@ All 18 original operational/legal files remain byte-for-byte preserved, with the
 
 ## October 4 product tours and FAQ
 
-All six product pages include progressively enhanced screen tours (19 screens total) with full-size image links, workflow explanations, and product-specific FAQs. With JavaScript disabled, every tour panel remains readable. `faq.html` provides 16 suite-wide questions; the homepage, resource directory, and shared footer link to it. Existing product, access, support, and pricing destinations remain in place.
+The four product pages and two Hub feature pages include progressively enhanced screen tours (19 screens total) with full-size image links, workflow explanations, and product-specific FAQs. With JavaScript disabled, every tour panel remains readable. `faq.html` provides 16 suite-wide questions; the homepage, resource directory, and shared footer link to it. Existing product, access, support, and pricing destinations remain in place.
 
-Resources uses the original icons for Hub, Live, Music, and Count. The portals use the Hub family mark and are explicitly labeled ChurchOps web workspaces; no separate portal app icon has been invented.
+Resources uses the original icons for Hub, Live, Music, and Count. The portals use the Hub family mark and are explicitly presented as Hub features; no separate portal app icon has been invented.
 
 New Hub screens come from existing training captures. Additional Music/Count screens use native review/demo fixtures; the Live readiness capture uses the actual renderer with an isolated fictional service and synthetic readings. Staff People uses an existing fictional QA preview. Request screenshots render the original form layouts with fictional contact/event/expense details in isolated, script-free fixtures with form submission disabled. Only the PNGs are published; live forms and services are unchanged. No real financial account data was entered.
 
 Browser verification covers all 19 tour selections, FAQ expansion, and all 11 authored pages at 390, 768, and 1440 pixels. Image dimensions reserve space while screens load. Keep `assets/products/sources.json` current when replacing images, and update the content-hashed CSS/JS URLs when shared assets change.
+
+## Product hierarchy correction
+
+The product family is Hub, Live, Music, and Count. Staff Portal and Request Portal belong to Hub. Their detail URLs remain for feature tours and existing links; they are not standalone products or subscriptions. Resources nests their entry points under Hub, pricing includes them within Hub, and contact inquiries use Hub.

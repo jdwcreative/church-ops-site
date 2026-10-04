@@ -45,6 +45,6 @@ for name in PAGES:
   if not target.exists():errors.append(name+': missing target '+href)
   if u.fragment and target.suffix=='.html' and u.fragment not in parsed[target.name].ids:errors.append(name+': missing anchor '+href)
 checks+=1
-if len(parsed['contact.html'].options)!=9:errors.append('Contact product selector must include all nine intended choices')
+if len(parsed['contact.html'].options)!=7:errors.append('Contact product selector must include the four products and three general/suite choices')
 print(json.dumps({'checks':checks,'preserved_original_files':len(original),'product_info_pages':len(PAGES),'errors':errors},indent=2))
 sys.exit(bool(errors))

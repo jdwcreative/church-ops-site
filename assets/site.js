@@ -92,7 +92,8 @@ document.querySelectorAll('[data-billing]').forEach(button => {
 // Carry a product choice into the inquiry without accepting arbitrary options.
 const interestField = document.getElementById('contact-interest');
 if (interestField) {
-  const interest = new URLSearchParams(location.search).get('interest');
+  const requestedInterest = new URLSearchParams(location.search).get('interest');
+  const interest = ['Staff Portal', 'Request Portal'].includes(requestedInterest) ? 'ChurchOps Hub' : requestedInterest;
   if ([...interestField.options].some(option => option.value === interest)) interestField.value = interest;
 }
 
