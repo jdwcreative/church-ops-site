@@ -5,10 +5,10 @@ from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import hashlib,json,sys
 ROOT=Path(__file__).resolve().parents[1]
-PAGES=['index.html','churchops.html','staff-portal.html','count.html','request-portal.html','resources.html','contact.html']
+PAGES=['index.html','churchops.html','staff-portal.html','count.html','request-portal.html','resources.html','contact.html','live.html','music.html','pricing.html']
 class Page(HTMLParser):
  def __init__(self):
-  super().__init__();self.ids=[];self.links=[];self.assets=[];self.h1=0;self.labels=[];self.fields=[]
+  super().__init__();self.ids=[];self.links=[];self.assets=[];self.h1=0;self.labels=[];self.fields=[];self.options=[]
  def handle_starttag(self,tag,attrs):
   a=dict(attrs)
   if a.get('id'): self.ids.append(a['id'])
@@ -16,6 +16,7 @@ class Page(HTMLParser):
   if tag in ['script','img'] and a.get('src'): self.assets.append(a['src'])
   if tag=='link' and a.get('rel') in ['stylesheet','icon']:self.assets.append(a['href'])
   if tag=='h1':self.h1+=1
+  if tag=='option':self.options.append(a)
   if tag=='label':self.labels.append(a.get('for'))
   if tag in ['input','textarea','select']:self.fields.append(a.get('id'))
 errors=[];checks=0
@@ -40,5 +41,7 @@ for name in PAGES:
   target=ROOT/path
   if not target.exists():errors.append(name+': missing target '+href)
   if u.fragment and target.suffix=='.html' and u.fragment not in parsed[target.name].ids:errors.append(name+': missing anchor '+href)
+checks+=1
+if len(parsed['contact.html'].options)!=9:errors.append('Contact product selector must include all nine intended choices')
 print(json.dumps({'checks':checks,'preserved_original_files':len(original),'product_info_pages':len(PAGES),'errors':errors},indent=2))
 sys.exit(bool(errors))

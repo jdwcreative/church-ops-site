@@ -9,6 +9,7 @@ function boot(search = '') {
   const nodes = Object.fromEntries(['form-link-helper', 'church-link', 'link-feedback', 'contact-form', 'contact-feedback'].map(id => [id, {
     value: '', textContent: '', focus() {}, addEventListener(type, fn) { handlers[id + ':' + type] = fn; }
   }]));
+  nodes['contact-interest']={value:'The ChurchOps Suite',options:['The ChurchOps Suite','ChurchOps Hub','ChurchOps Live','ChurchOps Music','ChurchOps Count','Staff Portal','Request Portal','Complete Suite — Pricing Preview','Something Else'].map(value=>({value}))};
   const links = ['invoice.html', 'reimbursement.html', 'event-request.html', 'jobs.html'].map(file => ({hidden:true, href:'/'+file, getAttribute(){return this.href;}}));
   let destination;
   const location = {origin:'https://www.church-ops.com', search, hash:'', assign(value){destination=value;}, set href(value){destination=value;}};
@@ -26,4 +27,6 @@ app=boot('?teamId=sample-church');assert.ok(app.links.every(link=>!link.hidden&&
 app=boot('?teamId=%3Cscript%3E');assert.ok(app.links.every(link=>link.hidden));checks++;
 app=boot();app.handlers['contact-form:submit']({preventDefault(){},currentTarget:{name:'Jordan & Lee',church:'Example Church',interest:'Staff Portal',message:'A browser home for our team.\nCan we talk?'}});
 const draft=new URL(app.destination());assert.equal(draft.protocol,'mailto:');assert.equal(draft.pathname,'hello@church-ops.com');assert.equal(draft.searchParams.get('subject'),'ChurchOps inquiry: Staff Portal');assert.ok(draft.searchParams.get('body').includes('Jordan & Lee'));assert.ok(draft.searchParams.get('body').includes('\nCan we talk?'));assert.match(app.nodes['contact-feedback'].textContent,/Nothing has been sent/);checks++;
+for(const interest of ['ChurchOps Live','ChurchOps Music','Complete Suite — Pricing Preview']){app=boot('?interest='+encodeURIComponent(interest));assert.equal(app.nodes['contact-interest'].value,interest);checks++;}
+app=boot('?interest=Unrecognized');assert.equal(app.nodes['contact-interest'].value,'The ChurchOps Suite');checks++;
 console.log(JSON.stringify({checks,result:'passed',scope:'safe form-link handling, team context, email draft encoding; no network or messages'},null,2));

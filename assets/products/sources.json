@@ -1,0 +1,62 @@
+{
+  "churchops-icon.png": {
+    "source": "ChurchOps/Assets.xcassets/Branding/AppIcon.appiconset/Icon-1024.png",
+    "kind": "Original Hub app icon",
+    "sha256": "b3fd7ac15dd9555e864a235f591f5089ea5ec5a90f38ae71299ad083045f045e"
+  },
+  "count-icon.png": {
+    "source": "AttendanceApp/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+    "kind": "Original Count app icon",
+    "sha256": "8be943390e0ece6dca0cf575f518471ba41d45c80b73254621a9fef9f0ddcc05"
+  },
+  "live-icon.png": {
+    "source": "ChurchOps Live/desktop/assets/icon.png",
+    "kind": "Original Live app icon",
+    "sha256": "785dca16b070bda4fd1b47d666d30be5a8f7194d6bd9436867e18b940d2d86b8"
+  },
+  "music-icon.png": {
+    "source": "SongBoard/ios/SongBoard/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+    "kind": "Original Music app icon",
+    "sha256": "bcdf9c581130db6c8508cf3af7755254c7ec201877815ad9d7593e33f9a24c62"
+  },
+  "churchops-work.png": {
+    "source": "Staff Portal production/training-shots/churchops-app-work.png",
+    "kind": "Existing public product preview; app screen with marketing overlay",
+    "sha256": "db5eebc9d066cddafe8886ef94f0779afb779dae1fa5791071241f8dd6344003"
+  },
+  "music-board.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9/01-song-board.png",
+    "kind": "Actual native UI; fictional reviewer songs and people",
+    "sha256": "d5594c07b2c2e2946a225161ce16a636877b49ecca8d5a7cca4d980f4ab6016b"
+  },
+  "music-listen.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9/02-listen-and-mark.png",
+    "kind": "Actual native UI; fictional reviewer songs and people",
+    "sha256": "b8b264e196cb9e2067617c2b268663cfaeed0acc19ca96ad0664e3ae6eb863f8"
+  },
+  "count-overview.png": {
+    "source": "AttendanceApp/QA/Flow-Final/Count-Overview-Compact.png",
+    "kind": "Actual native UI; fictional local demo",
+    "sha256": "9e6cc0aedc33f5c5f55db355e39cb20ea86ace52a89b5278f2639acf60875a95"
+  },
+  "count-snapshot.png": {
+    "source": "AttendanceApp/QA/Flow-Final/Service-Snapshot-Compact.png",
+    "kind": "Actual native UI; fictional local demo",
+    "sha256": "13f862f815ec35e0ba5238d65c6c17062af7035ba43333abbf6413c73d2f31a7"
+  },
+  "live-screens.png": {
+    "source": "ChurchOps Live/docs/evidence/ui-simplicity-20261003/screens-desktop.png",
+    "kind": "Actual renderer; isolated fictional fixture",
+    "sha256": "bd7782c93f47532a57084c9ed7380f94b003562e4a514e8ba45e3ba38a6e1a8b"
+  },
+  "live-services.png": {
+    "source": "Fresh browser capture October 4: isolated local marketing fixture using Live native-qa public renderer and fictional roster",
+    "kind": "Actual renderer; synthetic meter values, no physical equipment or customer data",
+    "sha256": "57a5a22a26c3448a1cb7b4f089f01c562c504687bd7dfac8fc965b2962839861"
+  },
+  "staff-demo.png": {
+    "source": "docs/qa/portal-navigation-polish-2026-10-01/safari-demo.png",
+    "kind": "Actual Staff Portal demo; fictional staff data; browser chrome hidden by CSS presentation only",
+    "sha256": "9454754b6115bad7128f6cbb3c491d126b475de4f7370b7f5fe4cabd7b934166"
+  }
+}

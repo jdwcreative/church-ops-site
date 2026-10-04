@@ -62,3 +62,36 @@
     window.location.href = `mailto:hello@church-ops.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
 })();
+
+// Each choice reveals an actual product screen; links work without JavaScript.
+document.querySelectorAll('[data-screen]').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-screen]').forEach(choice => {
+      const selected = choice === button;
+      choice.setAttribute('aria-pressed', String(selected));
+      const panel = document.getElementById('screen-' + choice.dataset.screen);
+      if (panel) panel.hidden = !selected;
+    });
+  });
+});
+document.querySelectorAll('[data-billing]').forEach(button => {
+  button.addEventListener('click', () => {
+    const annual = button.dataset.billing === 'annual';
+    document.querySelectorAll('[data-billing]').forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+    document.querySelectorAll('[data-monthly][data-annual]').forEach(price => {
+      price.replaceChildren(document.createTextNode('$' + (annual ? price.dataset.annual : price.dataset.monthly)));
+      const period = document.createElement('span');
+      period.textContent = annual ? '/year' : '/month';
+      price.append(period);
+    });
+    document.querySelectorAll('.billing-term').forEach(term => {
+      term.textContent = annual ? 'Full annual amount, billed yearly in USD' : 'Billed monthly in USD';
+    });
+  });
+});
+// Carry a product choice into the inquiry without accepting arbitrary options.
+const interestField = document.getElementById('contact-interest');
+if (interestField) {
+  const interest = new URLSearchParams(location.search).get('interest');
+  if ([...interestField.options].some(option => option.value === interest)) interestField.value = interest;
+}
