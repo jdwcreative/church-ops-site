@@ -35,7 +35,7 @@ for(const portal of ['Staff Portal','Request Portal']) { const legacy=boot('?int
 // Old bookmarks must open the new screen without dropping church context.
 app=boot('?teamId=sample-church&requestId=a%2Fb','/resources.html','#forms');
 assert.equal(app.destination(),'/forms.html?teamId=sample-church&requestId=a%2Fb');checks++;
-app=boot('','/music.html','#platforms');assert.equal(app.destination(),'/music-devices.html');checks++;
+app=boot('','/music.html','#platforms');assert.equal(app.destination(),undefined);checks++;
 app=boot('','/resources.html','#access');assert.equal(app.destination(),undefined);checks++;
 app=boot('','/resources.html','#https://evil.example');assert.equal(app.destination(),undefined);checks++;
 app=boot('?teamId=sample-church');assert.ok(app.resourceNav.every(link=>link.href.endsWith('?teamId=sample-church')));checks++;

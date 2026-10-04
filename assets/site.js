@@ -1,6 +1,6 @@
 // Preserve bookmarks after moving long-page categories to dedicated screens.
 (() => {
-  const destinations = {"/churchops.html#product-tour": "/churchops-tour.html", "/churchops.html#platforms": "/churchops-devices.html", "/churchops.html#faq": "/churchops-faq.html", "/churchops.html#hub-portals": "/churchops-web.html", "/live.html#product-tour": "/live-tour.html", "/live.html#platforms": "/live-devices.html", "/live.html#faq": "/live-faq.html", "/music.html#product-tour": "/music-tour.html", "/music.html#platforms": "/music-devices.html", "/music.html#support": "/music-faq.html", "/music.html#faq": "/music-faq.html", "/music.html#workflow": "/music-tour.html", "/count.html#product-tour": "/count-tour.html", "/count.html#platforms": "/count-devices.html", "/count.html#faq": "/count-faq.html", "/count.html#how-it-works": "/count-tour.html", "/staff-portal.html#product-tour": "/staff-portal-tour.html", "/staff-portal.html#platforms": "/staff-portal-devices.html", "/staff-portal.html#faq": "/staff-portal-faq.html", "/request-portal.html#product-tour": "/request-portal-tour.html", "/request-portal.html#platforms": "/request-portal-devices.html", "/request-portal.html#faq": "/request-portal-faq.html", "/resources.html#access": "/resources.html", "/resources.html#forms": "/forms.html", "/resources.html#help": "/help.html", "/pricing.html#future": "/suite-pricing.html", "/pricing.html#pricing-questions": "/faq-pricing.html", "/pricing.html#hub": "/pricing.html", "/faq.html#faq-0": "/faq.html", "/faq.html#faq-1": "/faq-pricing.html", "/faq.html#faq-2": "/faq-access.html", "/faq.html#faq-3": "/faq-church.html", "/#suite": "/products.html", "/index.html#suite": "/products.html"};
+  const destinations = {"/resources.html#forms": "/forms.html", "/resources.html#help": "/help.html"};
   const target = destinations[location.pathname + location.hash];
   if (target && target !== location.pathname) window.location.replace(target + location.search);
   const teamId = new URLSearchParams(location.search).get('teamId');
@@ -128,3 +128,12 @@ document.querySelectorAll('[data-tour]').forEach(tour => {
   stage.classList.add('enhanced');
   controls.hidden = false;
 });
+
+// Shared links can open practical details without a separate product page.
+(() => {
+  const legacy = {platforms:'devices',faq:'answers',support:'answers'};
+  const requested = new URLSearchParams(location.search).get('detail') || legacy[location.hash.slice(1)];
+  if (!['devices','answers'].includes(requested)) return;
+  const panel = document.getElementById(requested);
+  if (panel?.matches?.('details.product-detail-disclosure')) panel.open = true;
+})();
