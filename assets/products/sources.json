@@ -118,5 +118,73 @@
     "source": "Original ChurchOps public form HTML; inert local fixture with fictional data",
     "kind": "Actual interface or original form layout; demonstration content",
     "sha256": "982a6a5b6b3ee5c987fc4289795681cb6baea3d90b3f8ae982282e302514db3b"
+  },
+  "hub-family-icon.svg": {
+    "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette",
+    "palette": {
+      "name": "ChurchOps Hub",
+      "background": "#000000",
+      "short": [
+        "#b36ce9",
+        "#597bea"
+      ],
+      "long": [
+        "#3268c8",
+        "#6bd0c7"
+      ]
+    },
+    "sha256": "cb88aac41be1b8dcd20fd17298e5cab8e86cc037436139d883fb60ee66f85f8d"
+  },
+  "live-family-icon.svg": {
+    "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette",
+    "palette": {
+      "name": "ChurchOps Live",
+      "background": "#000000",
+      "short": [
+        "#ff6848",
+        "#ff9952"
+      ],
+      "long": [
+        "#ff6848",
+        "#ffbc5e"
+      ]
+    },
+    "sha256": "4fd5eac166a035f26477ebfea18e06bc93bec76999d7377c2a8b59c232c0a053"
+  },
+  "music-family-icon.svg": {
+    "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette",
+    "palette": {
+      "name": "ChurchOps Music",
+      "background": "#f1e9d9",
+      "short": [
+        "#48503e",
+        "#687457"
+      ],
+      "long": [
+        "#48503e",
+        "#7d8a68"
+      ]
+    },
+    "sha256": "be79a5ae794b180f2fe560ab975148226ac4ce9d3dc415c6216c4123cb5aff47"
+  },
+  "count-family-icon.svg": {
+    "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette",
+    "palette": {
+      "name": "ChurchOps Count",
+      "background": "#0d0e10",
+      "short": [
+        "#3559f3",
+        "#6483ff"
+      ],
+      "long": [
+        "#3559f3",
+        "#80a0ff"
+      ]
+    },
+    "sha256": "96904a1cc28791e30d976c8bec94c85ae811900f45b2327ee1bdd433859f52a7"
   }
 }

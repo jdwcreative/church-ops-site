@@ -20,7 +20,7 @@ python3 -m http.server 8768 --bind 127.0.0.1
 - `faq.html`: product selection, availability, pricing, accounts, and setup answers.
 - `contact.html`: email draft helper. It does not send mail, collect data, or use a backend.
 
-The new presentation uses `assets/site.css`, `assets/site.js`, and `assets/mark.svg`. All page content is static HTML; JavaScript enhances mobile navigation, expandable workflow deep links, real product-preview switching, billing-period display, product-specific inquiry selection, and the two explicitly described helpers. No third-party fonts, trackers, SDKs, image services, or front-end dependencies are added. Product icons are byte-for-byte copies of the actual app assets. Music, Count, Live, and Staff Portal screens use fictional demo/reviewer data; Hub screens come from existing training captures. Image provenance is recorded in `assets/products/sources.json`. No screenshot is represented as a live customer record.
+The new presentation uses `assets/site.css`, `assets/site.js`, and `assets/mark.svg`. All page content is static HTML; JavaScript enhances mobile navigation, expandable workflow deep links, real product-preview switching, billing-period display, product-specific inquiry selection, and the two explicitly described helpers. No third-party fonts, trackers, SDKs, image services, or front-end dependencies are added. The website uses a unified set of vector icons based on the existing ChurchOps two-stroke mark, with a different palette for each product. Original app icon files remain preserved as source references. Music, Count, Live, and Staff Portal screens use fictional demo/reviewer data; Hub screens come from existing training captures. Image provenance is recorded in `assets/products/sources.json`. No screenshot is represented as a live customer record.
 
 ## Preservation
 
@@ -68,7 +68,7 @@ All 18 original operational/legal files remain byte-for-byte preserved, with the
 
 The four product pages and two Hub feature pages include progressively enhanced screen tours (19 screens total) with full-size image links, workflow explanations, and product-specific FAQs. With JavaScript disabled, every tour panel remains readable. `faq.html` provides 16 suite-wide questions; the homepage, resource directory, and shared footer link to it. Existing product, access, support, and pricing destinations remain in place.
 
-Resources uses the original icons for Hub, Live, Music, and Count. The portals use the Hub family mark and are explicitly presented as Hub features; no separate portal app icon has been invented.
+Resources uses the shared family icons for Hub, Live, Music, and Count. The portals use the Hub family mark and are explicitly presented as Hub features; no separate portal app icon has been invented.
 
 New Hub screens come from existing training captures. Additional Music/Count screens use native review/demo fixtures; the Live readiness capture uses the actual renderer with an isolated fictional service and synthetic readings. Staff People uses an existing fictional QA preview. Request screenshots render the original form layouts with fictional contact/event/expense details in isolated, script-free fixtures with form submission disabled. Only the PNGs are published; live forms and services are unchanged. No real financial account data was entered.
 
@@ -77,3 +77,7 @@ Browser verification covers all 19 tour selections, FAQ expansion, and all 11 au
 ## Product hierarchy correction
 
 The product family is Hub, Live, Music, and Count. Staff Portal and Request Portal belong to Hub. Their detail URLs remain for feature tours and existing links; they are not standalone products or subscriptions. Resources nests their entry points under Hub, pricing includes them within Hub, and contact inquiries use Hub.
+
+## Shared product icon family
+
+At the user’s request, all four website product icons now share the existing two-stroke vector paths from Live’s public icon. Geometry, mark scale, placement, and tile shape are identical; palettes distinguish Hub (blue/purple/aqua), Live (orange), Music (olive on cream), and Count (blue on black). The SVG files are named `*-family-icon.svg` and used throughout the marketing pages and website favicon. Original native PNG assets are retained; native app bundles and App Store listings were not changed by this website release.
