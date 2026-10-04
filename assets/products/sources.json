@@ -172,19 +172,19 @@
   },
   "count-family-icon.svg": {
     "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
-    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette; Count refined to white and blue on black per user feedback",
     "palette": {
       "name": "ChurchOps Count",
       "background": "#0d0e10",
       "short": [
-        "#3559f3",
-        "#6483ff"
+        "#ffffff",
+        "#ffffff"
       ],
       "long": [
-        "#3559f3",
-        "#80a0ff"
+        "#3458d4",
+        "#4e70f5"
       ]
     },
-    "sha256": "96904a1cc28791e30d976c8bec94c85ae811900f45b2327ee1bdd433859f52a7"
+    "sha256": "58a55a7b1517d740205869469949567a6dd64d61c8fd4a1e49bd9f771ff2ca36"
   }
 }
