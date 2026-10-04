@@ -1,0 +1,15 @@
+/* Homepage: one clear introduction, with detail available when needed. */
+.home-intro{text-align:center;padding-top:62px;padding-bottom:60px;max-width:960px}
+.home-intro h1{font:400 clamp(48px,6.2vw,84px)/1.06 var(--serif);letter-spacing:-2.8px;margin:0 0 24px}
+.home-intro h1 em{color:#71815e;font-weight:400}
+.home-intro>p{font-size:16px;line-height:1.8;max-width:660px;margin:0 auto 28px;color:var(--muted)}
+.home-intro>.button{font-size:13px;min-height:48px;padding:13px 23px}
+.home-suite-heading{max-width:none;border-top:1px solid var(--line);padding-top:30px;margin-bottom:25px}
+.home-suite-heading h2{font:400 36px/1.15 var(--serif);letter-spacing:-1px;margin:0}
+.home-preview-wrap{padding-bottom:38px}.home-preview{border-block:1px solid var(--line)}
+.home-preview>summary{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;list-style:none;cursor:pointer;font-size:15px;font-weight:550}
+.home-preview>summary::-webkit-details-marker{display:none}.home-preview>summary>span:last-child{font-size:23px;font-weight:400}
+.home-preview[open]>summary>span:last-child{transform:rotate(45deg)}
+.home-preview>.product-viewer{max-width:860px;margin:4px auto 28px;padding:20px}
+.home-preview .screen-image{height:390px}.home-preview .screen-caption{min-height:0;padding-bottom:0}.home-preview .screen-caption strong{font-size:30px}.home-preview .screen-caption p{font-size:13px;margin-bottom:12px}
+@media(max-width:700px){.home-intro{padding-top:40px;padding-bottom:42px}.home-intro h1{font-size:clamp(43px,10vw,64px);letter-spacing:-1.7px;margin-bottom:20px}.home-intro>p{font-size:14px;max-width:440px;margin-bottom:24px}.home-intro>.button{font-size:12px}.home-suite-heading{padding-top:25px;margin-bottom:22px}.home-suite-heading h2{font-size:30px}.home-preview-wrap{padding-bottom:24px}.home-preview>summary{font-size:14px;padding-block:20px}.home-preview>.product-viewer{padding:12px}.home-preview .screen-image{height:240px}.home-preview .screen-panel.phone .screen-image{height:330px}.home-preview .screen-caption strong{font-size:25px}}
