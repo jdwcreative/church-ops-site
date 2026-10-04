@@ -19,26 +19,13 @@
     }
   });
   window.matchMedia('(min-width: 801px)').addEventListener('change', closeMenu);
-  const tabs = [...document.querySelectorAll('[role="tab"]')];
-  function selectTab(tab) {
-    tabs.forEach(item => {
-      const selected = item === tab;
-      item.setAttribute('aria-selected', String(selected));
-      item.tabIndex = selected ? 0 : -1;
-      document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
-    });
+  // Direct workflow links reveal the selected topic without hiding its content.
+  function revealWorkflow() {
+    const topic = document.getElementById(location.hash.slice(1));
+    if (topic?.matches?.('details.workflow-disclosure')) topic.open = true;
   }
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => selectTab(tab));
-    tab.addEventListener('keydown', event => {
-      let next;
-      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-      if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-      if (event.key === 'Home') next = 0;
-      if (event.key === 'End') next = tabs.length - 1;
-      if (next !== undefined) { event.preventDefault(); selectTab(tabs[next]); tabs[next].focus(); }
-    });
-  });
+  window.addEventListener('hashchange', revealWorkflow);
+  revealWorkflow();
   // The resource directory never chooses a church on the visitor's behalf.
   const teamId = new URLSearchParams(location.search).get('teamId');
   if (teamId && /^[a-zA-Z0-9_-]{1,128}$/.test(teamId)) {

@@ -8,7 +8,7 @@ python3 -m http.server 8768 --bind 127.0.0.1
 
 ## Product pages
 
-- `index.html`: suite overview and accessible interactive product illustrations.
+- `index.html`: concise suite introduction and four product choices.
 - `churchops.html`: ChurchOps workflows, native app downloads, subscription/access guidance.
 - `staff-portal.html`: staff, finance, attendance, executive and reporting tools; current church-specific availability.
 - `count.html`: ChurchOps Count, clearly marked in development.
@@ -16,7 +16,7 @@ python3 -m http.server 8768 --bind 127.0.0.1
 - `resources.html`: access directory, preserved form-link helper, support and policies.
 - `contact.html`: email draft helper. It does not send mail, collect data, or use a backend.
 
-The new presentation uses `assets/site.css`, `assets/site.js`, and `assets/mark.svg`. All page content is static HTML; JavaScript enhances mobile navigation, preview tabs, and the two explicitly described helpers. No third-party fonts, trackers, SDKs, image services, or front-end dependencies are added. Product visuals are CSS/SVG illustrations with fictional sample data, labeled as illustrations rather than actual screenshots.
+The new presentation uses `assets/site.css`, `assets/site.js`, and `assets/mark.svg`. All page content is static HTML; JavaScript enhances mobile navigation, expandable workflow deep links, and the two explicitly described helpers. No third-party fonts, trackers, SDKs, image services, or front-end dependencies are added. Product visuals are CSS/SVG illustrations with fictional sample data, labeled as illustrations rather than actual screenshots.
 
 ## Preservation
 
@@ -44,4 +44,4 @@ node --check assets/site.js
 node tests/site-interactions.cjs
 ```
 
-Checks cover original-file preservation, local links and fragments, headings/labels, trusted form destinations, query preservation, church context, and mailto encoding without sending anything. Browser checks additionally cover responsive layouts and menu/tab/FAQ behavior.
+Checks cover original-file preservation, local links and fragments, headings/labels, trusted form destinations, query preservation, church context, and mailto encoding without sending anything. Browser checks additionally cover responsive layouts and menu/workflow/FAQ behavior.

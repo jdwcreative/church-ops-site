@@ -11,9 +11,9 @@ function boot(search = '') {
   }]));
   const links = ['invoice.html', 'reimbursement.html', 'event-request.html', 'jobs.html'].map(file => ({hidden:true, href:'/'+file, getAttribute(){return this.href;}}));
   let destination;
-  const location = {origin:'https://www.church-ops.com', search, assign(value){destination=value;}, set href(value){destination=value;}};
+  const location = {origin:'https://www.church-ops.com', search, hash:'', assign(value){destination=value;}, set href(value){destination=value;}};
   const document = {querySelector(){return null;}, querySelectorAll(s){return s==='[data-form]'?links:[];}, getElementById(id){return nodes[id];}, addEventListener(){}};
-  vm.runInNewContext(source, {document, window:{location,matchMedia(){return {addEventListener(){}};}}, location, URL, URLSearchParams, FormData: class {constructor(form){this.data=form;}get(key){return this.data[key];}}});
+  vm.runInNewContext(source, {document, window:{location,addEventListener(){},matchMedia(){return {addEventListener(){}};}}, location, URL, URLSearchParams, FormData: class {constructor(form){this.data=form;}get(key){return this.data[key];}}});
   return {nodes, links, handlers, destination:()=>destination};
 }
 const valid='https://www.church-ops.com/invoice.html?teamId=sample-church&v=original&requestId=a%2Fb#details';
