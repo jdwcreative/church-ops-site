@@ -5,7 +5,7 @@ from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import hashlib,json,sys
 ROOT=Path(__file__).resolve().parents[1]
-PAGES=['index.html','churchops.html','staff-portal.html','count.html','request-portal.html','resources.html','contact.html','live.html','music.html','pricing.html','faq.html']
+PAGES=sorted(p.name for p in ROOT.glob('*.html') if '/assets/site.css' in p.read_text())
 class Page(HTMLParser):
  def __init__(self):
   super().__init__();self.ids=[];self.links=[];self.assets=[];self.h1=0;self.labels=[];self.fields=[];self.options=[];self.duplicate_attributes=[]
