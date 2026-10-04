@@ -58,5 +58,65 @@
     "source": "docs/qa/portal-navigation-polish-2026-10-01/safari-demo.png",
     "kind": "Actual Staff Portal demo; fictional staff data; browser chrome hidden by CSS presentation only",
     "sha256": "9454754b6115bad7128f6cbb3c491d126b475de4f7370b7f5fe4cabd7b934166"
+  },
+  "hub-clock.png": {
+    "source": "Staff Portal production training-shots",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "959126646232435a1cd527523f19750f1c2f1291b02c3d9357cc648ad0109e47"
+  },
+  "music-player.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "2a0778a538fd2908f18f381f39111033fb9f56fa81a6718bb8b023518047ab76"
+  },
+  "request-invoice.png": {
+    "source": "Original ChurchOps public form HTML; inert local fixture with fictional data",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "ab45b9b922f023308bd981854e1c43c7c3177546d70b4300cf910437c1998c40"
+  },
+  "count-review.png": {
+    "source": "AttendanceApp/QA/Flow-Final",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "97ec2d43dad0ddcd48ca0dcdfb3940e0c16d47cb9bbaa3db1c6dee07a881d0f4"
+  },
+  "request-event.png": {
+    "source": "Original ChurchOps public form HTML; inert local fixture with fictional data",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "94b07ef6ec98e8c45d5e8ff4a552ecf2228f7b455bebeff032aefe062876845f"
+  },
+  "music-plans.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "6b1737553ada41d33ab48d31b3203794c3350bfed022cb6a438e9594b5ecbc41"
+  },
+  "staff-people.png": {
+    "source": "docs/qa/admin-employment-overview-2026-10-01/fictional-desktop-preview.png",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "876ddc8347fc42c16331fc910558a90af641cdfcbbdd228031a779b8366d28d3"
+  },
+  "count-area.png": {
+    "source": "AttendanceApp/QA/Flow-Final",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "561b6b3898d2f405165384677baed8b30496f66776a9560db13f47b30043eb7a"
+  },
+  "music-lyrics.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "dee7aa58f578982009cba862778c6e5b07a8fea577271bd5b2c8ee93f311295d"
+  },
+  "live-readiness.png": {
+    "source": "ChurchOps Live native-qa renderer; isolated fictional fixture",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "0212cf5c7b895ef9737199c0f9a90334f7ad5f0447af5a6119c4909d1d375402"
+  },
+  "hub-dashboard.png": {
+    "source": "Staff Portal production training-shots",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "1ffb08db210421fb2de83e033f6513f470103b53dccfb4bb843ce4eefa5fe95e"
+  },
+  "request-reimbursement.png": {
+    "source": "Original ChurchOps public form HTML; inert local fixture with fictional data",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "982a6a5b6b3ee5c987fc4289795681cb6baea3d90b3f8ae982282e302514db3b"
   }
 }

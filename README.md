@@ -17,9 +17,10 @@ python3 -m http.server 8768 --bind 127.0.0.1
 - `count.html`: ChurchOps Count, clearly marked in development.
 - `request-portal.html`: external requester tools and the existing Crosswalk portal.
 - `resources.html`: access directory, preserved form-link helper, support and policies.
+- `faq.html`: product selection, availability, pricing, accounts, and setup answers.
 - `contact.html`: email draft helper. It does not send mail, collect data, or use a backend.
 
-The new presentation uses `assets/site.css`, `assets/site.js`, and `assets/mark.svg`. All page content is static HTML; JavaScript enhances mobile navigation, expandable workflow deep links, real product-preview switching, billing-period display, product-specific inquiry selection, and the two explicitly described helpers. No third-party fonts, trackers, SDKs, image services, or front-end dependencies are added. Product icons are byte-for-byte copies of the actual app assets. Music, Count, Live, and Staff Portal screens use fictional demo/reviewer data; the Hub visual is its existing product preview. Image provenance is recorded in `assets/products/sources.json`. No screenshot is represented as a live customer record.
+The new presentation uses `assets/site.css`, `assets/site.js`, and `assets/mark.svg`. All page content is static HTML; JavaScript enhances mobile navigation, expandable workflow deep links, real product-preview switching, billing-period display, product-specific inquiry selection, and the two explicitly described helpers. No third-party fonts, trackers, SDKs, image services, or front-end dependencies are added. Product icons are byte-for-byte copies of the actual app assets. Music, Count, Live, and Staff Portal screens use fictional demo/reviewer data; Hub screens come from existing training captures. Image provenance is recorded in `assets/products/sources.json`. No screenshot is represented as a live customer record.
 
 ## Preservation
 
@@ -62,3 +63,13 @@ The user requested all products, correct capitalization, actual icons and app vi
 Rationale: preserve an inexpensive operations entry point, make songwriting/attendance approachable, charge Live by production capacity, and provide a meaningful bundle discount. This is a positioning and pricing hypothesis, not validated unit economics. Before selling the bundle, review storage/streaming/support costs and limits, enable paid products, define refunds/taxes and seat transitions, and implement a confirmed migration from existing App Store billing to avoid double billing. The site explicitly distinguishes separate accounts and permissions from a future purchasing bundle. No promise of unified sign-in or automatic cross-product data exchange is made.
 
 All 18 original operational/legal files remain byte-for-byte preserved, with the original homepage archived at support-center.html. Do not publish local responsive test fixtures.
+
+## October 4 product tours and FAQ
+
+All six product pages include progressively enhanced screen tours (19 screens total) with full-size image links, workflow explanations, and product-specific FAQs. With JavaScript disabled, every tour panel remains readable. `faq.html` provides 16 suite-wide questions; the homepage, resource directory, and shared footer link to it. Existing product, access, support, and pricing destinations remain in place.
+
+Resources uses the original icons for Hub, Live, Music, and Count. The portals use the Hub family mark and are explicitly labeled ChurchOps web workspaces; no separate portal app icon has been invented.
+
+New Hub screens come from existing training captures. Additional Music/Count screens use native review/demo fixtures; the Live readiness capture uses the actual renderer with an isolated fictional service and synthetic readings. Staff People uses an existing fictional QA preview. Request screenshots render the original form layouts with fictional contact/event/expense details in isolated, script-free fixtures with form submission disabled. Only the PNGs are published; live forms and services are unchanged. No real financial account data was entered.
+
+Browser verification covers all 19 tour selections, FAQ expansion, and all 11 authored pages at 390, 768, and 1440 pixels. Image dimensions reserve space while screens load. Keep `assets/products/sources.json` current when replacing images, and update the content-hashed CSS/JS URLs when shared assets change.

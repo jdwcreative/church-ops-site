@@ -95,3 +95,20 @@ if (interestField) {
   const interest = new URLSearchParams(location.search).get('interest');
   if ([...interestField.options].some(option => option.value === interest)) interestField.value = interest;
 }
+
+// Product tours are readable in full without JavaScript; enhance to a screen picker.
+document.querySelectorAll('[data-tour]').forEach(tour => {
+  const choices = Array.from(tour.querySelectorAll('[data-tour-choice]'));
+  const panels = Array.from(tour.querySelectorAll('[data-tour-panel]'));
+  const controls = tour.querySelector('.tour-choices');
+  const stage = tour.querySelector('.tour-stage');
+  if (!choices.length || choices.length !== panels.length || !controls || !stage) return;
+  function select(value) {
+    choices.forEach(choice => choice.setAttribute('aria-pressed', String(choice.dataset.tourChoice === value)));
+    panels.forEach(panel => { panel.hidden = panel.dataset.tourPanel !== value; });
+  }
+  choices.forEach(choice => choice.addEventListener('click', () => select(choice.dataset.tourChoice)));
+  select(choices[0].dataset.tourChoice);
+  stage.classList.add('enhanced');
+  controls.hidden = false;
+});

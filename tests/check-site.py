@@ -5,11 +5,13 @@ from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import hashlib,json,sys
 ROOT=Path(__file__).resolve().parents[1]
-PAGES=['index.html','churchops.html','staff-portal.html','count.html','request-portal.html','resources.html','contact.html','live.html','music.html','pricing.html']
+PAGES=['index.html','churchops.html','staff-portal.html','count.html','request-portal.html','resources.html','contact.html','live.html','music.html','pricing.html','faq.html']
 class Page(HTMLParser):
  def __init__(self):
-  super().__init__();self.ids=[];self.links=[];self.assets=[];self.h1=0;self.labels=[];self.fields=[];self.options=[]
+  super().__init__();self.ids=[];self.links=[];self.assets=[];self.h1=0;self.labels=[];self.fields=[];self.options=[];self.duplicate_attributes=[]
  def handle_starttag(self,tag,attrs):
+  names=[key for key,_ in attrs]
+  if len(names)!=len(set(names)):self.duplicate_attributes.append(tag)
   a=dict(attrs)
   if a.get('id'): self.ids.append(a['id'])
   if tag=='a' and a.get('href'): self.links.append(a['href'])
@@ -30,6 +32,7 @@ for p in ROOT.glob('*.html'):
  parser=Page();parser.feed(p.read_text());parsed[p.name]=parser
 for name in PAGES:
  p=parsed[name];checks+=3
+ if p.duplicate_attributes:errors.append(name+': duplicate HTML attributes on '+', '.join(p.duplicate_attributes))
  if p.h1!=1:errors.append(name+': must have exactly one h1')
  if len(p.ids)!=len(set(p.ids)):errors.append(name+': duplicate IDs')
  if any(f not in p.labels for f in p.fields):errors.append(name+': form control missing label')
