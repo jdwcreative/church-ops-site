@@ -41,7 +41,9 @@ class ArticleText(HTMLParser):
   if self.depth:self.parts.append(data)
 for name,expected in json.loads((ROOT/'tests/preserved-document-content.json').read_text()).items():
  parser=ArticleText();parser.feed((ROOT/name).read_text());checks+=1
- if parser.articles!=expected:errors.append(name+': original policy/support article text changed')
+ # Preserve the original articles; the reviewed October 7 YouTube disclosure is additive.
+ actual=[a for a in parser.articles if not (name=='privacy.html' and a.startswith('YouTube Connection YouTube data in Count and the Staff Portal '))]
+ if actual!=expected:errors.append(name+': original policy/support article text changed')
 parsed={}
 for p in ROOT.glob('*.html'):
  parser=Page();parser.feed(p.read_text());parsed[p.name]=parser
