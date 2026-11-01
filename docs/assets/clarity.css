@@ -1,0 +1,19 @@
+/* October 30: retain the existing visual family; clarify spacing and actions. */
+.hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:14px 20px;margin-top:24px}
+.button{max-width:100%;white-space:normal;text-align:center;line-height:1.4;gap:10px}
+.button svg,.button>span[aria-hidden]{flex-shrink:0}
+.access-entry>div{min-width:0}.access-entry p.availability{display:block;margin:0 0 16px;line-height:1.5}
+.access-entry .access-buttons{margin-top:18px}.access-entry>div>.button{margin-top:4px}
+.small-callout .text-link+.text-link{margin-left:24px}
+.pricing-preview-link .button{white-space:normal;flex-shrink:0}
+.current-pricing #hub{padding-top:12px;padding-bottom:32px}
+.current-pricing .plan-card h3{margin-bottom:18px}.current-pricing .plan-card .plan-fit{margin:12px 0 0}
+.current-pricing .included-tools{padding:22px 0 0}.current-pricing .included-tools p{margin-bottom:0}
+.current-pricing .pricing-note{margin-top:18px;max-width:800px}
+.resource-destinations{gap:12px 32px;padding-top:8px}.resource-destinations>a{display:flex;flex-direction:column;align-items:flex-start}
+.resource-destinations p{min-height:0;flex:1;margin-bottom:18px}
+.contact-card form{display:flex;flex-direction:column;gap:8px}.contact-card label{margin:10px 0 0}.contact-card input,.contact-card select,.contact-card textarea{margin:0;width:100%;min-width:0}
+.contact-card .button{align-self:flex-start;margin-top:14px}.contact-card .form-note{margin:8px 0 0}.input-feedback:empty{display:none}.input-feedback{margin:8px 0 0}
+.comparison-action{display:flex;flex-direction:column;align-items:flex-start;gap:16px}.comparison-action p{margin:0}
+@media(max-width:1000px){.site-header nav{gap:16px}.site-header nav>a{font-size:13px}.pricing-preview-link{gap:24px}.comparison-action{flex-direction:row;flex-wrap:wrap;align-items:center}}
+@media(max-width:700px){.hero-actions{gap:12px;margin-top:20px}.button{min-height:46px}.page-intro h1{font-size:clamp(35px,9vw,41px)}.welcome h1{font-size:clamp(38px,10.2vw,64px)}.resource-destinations{gap:0}.contact-card{padding:22px}.pricing-preview-link .button{margin-top:18px}.small-callout .text-link+.text-link{margin:14px 0 0;display:flex}.comparison-action{align-items:flex-start;gap:14px}.comparison-action p{max-width:none;width:100%}}

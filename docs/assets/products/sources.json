@@ -1,0 +1,190 @@
+{
+  "churchops-icon.png": {
+    "source": "ChurchOps/Assets.xcassets/Branding/AppIcon.appiconset/Icon-1024.png",
+    "kind": "Original Hub app icon",
+    "sha256": "b3fd7ac15dd9555e864a235f591f5089ea5ec5a90f38ae71299ad083045f045e"
+  },
+  "count-icon.png": {
+    "source": "AttendanceApp/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+    "kind": "Original Count app icon",
+    "sha256": "8be943390e0ece6dca0cf575f518471ba41d45c80b73254621a9fef9f0ddcc05"
+  },
+  "live-icon.png": {
+    "source": "ChurchOps Live/desktop/assets/icon.png",
+    "kind": "Original Live app icon",
+    "sha256": "785dca16b070bda4fd1b47d666d30be5a8f7194d6bd9436867e18b940d2d86b8"
+  },
+  "music-icon.png": {
+    "source": "SongBoard/ios/SongBoard/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+    "kind": "Original Music app icon",
+    "sha256": "bcdf9c581130db6c8508cf3af7755254c7ec201877815ad9d7593e33f9a24c62"
+  },
+  "churchops-work.png": {
+    "source": "Staff Portal production/training-shots/churchops-app-work.png",
+    "kind": "Existing public product preview; app screen with marketing overlay",
+    "sha256": "db5eebc9d066cddafe8886ef94f0779afb779dae1fa5791071241f8dd6344003"
+  },
+  "music-board.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9/01-song-board.png",
+    "kind": "Actual native UI; fictional reviewer songs and people",
+    "sha256": "d5594c07b2c2e2946a225161ce16a636877b49ecca8d5a7cca4d980f4ab6016b"
+  },
+  "music-listen.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9/02-listen-and-mark.png",
+    "kind": "Actual native UI; fictional reviewer songs and people",
+    "sha256": "b8b264e196cb9e2067617c2b268663cfaeed0acc19ca96ad0664e3ae6eb863f8"
+  },
+  "count-overview.png": {
+    "source": "AttendanceApp/QA/Flow-Final/Count-Overview-Compact.png",
+    "kind": "Actual native UI; fictional local demo",
+    "sha256": "9e6cc0aedc33f5c5f55db355e39cb20ea86ace52a89b5278f2639acf60875a95"
+  },
+  "count-snapshot.png": {
+    "source": "AttendanceApp/QA/Flow-Final/Service-Snapshot-Compact.png",
+    "kind": "Actual native UI; fictional local demo",
+    "sha256": "13f862f815ec35e0ba5238d65c6c17062af7035ba43333abbf6413c73d2f31a7"
+  },
+  "live-screens.png": {
+    "source": "ChurchOps Live/docs/evidence/ui-simplicity-20261003/screens-desktop.png",
+    "kind": "Actual renderer; isolated fictional fixture",
+    "sha256": "bd7782c93f47532a57084c9ed7380f94b003562e4a514e8ba45e3ba38a6e1a8b"
+  },
+  "live-services.png": {
+    "source": "Fresh browser capture October 4: isolated local marketing fixture using Live native-qa public renderer and fictional roster",
+    "kind": "Actual renderer; synthetic meter values, no physical equipment or customer data",
+    "sha256": "57a5a22a26c3448a1cb7b4f089f01c562c504687bd7dfac8fc965b2962839861"
+  },
+  "staff-demo.png": {
+    "source": "docs/qa/portal-navigation-polish-2026-10-01/safari-demo.png",
+    "kind": "Actual Staff Portal demo; fictional staff data; browser chrome hidden by CSS presentation only",
+    "sha256": "9454754b6115bad7128f6cbb3c491d126b475de4f7370b7f5fe4cabd7b934166"
+  },
+  "hub-clock.png": {
+    "source": "Staff Portal production training-shots",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "959126646232435a1cd527523f19750f1c2f1291b02c3d9357cc648ad0109e47"
+  },
+  "music-player.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "2a0778a538fd2908f18f381f39111033fb9f56fa81a6718bb8b023518047ab76"
+  },
+  "request-invoice.png": {
+    "source": "Original ChurchOps public form HTML; inert local fixture with fictional data",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "ab45b9b922f023308bd981854e1c43c7c3177546d70b4300cf910437c1998c40"
+  },
+  "count-review.png": {
+    "source": "AttendanceApp/QA/Flow-Final",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "97ec2d43dad0ddcd48ca0dcdfb3940e0c16d47cb9bbaa3db1c6dee07a881d0f4"
+  },
+  "request-event.png": {
+    "source": "Original ChurchOps public form HTML; inert local fixture with fictional data",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "94b07ef6ec98e8c45d5e8ff4a552ecf2228f7b455bebeff032aefe062876845f"
+  },
+  "music-plans.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "6b1737553ada41d33ab48d31b3203794c3350bfed022cb6a438e9594b5ecbc41"
+  },
+  "staff-people.png": {
+    "source": "docs/qa/admin-employment-overview-2026-10-01/fictional-desktop-preview.png",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "876ddc8347fc42c16331fc910558a90af641cdfcbbdd228031a779b8366d28d3"
+  },
+  "count-area.png": {
+    "source": "AttendanceApp/QA/Flow-Final",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "561b6b3898d2f405165384677baed8b30496f66776a9560db13f47b30043eb7a"
+  },
+  "music-lyrics.png": {
+    "source": "SongBoard/release/app-store/screenshots/iphone-6.9",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "dee7aa58f578982009cba862778c6e5b07a8fea577271bd5b2c8ee93f311295d"
+  },
+  "live-readiness.png": {
+    "source": "ChurchOps Live native-qa renderer; isolated fictional fixture",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "0212cf5c7b895ef9737199c0f9a90334f7ad5f0447af5a6119c4909d1d375402"
+  },
+  "hub-dashboard.png": {
+    "source": "Staff Portal production training-shots",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "1ffb08db210421fb2de83e033f6513f470103b53dccfb4bb843ce4eefa5fe95e"
+  },
+  "request-reimbursement.png": {
+    "source": "Original ChurchOps public form HTML; inert local fixture with fictional data",
+    "kind": "Actual interface or original form layout; demonstration content",
+    "sha256": "982a6a5b6b3ee5c987fc4289795681cb6baea3d90b3f8ae982282e302514db3b"
+  },
+  "hub-family-icon.svg": {
+    "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette",
+    "palette": {
+      "name": "ChurchOps Hub",
+      "background": "#000000",
+      "short": [
+        "#b36ce9",
+        "#597bea"
+      ],
+      "long": [
+        "#3268c8",
+        "#6bd0c7"
+      ]
+    },
+    "sha256": "cb88aac41be1b8dcd20fd17298e5cab8e86cc037436139d883fb60ee66f85f8d"
+  },
+  "live-family-icon.svg": {
+    "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette",
+    "palette": {
+      "name": "ChurchOps Live",
+      "background": "#000000",
+      "short": [
+        "#ff6848",
+        "#ff9952"
+      ],
+      "long": [
+        "#ff6848",
+        "#ffbc5e"
+      ]
+    },
+    "sha256": "4fd5eac166a035f26477ebfea18e06bc93bec76999d7377c2a8b59c232c0a053"
+  },
+  "music-family-icon.svg": {
+    "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette",
+    "palette": {
+      "name": "ChurchOps Music",
+      "background": "#f1e9d9",
+      "short": [
+        "#48503e",
+        "#687457"
+      ],
+      "long": [
+        "#48503e",
+        "#7d8a68"
+      ]
+    },
+    "sha256": "be79a5ae794b180f2fe560ab975148226ac4ce9d3dc415c6216c4123cb5aff47"
+  },
+  "count-family-icon.svg": {
+    "source": "ChurchOps Live/public/icon.svg (existing two-stroke vector paths)",
+    "kind": "Unified website family icon requested October 4, 2026; shared geometry with product palette; Count refined to white and blue on black per user feedback",
+    "palette": {
+      "name": "ChurchOps Count",
+      "background": "#0d0e10",
+      "short": [
+        "#ffffff",
+        "#ffffff"
+      ],
+      "long": [
+        "#3458d4",
+        "#4e70f5"
+      ]
+    },
+    "sha256": "58a55a7b1517d740205869469949567a6dd64d61c8fd4a1e49bd9f771ff2ca36"
+  }
+}

@@ -1,0 +1,2476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Facility Event Request – ChurchOps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f4f7fa;
+      --card: #ffffff;
+      --accent: #1f75a7;
+      --accent-strong: #134a63;
+      --accent-soft: #e8f4fb;
+      --accent-muted: #6fa9c7;
+      --danger: #d14343;
+      --text-main: #1f2933;
+      --text-muted: #72808d;
+      --border: #d7e2ea;
+      --surface: #fbfdff;
+      --surface-strong: #f1f7fb;
+      --success-bg: #e3f9e5;
+      --success-border: #8ed1a5;
+      --success-text: #03543f;
+      --shadow: 0 22px 60px rgba(19, 46, 64, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      background:
+        linear-gradient(180deg, #dfeef5 0%, #f4f7fa 380px),
+        var(--bg);
+      color: var(--text-main);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 34px 16px 42px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 880px;
+      background: var(--card);
+      border: 1px solid rgba(124, 145, 160, 0.22);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .form-header {
+      padding: 30px 32px 28px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 38%),
+        linear-gradient(135deg, var(--accent-strong) 0%, #1f75a7 56%, #3b8f8b 100%);
+      color: #ffffff;
+    }
+
+    .form-body {
+      padding: 28px 32px 32px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #9be7c7;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.08;
+      font-weight: 760;
+      color: inherit;
+    }
+
+    .intro {
+      margin: 0 0 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .form-header .intro {
+      max-width: 650px;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.84);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(31, 41, 51, 0.08);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #5f6e78;
+    }
+
+    .section-label:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .section-label::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px var(--accent-soft);
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .field {
+      flex: 1 1 220px;
+      min-width: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 680;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    label .req {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      color: var(--text-main);
+      background-color: #ffffff;
+      box-shadow: inset 0 1px 0 rgba(17, 40, 55, 0.03);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, transform 0.08s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(31, 117, 167, 0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+
+    .attendance-help {
+      max-width: 560px;
+    }
+
+    .section-note {
+      margin: -4px 0 16px 17px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .checkbox-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-main);
+      margin: 0;
+      padding: 10px 11px;
+      border: 1px solid rgba(215, 226, 234, 0.82);
+      border-radius: 11px;
+      background: #ffffff;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    .checkbox-row input {
+      margin: 0;
+      margin-top: 2px;
+      accent-color: var(--accent);
+    }
+
+    .checkbox-row label {
+      flex: 1;
+      margin: 0;
+      line-height: 1.35;
+    }
+
+    .info-button {
+      width: 22px;
+      height: 22px;
+      border: 1px solid rgba(31, 117, 167, 0.28);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(31, 117, 167, 0.06);
+    }
+
+    .info-button:hover,
+    .info-button[aria-expanded="true"] {
+      border-color: rgba(31, 117, 167, 0.45);
+      background: var(--accent-soft);
+    }
+
+    .info-panel {
+      flex: 0 0 calc(100% - 31px);
+      box-sizing: border-box;
+      margin: 1px 0 0 31px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .checkbox-row:has(input:checked) {
+      border-color: rgba(31, 117, 167, 0.38);
+      background: var(--accent-soft);
+      box-shadow: 0 8px 18px rgba(31, 117, 167, 0.08);
+    }
+
+    .checkbox-row.is-locked,
+    .checkbox-row.is-locked:has(input:checked) {
+      border-color: rgba(52, 199, 89, 0.38);
+      background: rgba(52, 199, 89, 0.08);
+      box-shadow: 0 8px 18px rgba(52, 199, 89, 0.08);
+    }
+
+    .checkbox-row.is-locked input {
+      cursor: not-allowed;
+    }
+
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface-strong);
+    }
+
+    .checkbox-group .help {
+      grid-column: 1 / -1;
+      margin-top: 0;
+      padding: 2px 2px 0;
+    }
+
+    .room-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface-strong);
+    }
+
+    .room-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 74px;
+      padding: 12px;
+      border-radius: 11px;
+      background: #ffffff;
+      border: 1px solid rgba(215, 226, 234, 0.82);
+    }
+
+    .room-item:hover {
+      border-color: rgba(31, 117, 167, 0.35);
+      box-shadow: 0 8px 18px rgba(31, 117, 167, 0.06);
+    }
+
+    .room-item label {
+      flex: 1;
+      margin: 0;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .room-meta {
+      display: block;
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .schedule-card {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface-strong);
+    }
+
+    .schedule-card-title {
+      margin-bottom: 12px;
+    }
+
+    .schedule-card-title strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.25;
+      color: var(--text-main);
+    }
+
+    .schedule-card-title > span {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--text-muted);
+    }
+
+    .date-time-controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 150px;
+      gap: 10px;
+    }
+
+    .date-time-controls label {
+      font-size: 12px;
+    }
+
+    .estimate-card {
+      margin-top: 28px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(180deg, rgba(232, 244, 251, 0.78) 0%, rgba(255, 255, 255, 0.96) 46%),
+        #ffffff;
+      box-shadow: 0 14px 30px rgba(17, 40, 55, 0.07);
+    }
+
+    .estimate-title {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 760;
+      color: var(--text-main);
+    }
+
+    .estimate-subtitle {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .estimate-hint {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .estimate-callout {
+      position: relative;
+      padding: 13px 15px 13px 48px;
+      border: 1px solid rgba(31, 117, 167, 0.26);
+      border-radius: 14px;
+      background: #f2f9fd;
+      color: #175c83;
+      font-weight: 600;
+    }
+
+    .estimate-callout::before {
+      content: "i";
+      position: absolute;
+      top: 13px;
+      left: 15px;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .estimate-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .estimate-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 13px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(31, 41, 51, 0.06);
+    }
+
+    .estimate-line:last-child {
+      border-bottom: 0;
+    }
+
+    .estimate-line.is-deposit {
+      margin: 5px 0;
+      padding: 11px 12px;
+      border: 1px solid rgba(180, 124, 25, 0.28);
+      border-radius: 12px;
+      background: rgba(255, 244, 214, 0.62);
+    }
+
+    .estimate-line.is-deposit .estimate-line-title strong,
+    .estimate-line.is-deposit > strong {
+      color: #7a4f00;
+    }
+
+    .estimate-line strong {
+      white-space: nowrap;
+    }
+
+    .estimate-line-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .estimate-line-title strong {
+      white-space: normal;
+    }
+
+    .estimate-line .info-button {
+      width: 20px;
+      height: 20px;
+      font-size: 11px;
+      flex: 0 0 auto;
+    }
+
+    .estimate-line-info {
+      max-width: 430px;
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(31, 117, 167, 0.07);
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .estimate-line-meta {
+      display: block;
+      margin-top: 2px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .estimate-total {
+      margin-top: 14px;
+      padding: 13px 14px;
+      border: 1px solid rgba(31, 117, 167, 0.18);
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .estimate-total span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .estimate-total strong {
+      font-size: 20px;
+      color: var(--text-main);
+    }
+
+    .estimate-disclaimer {
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .error-banner {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(209, 67, 67, 0.06);
+      border: 1px solid rgba(209, 67, 67, 0.3);
+      color: #8b1c1c;
+      font-size: 13px;
+    }
+
+    .success-banner {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+      font-size: 13px;
+    }
+
+    .info-banner {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f2f9fd;
+      border: 1px solid rgba(31, 117, 167, 0.24);
+      color: #175c83;
+      font-size: 13px;
+    }
+
+    .submit-progress {
+      display: none;
+      margin-bottom: 16px;
+      padding: 14px;
+      border-radius: 13px;
+      background: #f2f9fd;
+      border: 1px solid rgba(31, 117, 167, 0.24);
+      color: #175c83;
+      font-size: 13px;
+    }
+
+    .submit-progress-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .submit-progress-text {
+      color: #3b5b85;
+      line-height: 1.4;
+    }
+
+    .submit-progress-bar {
+      position: relative;
+      overflow: hidden;
+      height: 4px;
+      margin-top: 10px;
+      border-radius: 999px;
+      background: #d7edf8;
+    }
+
+    .submit-progress-bar::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 42%;
+      border-radius: inherit;
+      background: var(--accent);
+      animation: submitProgress 1.1s ease-in-out infinite;
+    }
+
+    @keyframes submitProgress {
+      0% { transform: translateX(-110%); }
+      100% { transform: translateX(250%); }
+    }
+
+    .step-progress {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 26px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--surface-strong);
+    }
+
+    .step-item {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font: inherit;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      padding: 10px;
+      border-radius: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .step-item:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(31, 117, 167, 0.16);
+    }
+
+    .step-item:hover {
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .step-item.is-active {
+      color: var(--text-main);
+      background: #ffffff;
+      box-shadow: 0 8px 18px rgba(17, 40, 55, 0.08);
+    }
+
+    .step-item.is-complete {
+      color: #176b4d;
+    }
+
+    .step-number {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: inherit;
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .step-item.is-active .step-number {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .step-item.is-complete .step-number {
+      background: #dcf7e8;
+      border-color: #9bd8b5;
+      color: #176b4d;
+    }
+
+    .step-copy {
+      min-width: 0;
+    }
+
+    .step-copy strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .step-copy span {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .form-step {
+      display: none;
+    }
+
+    .form-step.is-active {
+      display: block;
+    }
+
+    .step-actions {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(31, 41, 51, 0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .step-action-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .button-primary,
+    .button-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 22px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 720;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(31, 117, 167, 0.26);
+      transition: box-shadow 0.15s ease, transform 0.08s ease, background-color 0.15s ease;
+    }
+
+    .button-secondary {
+      background: #ffffff;
+      color: var(--accent-strong);
+      border: 1px solid rgba(31, 117, 167, 0.24);
+      box-shadow: none;
+    }
+
+    .button-primary:hover {
+      background: #16658f;
+      box-shadow: 0 14px 28px rgba(31, 117, 167, 0.32);
+    }
+
+    .button-secondary:hover {
+      background: var(--accent-soft);
+    }
+
+    .button-primary:active,
+    .button-secondary:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 8px rgba(37, 99, 242, 0.2);
+    }
+
+    .button-primary[disabled],
+    .button-secondary[disabled] {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 18px 10px 26px;
+      }
+
+      .card {
+        border-radius: 18px;
+      }
+
+      .form-header {
+        padding: 24px 20px 22px;
+      }
+
+      .form-body {
+        padding: 22px 18px 24px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      .field-row {
+        gap: 12px;
+      }
+
+      .checkbox-group {
+        grid-template-columns: 1fr;
+      }
+
+      .room-list {
+        grid-template-columns: 1fr;
+      }
+
+      .schedule-grid,
+      .date-time-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .step-progress {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .step-copy span {
+        display: none;
+      }
+
+      .step-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .step-action-group {
+        width: 100%;
+        flex-direction: column-reverse;
+      }
+
+      .button-primary,
+      .button-secondary {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <div class="form-header">
+        <div class="eyebrow">External Event Request</div>
+        <h1>Facility Event Request</h1>
+        <p class="intro">
+          Use this form to request an event at our church. We’ll review your request, confirm availability,
+          and follow up with any next steps needed to move forward.
+        </p>
+      </div>
+
+      <div class="form-body">
+        <div id="dynamicInstructions" class="intro" style="display:none;"></div>
+        <div id="formDisabledNotice" class="info-banner"></div>
+        <div id="errorBanner" class="error-banner"></div>
+        <div id="successBanner" class="success-banner"></div>
+        <div id="submitProgress" class="submit-progress" role="status" aria-live="polite" aria-atomic="true">
+          <div class="submit-progress-title">Submitting...</div>
+          <div id="submitProgressText" class="submit-progress-text">Please wait while we send your event request.</div>
+          <div class="submit-progress-bar"></div>
+        </div>
+
+        <form id="eventForm" novalidate>
+        <div class="step-progress" aria-label="Request steps">
+          <button type="button" class="step-item is-active" data-step-indicator="0">
+            <span class="step-number">1</span>
+            <span class="step-copy">
+              <strong>Contact</strong>
+              <span>Who to follow up with</span>
+            </span>
+          </button>
+          <button type="button" class="step-item" data-step-indicator="1">
+            <span class="step-number">2</span>
+            <span class="step-copy">
+              <strong>Event</strong>
+              <span>What you are planning</span>
+            </span>
+          </button>
+          <button type="button" class="step-item" data-step-indicator="2">
+            <span class="step-number">3</span>
+            <span class="step-copy">
+              <strong>Space</strong>
+              <span>Rooms and timing</span>
+            </span>
+          </button>
+          <button type="button" class="step-item" data-step-indicator="3">
+            <span class="step-number">4</span>
+            <span class="step-copy">
+              <strong>Estimate</strong>
+              <span>Support and review</span>
+            </span>
+          </button>
+        </div>
+
+        <section class="form-step is-active" data-step="0">
+        <div class="section-label">Contact Information</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="requesterName">Your Name <span class="req">*</span></label>
+            <input id="requesterName" name="requesterName" type="text" autocomplete="name" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="requesterEmail">Email <span class="req">*</span></label>
+            <input id="requesterEmail" name="requesterEmail" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="requesterPhone">Phone <span class="req">*</span></label>
+            <input id="requesterPhone" name="requesterPhone" type="tel" inputmode="tel" placeholder="423-555-1234" required />
+            <div class="help">We’ll format this as you type.</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="orgName">Group / Organization</label>
+            <input id="orgName" name="orgName" type="text" />
+          </div>
+        </div>
+        </section>
+
+        <section class="form-step" data-step="1">
+        <div class="section-label">Event Details</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="eventNature">Nature of Event <span class="req">*</span></label>
+            <select id="eventNature" name="eventNature" required>
+              <option value="">Select One</option>
+              <option value="birthday_party">Birthday Party</option>
+              <option value="wedding">Wedding</option>
+              <option value="meeting">Meeting / Training</option>
+              <option value="community_event">Community Event</option>
+              <option value="memorial_service">Memorial / Funeral Service</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="title">Event Name</label>
+            <input id="title" name="title" type="text" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="description">What Is This Event For? <span class="req">*</span></label>
+            <textarea id="description" name="description" rows="3" required></textarea>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="expectedAttendance">Estimated Attendance <span class="req">*</span></label>
+            <input id="expectedAttendance" name="expectedAttendance" type="number" min="1" step="1" placeholder="e.g. 40" required />
+            <div class="help attendance-help">Use your best estimate. This number helps calculate seating, setup, and attendant pricing.</div>
+          </div>
+        </div>
+        </section>
+
+        <section class="form-step" data-step="2">
+        <div class="section-label">Space &amp; Timing</div>
+        <p class="section-note">
+          Choose the requester type, rooms, and schedule. These details help calculate the estimate on the final step.
+        </p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="requesterType">Requester Type <span class="req">*</span></label>
+            <select id="requesterType" name="requesterType" required>
+              <option value="">Select One</option>
+              <option value="staff">Staff</option>
+              <option value="member">Member</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="structuredLocationSection" style="display:none;">
+          <div class="field-row">
+            <div class="field">
+              <label for="structuredCampus">Campus <span class="req">*</span></label>
+              <select id="structuredCampus" name="structuredCampus">
+                <option value="">Select a Campus</option>
+              </select>
+              <div id="singleCampusHelp" class="help" style="display:none;">Campus selected automatically for this team.</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Rooms <span class="req">*</span></label>
+              <div id="roomList" class="room-list">
+                <div class="estimate-hint">Select a campus to see rentable rooms.</div>
+              </div>
+              <div class="help">You can choose more than one room within the selected campus.</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="locationNotes">Additional Location Notes</label>
+              <textarea id="locationNotes" name="locationNotes" rows="2" placeholder="Anything else our team should know about the space you need?"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div id="legacyLocationSection">
+          <div class="field-row">
+            <div class="field">
+              <label for="locationNameLegacy">Preferred Location</label>
+              <input id="locationNameLegacy" name="locationNameLegacy" type="text" placeholder="Room, area, or off-site address" />
+            </div>
+            <div class="field">
+              <label for="campusIdLegacy">Campus</label>
+              <input id="campusIdLegacy" name="campusIdLegacy" type="text" placeholder="e.g. Main Campus" />
+            </div>
+          </div>
+          <div class="help">
+            Rentable room pricing is still being configured for this form. You can still submit your request and our team will follow up with an estimate.
+          </div>
+        </div>
+
+        <div class="schedule-grid">
+          <div class="schedule-card">
+            <div class="schedule-card-title">
+              <strong>Event Starts <span class="req">*</span></strong>
+              <span>When guests should arrive or the event begins.</span>
+            </div>
+            <input id="startDateTime" name="startDateTime" type="hidden" required />
+            <div class="date-time-controls">
+              <div>
+                <label for="startDate">Date <span class="req">*</span></label>
+                <input id="startDate" name="startDate" type="date" />
+              </div>
+              <div>
+                <label for="startTime">Time <span class="req">*</span></label>
+                <select id="startTime" name="startTime"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="schedule-card">
+            <div class="schedule-card-title">
+              <strong>Event Ends <span class="req">*</span></strong>
+              <span>When the event is expected to finish.</span>
+            </div>
+            <input id="endDateTime" name="endDateTime" type="hidden" required />
+            <div class="date-time-controls">
+              <div>
+                <label for="endDate">Date <span class="req">*</span></label>
+                <input id="endDate" name="endDate" type="date" />
+              </div>
+              <div>
+                <label for="endTime">Time <span class="req">*</span></label>
+                <select id="endTime" name="endTime"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="schedule-grid">
+          <div id="setupScheduleCard" class="schedule-card" hidden>
+            <div class="schedule-card-title">
+              <strong>Requested Setup Start <span class="req">*</span></strong>
+              <span>Required. Choose when setup access should begin.</span>
+            </div>
+            <input id="setupStartDateTime" name="setupStartDateTime" type="hidden" required />
+            <div class="date-time-controls">
+              <div>
+                <label for="setupStartDate">Date <span class="req">*</span></label>
+                <input id="setupStartDate" name="setupStartDate" type="date" />
+              </div>
+              <div>
+                <label for="setupStartTime">Time <span class="req">*</span></label>
+                <select id="setupStartTime" name="setupStartTime"></select>
+              </div>
+            </div>
+          </div>
+
+          <div id="breakdownScheduleCard" class="schedule-card" hidden>
+            <div class="schedule-card-title">
+              <strong>Requested Breakdown End <span class="req">*</span></strong>
+              <span>Required. Choose when cleanup/load-out should finish.</span>
+            </div>
+            <input id="breakdownEndDateTime" name="breakdownEndDateTime" type="hidden" required />
+            <div class="date-time-controls">
+              <div>
+                <label for="breakdownEndDate">Date <span class="req">*</span></label>
+                <input id="breakdownEndDate" name="breakdownEndDate" type="date" />
+              </div>
+              <div>
+                <label for="breakdownEndTime">Time <span class="req">*</span></label>
+                <select id="breakdownEndTime" name="breakdownEndTime"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+        </section>
+
+        <section class="form-step" data-step="3">
+        <div class="section-label">Support Needed</div>
+        <div class="field-row">
+          <div class="field">
+            <div class="checkbox-group">
+              <div class="checkbox-row">
+                <input id="needsRooms" name="needsRooms" type="checkbox" />
+                <label for="needsRooms">Room / Space Setup</label>
+                <button type="button" class="info-button" data-info-target="needsRoomsInfo" aria-expanded="false" aria-label="More info about Room / Space Setup">i</button>
+                <div id="needsRoomsInfo" class="info-panel" hidden>
+                  Covers preparing the selected room layout and approved setup needs before the event.
+                </div>
+              </div>
+              <div class="checkbox-row">
+                <input id="needsTeardown" name="needsTeardown" type="checkbox" />
+                <label for="needsTeardown">Teardown Assistance</label>
+                <button type="button" class="info-button" data-info-target="needsTeardownInfo" aria-expanded="false" aria-label="More info about Teardown Assistance">i</button>
+                <div id="needsTeardownInfo" class="info-panel" hidden>
+                  Covers post-event reset or teardown help for the requested room setup.
+                </div>
+              </div>
+              <div class="checkbox-row">
+                <input id="needsAV" name="needsAV" type="checkbox" />
+                <label for="needsAV">Tech / AV Support (1 Attendant Estimate)</label>
+                <button type="button" class="info-button" data-info-target="needsAVInfo" aria-expanded="false" aria-label="More info about Tech and AV Support">i</button>
+                <div id="needsAVInfo" class="info-panel" hidden>
+                  The public estimate includes one tech attendant during event hours. The church determines final staffing after reviewing the event details.
+                </div>
+              </div>
+              <div class="checkbox-row">
+                <input id="needsCleanup" name="needsCleanup" type="checkbox" />
+                <label for="needsCleanup">Cleanup Service</label>
+                <button type="button" class="info-button" data-info-target="needsCleanupInfo" aria-expanded="false" aria-label="More info about Cleanup Service">i</button>
+                <div id="needsCleanupInfo" class="info-panel" hidden>
+                  Covers additional facility cleaning needs beyond a normal room reset.
+                </div>
+              </div>
+              <div class="checkbox-row">
+                <input id="needsTablesAndChairs" name="needsTablesAndChairs" type="checkbox" />
+                <label for="needsTablesAndChairs">Tables / Chairs Needed</label>
+                <button type="button" class="info-button" data-info-target="needsTablesAndChairsInfo" aria-expanded="false" aria-label="More info about Tables and Chairs">i</button>
+                <div id="needsTablesAndChairsInfo" class="info-panel" hidden>
+                  Covers setup and breakdown of requested tables and chairs. Pricing follows the guest count band.
+                </div>
+              </div>
+              <div class="checkbox-row">
+                <input id="needsCafe" name="needsCafe" type="checkbox" />
+                <label for="needsCafe">Cafe Service</label>
+                <button type="button" class="info-button" data-info-target="needsCafeInfo" aria-expanded="false" aria-label="More info about Cafe Service">i</button>
+                <div id="needsCafeInfo" class="info-panel" hidden>
+                  Covers standard cafe service and selected cafe add-ons based on the event details.
+                </div>
+              </div>
+              <div class="help">You can choose more than one if needed.</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tablesChairsSection" style="display:none;">
+          <div class="field-row">
+            <div class="field">
+              <label for="tablesCount">How Many Tables?</label>
+              <input id="tablesCount" name="tablesCount" type="number" min="0" step="1" placeholder="0" />
+            </div>
+            <div class="field">
+              <label for="chairsCount">How Many Chairs?</label>
+              <input id="chairsCount" name="chairsCount" type="number" min="0" step="1" placeholder="0" />
+            </div>
+          </div>
+          <div class="help">Pricing follows estimated attendance; quantities help the team plan the setup.</div>
+        </div>
+
+        <div id="cafeSection" style="display:none;">
+          <div class="field-row">
+            <div class="field">
+              <label for="cafeGuestCount">Cafe Guest Count</label>
+              <input id="cafeGuestCount" name="cafeGuestCount" type="number" min="0" step="1" placeholder="Use attendance if blank" />
+            </div>
+            <div class="field">
+              <label for="cafeCustomSyrupCount">Custom Syrups</label>
+              <input id="cafeCustomSyrupCount" name="cafeCustomSyrupCount" type="number" min="0" step="1" placeholder="0" />
+            </div>
+          </div>
+          <div class="help">Cafe pricing uses the event duration plus the guest count attending cafe service. Time beyond the included two hours is billed in 30-minute increments.</div>
+        </div>
+
+        <div class="estimate-card">
+          <p class="estimate-title">Estimated Cost</p>
+          <p class="estimate-subtitle">
+            We’ll use the estimate details above to provide a planning estimate before you submit.
+          </p>
+
+          <div id="estimateState" class="estimate-hint estimate-callout">
+            Fill out the fields in the Estimate Details section to generate a live estimate.
+          </div>
+
+          <div id="estimateBreakdown" style="display:none;">
+            <div id="estimateLineItems" class="estimate-lines"></div>
+            <div class="estimate-total">
+              <span>Estimated Total</span>
+              <strong id="estimateTotal">$0.00</strong>
+            </div>
+          </div>
+
+          <div id="estimateDisclaimer" class="estimate-disclaimer">
+            This estimate is provided for planning purposes only and is not a final invoice. Facility use fees may vary based on staffing, setup needs, room availability, and final event details. Our team will review your request and follow up with a confirmed estimate and next steps.
+          </div>
+        </div>
+
+        </section>
+
+        <div class="step-actions">
+          <button type="button" id="backButton" class="button-secondary">Back</button>
+          <div class="step-action-group">
+            <button type="button" id="nextButton" class="button-primary">Continue</button>
+            <button type="submit" id="submitButton" class="button-primary">Submit Event Request</button>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const DEFAULT_DISCLAIMER =
+        "This estimate is provided for planning purposes only and is not a final invoice. " +
+        "Facility use fees may vary based on staffing, setup needs, room availability, and final event details. " +
+        "Our team will review your request and follow up with a confirmed estimate and next steps.";
+
+      const SETUP_URL = "https://us-central1-crswlkoperations.cloudfunctions.net/getExternalEventRequestSetup";
+      const ESTIMATE_URL = "https://us-central1-crswlkoperations.cloudfunctions.net/estimateExternalEventRequest";
+      const SUBMIT_URL = "https://us-central1-crswlkoperations.cloudfunctions.net/submitExternalEventRequest";
+      const ESTIMATE_REQUIREMENTS_HINT =
+        "Complete the previous steps to generate a live estimate.";
+
+      function domById(id) { return document.getElementById(id); }
+
+      const params = new URLSearchParams(window.location.search);
+      const teamId = (params.get("teamId") || "").trim();
+
+      const state = {
+        pricingReady: false,
+        campuses: [],
+        disclaimer: DEFAULT_DISCLAIMER,
+        estimateToken: 0,
+        estimateTimer: null,
+        currentStep: 0
+      };
+
+      const FINAL_STEP_INDEX = 3;
+      const dateTimePairs = [
+        { hiddenId: "startDateTime", dateId: "startDate", timeId: "startTime", required: true },
+        { hiddenId: "endDateTime", dateId: "endDate", timeId: "endTime", required: true },
+        { hiddenId: "setupStartDateTime", dateId: "setupStartDate", timeId: "setupStartTime", required: true },
+        { hiddenId: "breakdownEndDateTime", dateId: "breakdownEndDate", timeId: "breakdownEndTime", required: true }
+      ];
+
+      const TIME_OPTION_START_MINUTES = 6 * 60;
+      const TIME_OPTION_END_MINUTES = (23 * 60) + 30;
+
+      const SUPPORT_LOCKED_FOR_OTHER = ["needsRooms", "needsTeardown"];
+      const ESTIMATE_LINE_LABELS = {
+        damage_deposit: "Damage Deposit (Included in Estimated Total)",
+        setup: "Room / Space Setup",
+        teardown: "Teardown Assistance",
+        cleanup: "Cleanup Service",
+        tables_chairs_setup: "Tables / Chairs Setup and Breakdown",
+        av: "Tech / AV Support (1 Attendant Estimate)",
+        cafe_base: "Cafe Standard Service",
+        cafe_attendance: "Cafe Attendance",
+        cafe_additional_hours: "Cafe Additional Hours",
+        cafe_custom_syrups: "Cafe Custom Syrups"
+      };
+      const ESTIMATE_LINE_INFO = {
+        room: "Room rental is based on the selected room and requester type.",
+        damage_deposit: "This Damage Deposit is included in the Estimated Total. The church will confirm payment and return terms during review.",
+        setup: "Room / Space Setup covers preparing the requested room layout before the event.",
+        teardown: "Teardown Assistance covers resetting or breaking down the room after the event.",
+        cleanup: "Cleanup Service covers additional facility cleaning needs beyond a normal room reset.",
+        tables_chairs_setup: "Tables / Chairs Setup and Breakdown follows the event's guest count band.",
+        av: "Tech / AV Support includes one attendant during event hours in the public estimate. The church determines final staffing after reviewing the event details.",
+        building_attendant: "Building Attendants are estimated from requester type, guest count, and the requested facility access window.",
+        cafe_base: "Cafe Standard Service covers the base cafe service package.",
+        cafe_attendance: "Cafe Attendance applies the per-person cafe charge to the selected cafe guest count.",
+        cafe_additional_hours: "Cafe Additional Hours applies after the included two-hour service window and is billed in 30-minute increments.",
+        cafe_custom_syrups: "Cafe Custom Syrups covers requested custom syrup add-ons."
+      };
+
+      function formatMoney(cents) {
+        const dollars = (Number(cents || 0) / 100);
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD"
+        }).format(dollars);
+      }
+
+      function showError(msg) {
+        const el = domById("errorBanner");
+        el.textContent = msg;
+        el.style.display = "block";
+        domById("successBanner").style.display = "none";
+        hideSubmitProgress();
+        scrollToStatus(el);
+      }
+
+      function showSuccess(msg) {
+        const el = domById("successBanner");
+        el.textContent = msg;
+        el.style.display = "block";
+        domById("errorBanner").style.display = "none";
+        hideSubmitProgress();
+        scrollToStatus(el);
+      }
+
+      function clearMessages() {
+        domById("errorBanner").style.display = "none";
+        domById("successBanner").style.display = "none";
+        hideSubmitProgress();
+      }
+
+      function scrollToStatus(el) {
+        if (!el) {
+          return;
+        }
+        window.setTimeout(function () {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 0);
+      }
+
+      function setSubmitProgress(message) {
+        const el = domById("submitProgress");
+        const text = domById("submitProgressText");
+        if (text) {
+          text.textContent = message || "Please wait while we send your event request.";
+        }
+        if (el) {
+          el.style.display = "block";
+          scrollToStatus(el);
+        }
+      }
+
+      function hideSubmitProgress() {
+        const el = domById("submitProgress");
+        if (el) {
+          el.style.display = "none";
+        }
+      }
+
+      function fieldValue(id) {
+        const el = domById(id);
+        return el ? el.value.trim() : "";
+      }
+
+      function timeLabel(value) {
+        const parts = value.split(":");
+        const hour = Number(parts[0] || 0);
+        const minute = Number(parts[1] || 0);
+        const suffix = hour >= 12 ? "PM" : "AM";
+        const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+        return displayHour + ":" + String(minute).padStart(2, "0") + " " + suffix;
+      }
+
+      function populateTimeSelect(select) {
+        select.innerHTML = "<option value=\"\">Select Time</option>";
+        for (let minutes = TIME_OPTION_START_MINUTES; minutes <= TIME_OPTION_END_MINUTES; minutes += 30) {
+          const hour = Math.floor(minutes / 60);
+          const minute = minutes % 60;
+          const value = String(hour).padStart(2, "0") + ":" + String(minute).padStart(2, "0");
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = timeLabel(value);
+          select.appendChild(option);
+        }
+      }
+
+      function setupTimeSelects() {
+        dateTimePairs.forEach(function (pair) {
+          const select = domById(pair.timeId);
+          if (select) populateTimeSelect(select);
+        });
+      }
+
+      function bindInfoToggle(button, panel) {
+        if (!button || !panel || button.dataset.infoBound === "true") return;
+        button.dataset.infoBound = "true";
+        button.addEventListener("click", function () {
+          const isOpen = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", String(!isOpen));
+          panel.hidden = isOpen;
+        });
+      }
+
+      function setupInfoToggles(root) {
+        const scope = root || document;
+        scope.querySelectorAll("[data-info-target]").forEach(function (button) {
+          bindInfoToggle(button, domById(button.getAttribute("data-info-target")));
+        });
+      }
+
+      function syncDateTimePair(pair) {
+        const dateValue = fieldValue(pair.dateId);
+        const timeValue = fieldValue(pair.timeId);
+        const hidden = domById(pair.hiddenId);
+        if (!hidden) return;
+        hidden.value = dateValue && timeValue ? dateValue + "T" + timeValue : "";
+      }
+
+      function syncAllDateTimePairs() {
+        dateTimePairs.forEach(syncDateTimePair);
+      }
+
+      function setDateIfBlank(targetId, sourceId) {
+        const target = domById(targetId);
+        const sourceValue = fieldValue(sourceId);
+        if (target && sourceValue && !target.value) {
+          target.value = sourceValue;
+        }
+      }
+
+      function syncDependentScheduleCards() {
+        const hasEventStart = !!fieldValue("startDateTime");
+        const hasEventEnd = !!fieldValue("endDateTime");
+        const setupCard = domById("setupScheduleCard");
+        const breakdownCard = domById("breakdownScheduleCard");
+
+        if (setupCard) setupCard.hidden = !hasEventStart;
+        if (breakdownCard) breakdownCard.hidden = !hasEventEnd;
+
+        if (hasEventStart) {
+          setDateIfBlank("setupStartDate", "startDate");
+        }
+        if (hasEventEnd) {
+          setDateIfBlank("breakdownEndDate", "endDate");
+        }
+
+        syncDateTimePair(dateTimePairByHiddenId("setupStartDateTime"));
+        syncDateTimePair(dateTimePairByHiddenId("breakdownEndDateTime"));
+      }
+
+      function dateTimePairByHiddenId(hiddenId) {
+        return dateTimePairs.find(function (pair) { return pair.hiddenId === hiddenId; }) || null;
+      }
+
+      function missingDateTimeField(pair) {
+        if (!fieldValue(pair.dateId)) return pair.dateId;
+        if (!fieldValue(pair.timeId)) return pair.timeId;
+        return pair.hiddenId;
+      }
+
+      function hasPartialDateTime(pair) {
+        const hasDate = !!fieldValue(pair.dateId);
+        const hasTime = !!fieldValue(pair.timeId);
+        return hasDate !== hasTime;
+      }
+
+      function focusField(id) {
+        const el = domById(id);
+        if (el && typeof el.focus === "function") {
+          window.setTimeout(function () { el.focus(); }, 0);
+        }
+      }
+
+      function showStepError(message, fieldId) {
+        showError(message);
+        if (fieldId) focusField(fieldId);
+      }
+
+      function setCurrentStep(index, shouldScroll) {
+        const nextStep = Math.max(0, Math.min(FINAL_STEP_INDEX, index));
+        state.currentStep = nextStep;
+
+        document.querySelectorAll(".form-step").forEach(function (step) {
+          step.classList.toggle("is-active", Number(step.dataset.step) === nextStep);
+        });
+
+        document.querySelectorAll("[data-step-indicator]").forEach(function (item) {
+          const itemStep = Number(item.dataset.stepIndicator);
+          item.classList.toggle("is-active", itemStep === nextStep);
+          item.classList.toggle("is-complete", itemStep < nextStep);
+          if (itemStep === nextStep) {
+            item.setAttribute("aria-current", "step");
+          } else {
+            item.removeAttribute("aria-current");
+          }
+        });
+
+        const backButton = domById("backButton");
+        const nextButton = domById("nextButton");
+        const submitButton = domById("submitButton");
+
+        if (backButton) {
+          backButton.disabled = nextStep === 0;
+          backButton.style.display = nextStep === 0 ? "none" : "inline-flex";
+        }
+        if (nextButton) {
+          nextButton.style.display = nextStep === FINAL_STEP_INDEX ? "none" : "inline-flex";
+        }
+        if (submitButton) {
+          submitButton.style.display = nextStep === FINAL_STEP_INDEX ? "inline-flex" : "none";
+        }
+
+        if (nextStep === FINAL_STEP_INDEX) {
+          queueEstimateRefresh();
+        }
+
+        const formBody = document.querySelector(".form-body");
+        if (formBody && shouldScroll !== false) {
+          formBody.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      function navigateToStep(targetStep) {
+        const nextStep = Math.max(0, Math.min(FINAL_STEP_INDEX, Number(targetStep)));
+        if (!Number.isFinite(nextStep) || nextStep === state.currentStep) return;
+
+        clearMessages();
+        if (nextStep < state.currentStep) {
+          setCurrentStep(nextStep);
+          return;
+        }
+
+        for (let step = 0; step < nextStep; step += 1) {
+          if (state.currentStep !== step) {
+            setCurrentStep(step, false);
+          }
+          if (!validateStep(step)) {
+            return;
+          }
+        }
+
+        setCurrentStep(nextStep);
+      }
+
+      function validateStepsForSubmit() {
+        for (let step = 0; step <= FINAL_STEP_INDEX; step += 1) {
+          if (state.currentStep !== step) {
+            setCurrentStep(step, false);
+          }
+          if (!validateStep(step)) {
+            return false;
+          }
+        }
+
+        setCurrentStep(FINAL_STEP_INDEX, false);
+        return true;
+      }
+
+      function validateStep(index) {
+        if (index === 0) {
+          if (!fieldValue("requesterName")) {
+            showStepError("Please enter your name.", "requesterName");
+            return false;
+          }
+          const emailInput = domById("requesterEmail");
+          if (!fieldValue("requesterEmail") || (emailInput && !emailInput.checkValidity())) {
+            showStepError("Please enter a valid email address.", "requesterEmail");
+            return false;
+          }
+          if (!fieldValue("requesterPhone")) {
+            showStepError("Please enter your phone number.", "requesterPhone");
+            return false;
+          }
+          return true;
+        }
+
+        if (index === 1) {
+          if (!fieldValue("eventNature")) {
+            showStepError("Please choose the nature of event.", "eventNature");
+            return false;
+          }
+          if (!fieldValue("description")) {
+            showStepError("Please describe what this event is for.", "description");
+            return false;
+          }
+          if (parseCount("expectedAttendance") <= 0) {
+            showStepError("Please enter estimated attendance.", "expectedAttendance");
+            return false;
+          }
+          return true;
+        }
+
+        if (index === 2) {
+          syncAllDateTimePairs();
+          syncDependentScheduleCards();
+
+          if (!fieldValue("requesterType")) {
+            showStepError("Please choose whether you are staff, a member, or other.", "requesterType");
+            return false;
+          }
+
+          if (state.pricingReady) {
+            if (!currentCampus()) {
+              showStepError("Please choose a campus.", "structuredCampus");
+              return false;
+            }
+            if (selectedRoomIds().length === 0) {
+              showStepError("Please choose at least one room.", "roomList");
+              return false;
+            }
+          }
+
+          const startDateTime = fieldValue("startDateTime");
+          const endDateTime = fieldValue("endDateTime");
+          if (!startDateTime || !endDateTime) {
+            const missingPair = !startDateTime ? dateTimePairByHiddenId("startDateTime") : dateTimePairByHiddenId("endDateTime");
+            showStepError("Please provide both start and end date/time.", missingPair ? missingDateTimeField(missingPair) : null);
+            return false;
+          }
+
+          const startDate = new Date(startDateTime);
+          const endDate = new Date(endDateTime);
+          if (!(endDate > startDate)) {
+            showStepError("End date/time must be after the start date/time.", "endDateTime");
+            return false;
+          }
+
+          const setupStartDateTime = fieldValue("setupStartDateTime");
+          const breakdownEndDateTime = fieldValue("breakdownEndDateTime");
+          const setupPair = dateTimePairByHiddenId("setupStartDateTime");
+          const breakdownPair = dateTimePairByHiddenId("breakdownEndDateTime");
+          if (!setupStartDateTime) {
+            showStepError("Please provide the requested setup start date/time.", setupPair ? missingDateTimeField(setupPair) : null);
+            return false;
+          }
+          if (!breakdownEndDateTime) {
+            showStepError("Please provide the requested breakdown end date/time.", breakdownPair ? missingDateTimeField(breakdownPair) : null);
+            return false;
+          }
+
+          const setupStartDate = new Date(setupStartDateTime);
+          const breakdownEndDate = new Date(breakdownEndDateTime);
+          if (isNaN(setupStartDate.getTime())) {
+            showStepError("Please provide a valid setup date/time.", setupPair ? missingDateTimeField(setupPair) : null);
+            return false;
+          }
+          if (isNaN(breakdownEndDate.getTime())) {
+            showStepError("Please provide a valid breakdown date/time.", breakdownPair ? missingDateTimeField(breakdownPair) : null);
+            return false;
+          }
+          if (setupStartDate > startDate) {
+            showStepError("Setup start cannot be after the event start.", setupPair ? missingDateTimeField(setupPair) : null);
+            return false;
+          }
+          if (breakdownEndDate < endDate) {
+            showStepError("Breakdown end cannot be before the event end.", breakdownPair ? missingDateTimeField(breakdownPair) : null);
+            return false;
+          }
+          return true;
+        }
+
+        if (index === FINAL_STEP_INDEX) {
+          if (domById("needsTablesAndChairs").checked && parseCount("tablesCount") <= 0 && parseCount("chairsCount") <= 0) {
+            showStepError("Enter at least one table or chair quantity.", "tablesCount");
+            return false;
+          }
+          return true;
+        }
+
+        return true;
+      }
+
+      function setEstimateDisclaimer(text) {
+        const disclaimer = (text || "").trim() || DEFAULT_DISCLAIMER;
+        state.disclaimer = disclaimer;
+        domById("estimateDisclaimer").textContent = disclaimer;
+      }
+
+      function setEstimateHint(message) {
+        domById("estimateState").textContent = message;
+        domById("estimateState").style.display = "block";
+        domById("estimateBreakdown").style.display = "none";
+        domById("estimateLineItems").innerHTML = "";
+        domById("estimateTotal").textContent = formatMoney(0);
+      }
+
+      function titleCaseEstimateLabel(value) {
+        return String(value || "").trim().replace(/[A-Za-z][A-Za-z']*/g, function (word) {
+          const lower = word.toLowerCase();
+          if (lower === "av") return "AV";
+          if (["and", "or", "by", "of"].includes(lower)) return lower;
+          return lower.charAt(0).toUpperCase() + lower.slice(1);
+        });
+      }
+
+      function displayEstimateLineLabel(item) {
+        const code = String(item && item.code ? item.code : "");
+        if (code === "room") {
+          return String(item && item.label ? item.label : "").trim();
+        }
+        if (ESTIMATE_LINE_LABELS[code]) {
+          return ESTIMATE_LINE_LABELS[code];
+        }
+        return titleCaseEstimateLabel(item && item.label ? item.label : "");
+      }
+
+      function estimateLineInfo(item) {
+        const code = String(item && item.code ? item.code : "");
+        return ESTIMATE_LINE_INFO[code] || "";
+      }
+
+      function createInlineInfoButton(panelId, label) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "info-button";
+        button.setAttribute("data-info-target", panelId);
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-label", "More info about " + label);
+        button.textContent = "i";
+        return button;
+      }
+
+      function renderEstimate(estimate) {
+        if (!estimate || estimate.status !== "available") {
+          const reason =
+            (estimate && estimate.unavailableReason) ||
+            "We’ll review your request and follow up with a confirmed estimate.";
+          setEstimateHint(reason);
+          if (estimate && estimate.disclaimer) {
+            setEstimateDisclaimer(estimate.disclaimer);
+          }
+          return;
+        }
+
+        const lines = Array.isArray(estimate.lineItems) ? estimate.lineItems : [];
+        const lineItemsEl = domById("estimateLineItems");
+        lineItemsEl.innerHTML = "";
+
+        lines.forEach(function (item) {
+          const row = document.createElement("div");
+          row.className = "estimate-line";
+          if (String(item && item.code ? item.code : "") === "damage_deposit") {
+            row.classList.add("is-deposit");
+          }
+
+          const left = document.createElement("div");
+          const label = displayEstimateLineLabel(item);
+          const title = document.createElement("div");
+          title.className = "estimate-line-title";
+
+          const titleText = document.createElement("strong");
+          titleText.textContent = label;
+          title.appendChild(titleText);
+
+          const infoText = estimateLineInfo(item);
+          if (infoText) {
+            const panelId = "estimateLineInfo" + String(lineItemsEl.children.length);
+            const infoButton = createInlineInfoButton(panelId, label);
+            const infoPanel = document.createElement("div");
+            infoPanel.id = panelId;
+            infoPanel.className = "estimate-line-info";
+            infoPanel.hidden = true;
+            infoPanel.textContent = infoText;
+            title.appendChild(infoButton);
+            left.appendChild(title);
+            bindInfoToggle(infoButton, infoPanel);
+
+            const meta = document.createElement("span");
+            meta.className = "estimate-line-meta";
+            meta.textContent = formatQuantity(item.quantity, item.unitLabel) + " x " + formatMoney(item.rateCents);
+            left.appendChild(meta);
+            left.appendChild(infoPanel);
+          } else {
+            left.appendChild(title);
+
+            const meta = document.createElement("span");
+            meta.className = "estimate-line-meta";
+            meta.textContent = formatQuantity(item.quantity, item.unitLabel) + " x " + formatMoney(item.rateCents);
+            left.appendChild(meta);
+          }
+
+          const right = document.createElement("strong");
+          right.textContent = formatMoney(item.amountCents);
+
+          row.appendChild(left);
+          row.appendChild(right);
+          lineItemsEl.appendChild(row);
+        });
+
+        domById("estimateState").style.display = "none";
+        domById("estimateBreakdown").style.display = "block";
+        domById("estimateTotal").textContent = formatMoney(estimate.totalCents);
+        setEstimateDisclaimer(estimate.disclaimer);
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function formatQuantity(quantity, unitLabel) {
+        const amount = Number(quantity || 0);
+        const rounded = Math.round(amount * 100) / 100;
+        const qty = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+        const unit = unitLabel || "item";
+        return qty + " " + unit + (qty === "1" ? "" : "s");
+      }
+
+      function selectedRoomInputs() {
+        return Array.from(document.querySelectorAll("#roomList input[type='checkbox']:checked"));
+      }
+
+      function selectedRoomIds() {
+        return selectedRoomInputs().map(function (input) { return input.value; });
+      }
+
+      function selectedRoomNames() {
+        return selectedRoomInputs().map(function (input) { return input.dataset.roomName || ""; }).filter(Boolean);
+      }
+
+      function currentCampus() {
+        return domById("structuredCampus").value.trim();
+      }
+
+      function selectedOptionText(id) {
+        const el = domById(id);
+        if (!el || el.selectedIndex < 0) return null;
+        const option = el.options[el.selectedIndex];
+        const text = option ? option.textContent.trim() : "";
+        return text && el.value.trim() ? text : null;
+      }
+
+      function syncTablesChairsVisibility() {
+        const visible = domById("needsTablesAndChairs").checked;
+        domById("tablesChairsSection").style.display = visible ? "block" : "none";
+        queueEstimateRefresh();
+      }
+
+      function syncCafeVisibility() {
+        const visible = domById("needsCafe").checked;
+        domById("cafeSection").style.display = visible ? "block" : "none";
+        queueEstimateRefresh();
+      }
+
+      function syncRequesterSupportRequirements() {
+        const requiresSetupSupport = fieldValue("requesterType") === "other";
+        SUPPORT_LOCKED_FOR_OTHER.forEach(function (id) {
+          const input = domById(id);
+          const row = input ? input.closest(".checkbox-row") : null;
+          if (!input) return;
+
+          if (requiresSetupSupport) {
+            input.checked = true;
+          }
+          input.disabled = requiresSetupSupport;
+          if (row) {
+            row.classList.toggle("is-locked", requiresSetupSupport);
+          }
+        });
+        queueEstimateRefresh();
+      }
+
+      function setLocationMode(pricingReady) {
+        state.pricingReady = pricingReady === true;
+        domById("structuredLocationSection").style.display = state.pricingReady ? "block" : "none";
+        domById("legacyLocationSection").style.display = state.pricingReady ? "none" : "block";
+
+        if (state.pricingReady) {
+          setEstimateHint(ESTIMATE_REQUIREMENTS_HINT);
+        } else {
+          setEstimateHint("Room-based pricing is still being configured for this form. You can still submit a request and our team will follow up with an estimate.");
+        }
+      }
+
+      function populateCampuses(campuses) {
+        const select = domById("structuredCampus");
+        const singleCampusHelp = domById("singleCampusHelp");
+        select.innerHTML = "<option value=\"\">Select a Campus</option>";
+
+        campuses.forEach(function (campus) {
+          const option = document.createElement("option");
+          option.value = campus.name;
+          option.textContent = campus.name;
+          select.appendChild(option);
+        });
+
+        const usableCampuses = campuses.filter(function (campus) {
+          return campus && typeof campus.name === "string" && campus.name.trim() !== "";
+        });
+
+        if (usableCampuses.length === 1) {
+          select.value = usableCampuses[0].name;
+          if (singleCampusHelp) singleCampusHelp.style.display = "block";
+        } else if (singleCampusHelp) {
+          singleCampusHelp.style.display = "none";
+        }
+      }
+
+      function applySingleCampusDefault() {
+        const usableCampuses = state.campuses.filter(function (campus) {
+          return campus && typeof campus.name === "string" && campus.name.trim() !== "";
+        });
+
+        if (usableCampuses.length === 1) {
+          domById("structuredCampus").value = usableCampuses[0].name;
+          const singleCampusHelp = domById("singleCampusHelp");
+          if (singleCampusHelp) singleCampusHelp.style.display = "block";
+        }
+      }
+
+      function renderRoomsForCampus() {
+        const campusName = currentCampus();
+        const roomList = domById("roomList");
+        roomList.innerHTML = "";
+
+        if (!campusName) {
+          roomList.innerHTML = "<div class=\"estimate-hint\">Select a Campus to See Rentable Rooms.</div>";
+          queueEstimateRefresh();
+          return;
+        }
+
+        const campus = state.campuses.find(function (entry) { return entry.name === campusName; });
+        if (!campus || !Array.isArray(campus.rooms) || campus.rooms.length === 0) {
+          roomList.innerHTML = "<div class=\"estimate-hint\">No Rentable Rooms Are Configured for This Campus Yet.</div>";
+          queueEstimateRefresh();
+          return;
+        }
+
+        campus.rooms.forEach(function (room) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "room-item";
+
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.value = room.id;
+          input.dataset.roomName = room.name;
+          input.id = "room-" + room.id;
+          input.addEventListener("change", queueEstimateRefresh);
+
+          const label = document.createElement("label");
+          label.setAttribute("for", input.id);
+          label.innerHTML =
+            escapeHtml(room.name) +
+            "<span class=\"room-meta\">" +
+            escapeHtml(room.capacity ? "Capacity " + room.capacity : "Rentable Room") +
+            "</span>";
+
+          wrapper.appendChild(input);
+          wrapper.appendChild(label);
+          roomList.appendChild(wrapper);
+        });
+
+        queueEstimateRefresh();
+      }
+
+      function parseCount(id) {
+        const raw = domById(id).value.trim();
+        if (!raw) return 0;
+        const parsed = Number(raw);
+        if (!Number.isFinite(parsed)) return 0;
+        return Math.max(0, Math.round(parsed));
+      }
+
+      function estimateInputsReady() {
+        syncAllDateTimePairs();
+        if (!state.pricingReady) return false;
+
+        const requesterType = domById("requesterType").value.trim();
+        const startDateTime = domById("startDateTime").value;
+        const endDateTime = domById("endDateTime").value;
+
+        if (!requesterType || !startDateTime || !endDateTime) return false;
+        if (parseCount("expectedAttendance") <= 0) return false;
+        if (!currentCampus()) return false;
+        if (selectedRoomIds().length === 0) return false;
+
+        const startDate = new Date(startDateTime);
+        const endDate = new Date(endDateTime);
+        if (!(endDate > startDate)) return false;
+
+        if (domById("needsTablesAndChairs").checked) {
+          return parseCount("tablesCount") > 0 || parseCount("chairsCount") > 0;
+        }
+        return true;
+      }
+
+      function buildEstimatePayload() {
+        syncAllDateTimePairs();
+        return {
+          teamId: teamId,
+          requesterType: domById("requesterType").value.trim(),
+          eventNature: domById("eventNature").value.trim() || null,
+          eventNatureLabel: selectedOptionText("eventNature"),
+          expectedAttendance: domById("expectedAttendance").value.trim()
+            ? Number(domById("expectedAttendance").value.trim())
+            : null,
+          campusId: currentCampus() || null,
+          roomIds: selectedRoomIds(),
+          startDate: new Date(domById("startDateTime").value).toISOString(),
+          endDate: new Date(domById("endDateTime").value).toISOString(),
+          setupStartDate: domById("setupStartDateTime").value
+            ? new Date(domById("setupStartDateTime").value).toISOString()
+            : null,
+          breakdownEndDate: domById("breakdownEndDateTime").value
+            ? new Date(domById("breakdownEndDateTime").value).toISOString()
+            : null,
+          needsSetup: domById("needsRooms").checked,
+          needsAV: domById("needsAV").checked,
+          needsTeardown: domById("needsTeardown").checked,
+          needsCleanup: domById("needsCleanup").checked,
+          needsTablesAndChairs: domById("needsTablesAndChairs").checked,
+          tablesCount: parseCount("tablesCount"),
+          chairsCount: parseCount("chairsCount"),
+          needsCafe: domById("needsCafe").checked,
+          cafeGuestCount: parseCount("cafeGuestCount") || null,
+          cafeCustomSyrupCount: parseCount("cafeCustomSyrupCount")
+        };
+      }
+
+      async function refreshEstimate() {
+        if (!teamId) return;
+        if (state.currentStep !== FINAL_STEP_INDEX) return;
+
+        if (!state.pricingReady) {
+          setEstimateHint("Room-based pricing is still being configured for this form. You can still submit a request and our team will follow up with an estimate.");
+          return;
+        }
+
+        if (!estimateInputsReady()) {
+          setEstimateHint(ESTIMATE_REQUIREMENTS_HINT);
+          return;
+        }
+
+        const token = ++state.estimateToken;
+
+        try {
+          const resp = await fetch(ESTIMATE_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(buildEstimatePayload())
+          });
+
+          if (!resp.ok) {
+            throw new Error("Estimate request failed");
+          }
+
+          const data = await resp.json();
+          if (token !== state.estimateToken) return;
+          renderEstimate(data);
+        } catch (err) {
+          console.error("estimateExternalEventRequest error", err);
+          if (token !== state.estimateToken) return;
+          setEstimateHint("We couldn’t calculate an estimate just now. You can still submit your request and our team will follow up.");
+        }
+      }
+
+      function queueEstimateRefresh() {
+        if (state.estimateTimer) {
+          clearTimeout(state.estimateTimer);
+        }
+        state.estimateTimer = setTimeout(refreshEstimate, 250);
+      }
+
+      async function loadExternalFormsConfig() {
+        const instructionsEl = domById("dynamicInstructions");
+        const formDisabledNotice = domById("formDisabledNotice");
+
+        if (!teamId || !db) {
+          return;
+        }
+        try {
+          const docRef = db
+            .collection("teams")
+            .doc(teamId)
+            .collection("config")
+            .doc("externalForms");
+          const snap = await docRef.get();
+          if (!snap.exists) {
+            return;
+          }
+          const data = snap.data() || {};
+
+          const eventEnabled = data.eventEnabled !== false;
+          const instructions = (data.eventInstructions || "").trim();
+
+          if (instructions) {
+            instructionsEl.textContent = instructions;
+            instructionsEl.style.display = "block";
+          }
+
+          if (!eventEnabled) {
+            const form = domById("eventForm");
+            if (form) {
+              form.style.display = "none";
+            }
+            formDisabledNotice.textContent =
+              "This event request form is currently disabled. Please contact the church office if you have questions.";
+            formDisabledNotice.style.display = "block";
+          }
+        } catch (err) {
+          console.error("Error loading externalForms config:", err);
+        }
+      }
+
+      async function loadPublicEventSetup() {
+        if (!teamId) return;
+
+        try {
+          const resp = await fetch(SETUP_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ teamId: teamId })
+          });
+
+          if (!resp.ok) {
+            throw new Error("Setup request failed");
+          }
+
+          const data = await resp.json();
+          state.campuses = Array.isArray(data.campuses) ? data.campuses : [];
+          populateCampuses(state.campuses);
+          setEstimateDisclaimer(data.disclaimer);
+          setLocationMode(data.pricingReady === true && state.campuses.length > 0);
+          renderRoomsForCampus();
+        } catch (err) {
+          console.error("getExternalEventRequestSetup error", err);
+          state.campuses = [];
+          populateCampuses([]);
+          setEstimateDisclaimer(DEFAULT_DISCLAIMER);
+          setLocationMode(false);
+        }
+      }
+
+      let db = null;
+      try {
+        if (typeof firebase !== "undefined") {
+          if (!firebase.apps.length) {
+            const firebaseConfig = {
+              apiKey: "AIzaSyCLLRMc-Tw-7EJMorQzw7-736gyQhvniGQ",
+              authDomain: "crswlkoperations.firebaseapp.com",
+              projectId: "crswlkoperations",
+              storageBucket: "crswlkoperations.firebasestorage.app",
+              messagingSenderId: "828244861941",
+              appId: "1:828244861941:web:4a41c371fb8474f12476bc",
+              measurementId: "G-N9892V2MT7"
+            };
+            firebase.initializeApp(firebaseConfig);
+          }
+          db = firebase.firestore();
+        }
+      } catch (e) {
+        console.error("Error initializing Firebase for external forms config:", e);
+      }
+
+      loadExternalFormsConfig();
+      loadPublicEventSetup();
+      setupTimeSelects();
+
+      const phoneInput = domById("requesterPhone");
+      phoneInput.addEventListener("input", function () {
+        let digits = this.value.replace(/\D/g, "").slice(0, 10);
+        let formatted = "";
+        if (digits.length <= 3) {
+          formatted = digits;
+        } else if (digits.length <= 6) {
+          formatted = digits.slice(0, 3) + "-" + digits.slice(3);
+        } else {
+          formatted = digits.slice(0, 3) + "-" + digits.slice(3, 6) + "-" + digits.slice(6);
+        }
+        this.value = formatted;
+      });
+
+      domById("structuredCampus").addEventListener("change", renderRoomsForCampus);
+      domById("requesterType").addEventListener("change", syncRequesterSupportRequirements);
+      domById("eventNature").addEventListener("change", queueEstimateRefresh);
+      domById("expectedAttendance").addEventListener("input", queueEstimateRefresh);
+      dateTimePairs.forEach(function (pair) {
+        [pair.dateId, pair.timeId].forEach(function (id) {
+          const control = domById(id);
+          if (!control) return;
+          control.addEventListener("change", function () {
+            syncDateTimePair(pair);
+            syncDependentScheduleCards();
+            queueEstimateRefresh();
+          });
+          control.addEventListener("input", function () {
+            syncDateTimePair(pair);
+            syncDependentScheduleCards();
+            queueEstimateRefresh();
+          });
+        });
+      });
+      domById("needsRooms").addEventListener("change", queueEstimateRefresh);
+      domById("needsTeardown").addEventListener("change", queueEstimateRefresh);
+      domById("needsAV").addEventListener("change", queueEstimateRefresh);
+      domById("needsCleanup").addEventListener("change", queueEstimateRefresh);
+      domById("needsTablesAndChairs").addEventListener("change", syncTablesChairsVisibility);
+      domById("tablesCount").addEventListener("input", queueEstimateRefresh);
+      domById("chairsCount").addEventListener("input", queueEstimateRefresh);
+      domById("needsCafe").addEventListener("change", syncCafeVisibility);
+      domById("cafeGuestCount").addEventListener("input", queueEstimateRefresh);
+      domById("cafeCustomSyrupCount").addEventListener("input", queueEstimateRefresh);
+
+      const form = domById("eventForm");
+      const backButton = domById("backButton");
+      const nextButton = domById("nextButton");
+      const submitButton = domById("submitButton");
+      const defaultSubmitButtonText = submitButton.textContent.trim();
+
+      backButton.addEventListener("click", function () {
+        clearMessages();
+        setCurrentStep(state.currentStep - 1);
+      });
+
+      nextButton.addEventListener("click", function () {
+        clearMessages();
+        if (!validateStep(state.currentStep)) return;
+        setCurrentStep(state.currentStep + 1);
+      });
+
+      document.querySelectorAll("[data-step-indicator]").forEach(function (item) {
+        item.addEventListener("click", function () {
+          navigateToStep(Number(item.dataset.stepIndicator));
+        });
+      });
+
+      function startSubmitting(message) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+        setSubmitProgress(message);
+      }
+
+      function finishSubmitting() {
+        submitButton.disabled = false;
+        submitButton.textContent = defaultSubmitButtonText;
+        hideSubmitProgress();
+      }
+
+      form.addEventListener("submit", async function (evt) {
+        evt.preventDefault();
+        clearMessages();
+        syncAllDateTimePairs();
+        syncDependentScheduleCards();
+
+        if (!validateStepsForSubmit()) {
+          return;
+        }
+
+        if (!teamId) {
+          showError("This form is missing the team id. Please use the link provided by your church.");
+          return;
+        }
+
+        const requesterName = domById("requesterName").value.trim();
+        const requesterEmail = domById("requesterEmail").value.trim();
+        const requesterPhone = domById("requesterPhone").value.trim();
+        const requesterType = domById("requesterType").value.trim();
+        const eventNature = domById("eventNature").value.trim();
+        const eventNatureLabel = selectedOptionText("eventNature");
+        const orgName = domById("orgName").value.trim();
+        const titleInput = domById("title").value.trim();
+        const title = titleInput || eventNatureLabel || "Event Request";
+        const description = domById("description").value.trim();
+        const startDateTime = domById("startDateTime").value;
+        const endDateTime = domById("endDateTime").value;
+        const setupStartDateTime = domById("setupStartDateTime").value;
+        const breakdownEndDateTime = domById("breakdownEndDateTime").value;
+        const expectedAttendanceStr = domById("expectedAttendance").value.trim();
+        const setupNeeded = domById("needsRooms").checked;
+        const teardownNeeded = domById("needsTeardown").checked;
+        const avNeeded = domById("needsAV").checked;
+        const cleanupNeeded = domById("needsCleanup").checked;
+        const needsTablesAndChairs = domById("needsTablesAndChairs").checked;
+        const tablesCount = parseCount("tablesCount");
+        const chairsCount = parseCount("chairsCount");
+        const needsCafe = domById("needsCafe").checked;
+        const cafeGuestCount = parseCount("cafeGuestCount");
+        const cafeCustomSyrupCount = parseCount("cafeCustomSyrupCount");
+
+        if (!requesterName) { showError("Please enter your name."); return; }
+        if (!requesterEmail) { showError("Please enter your email."); return; }
+        if (!requesterPhone) { showError("Please enter your phone number."); return; }
+        if (!requesterType) { showError("Please choose whether you are staff, a member, or other."); return; }
+        if (!eventNature) { showError("Please choose the nature of event."); return; }
+        if (parseCount("expectedAttendance") <= 0) { showError("Please enter estimated attendance."); return; }
+        if (!startDateTime || !endDateTime) {
+          setCurrentStep(2, false);
+          showError("Please provide both start and end date/time.");
+          return;
+        }
+        if (!setupStartDateTime) {
+          setCurrentStep(2, false);
+          showStepError("Please provide the requested setup start date/time.", "setupStartTime");
+          return;
+        }
+        if (!breakdownEndDateTime) {
+          setCurrentStep(2, false);
+          showStepError("Please provide the requested breakdown end date/time.", "breakdownEndTime");
+          return;
+        }
+        if (!description) {
+          setCurrentStep(1, false);
+          showError("Please describe what this event is for.");
+          return;
+        }
+
+        const startDate = new Date(startDateTime);
+        const endDate = new Date(endDateTime);
+        if (!(endDate > startDate)) {
+          showError("End date/time must be after the start date/time.");
+          return;
+        }
+        const setupStartDate = new Date(setupStartDateTime);
+        if (isNaN(setupStartDate.getTime())) {
+          setCurrentStep(2, false);
+          showError("Please provide a valid setup date/time.");
+          return;
+        }
+        const breakdownEndDate = new Date(breakdownEndDateTime);
+        if (isNaN(breakdownEndDate.getTime())) {
+          setCurrentStep(2, false);
+          showError("Please provide a valid breakdown date/time.");
+          return;
+        }
+
+        if (needsTablesAndChairs && tablesCount <= 0 && chairsCount <= 0) {
+          showError("Enter at least one table or chair quantity.");
+          return;
+        }
+
+        let locationName = null;
+        let campusId = null;
+        let roomIds = [];
+        let roomNames = [];
+        let locationNotes = null;
+
+        if (state.pricingReady) {
+          campusId = currentCampus() || null;
+          roomIds = selectedRoomIds();
+          roomNames = selectedRoomNames();
+          locationNotes = domById("locationNotes").value.trim() || null;
+
+          if (!campusId) {
+            showError("Please choose a campus.");
+            return;
+          }
+          if (roomIds.length === 0) {
+            showError("Please choose at least one room.");
+            return;
+          }
+        } else {
+          locationName = domById("locationNameLegacy").value.trim() || null;
+          campusId = domById("campusIdLegacy").value.trim() || null;
+        }
+
+        let expectedAttendance = null;
+        if (expectedAttendanceStr !== "" && !isNaN(Number(expectedAttendanceStr))) {
+          expectedAttendance = Number(expectedAttendanceStr);
+        }
+
+        const payload = {
+          teamId: teamId,
+          title: title,
+          requesterName: requesterName,
+          requesterEmail: requesterEmail,
+          requesterPhone: requesterPhone,
+          requesterType: requesterType,
+          eventNature: eventNature || null,
+          eventNatureLabel: eventNatureLabel,
+          organizationName: orgName || null,
+          description: description,
+          locationName: locationName,
+          locationNotes: locationNotes,
+          campusId: campusId,
+          roomIds: roomIds,
+          roomNames: roomNames,
+          guestCountRange: null,
+          expectedAttendance: expectedAttendance,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          setupStartDate: setupStartDate.toISOString(),
+          breakdownEndDate: breakdownEndDate.toISOString(),
+          needsSetup: setupNeeded,
+          needsRooms: setupNeeded,
+          needsTeardown: teardownNeeded,
+          needsAV: avNeeded,
+          needsCleanup: cleanupNeeded,
+          needsTablesAndChairs: needsTablesAndChairs,
+          tablesCount: needsTablesAndChairs ? tablesCount : null,
+          chairsCount: needsTablesAndChairs ? chairsCount : null,
+          needsCafe: needsCafe,
+          cafeGuestCount: needsCafe && cafeGuestCount > 0 ? cafeGuestCount : null,
+          cafeCustomSyrupCount: needsCafe ? cafeCustomSyrupCount : null
+        };
+
+        startSubmitting("Submitting your event request...");
+
+        try {
+          const resp = await fetch(SUBMIT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (!resp.ok) {
+            const data = await resp.json().catch(function () { return {}; });
+            const msg =
+              (data && data.error) ||
+              (data && data.message) ||
+              "There was an error submitting your event request.";
+            showError(msg);
+            finishSubmitting();
+            return;
+          }
+
+          form.reset();
+          syncAllDateTimePairs();
+          syncDependentScheduleCards();
+          domById("structuredCampus").value = "";
+          applySingleCampusDefault();
+          setEstimateDisclaimer(state.disclaimer);
+          syncRequesterSupportRequirements();
+          syncTablesChairsVisibility();
+          renderRoomsForCampus();
+          setCurrentStep(0);
+          showSuccess("Thank you. Your event request has been submitted, and our team will follow up soon.");
+        } catch (err) {
+          console.error("submitExternalEventRequest error", err);
+          showError("Unexpected error submitting your request. Please try again in a moment.");
+        } finally {
+          finishSubmitting();
+        }
+      });
+
+      setupInfoToggles(document);
+      syncDependentScheduleCards();
+      syncRequesterSupportRequirements();
+      syncTablesChairsVisibility();
+      setCurrentStep(0, false);
+    })();
+  </script>
+</body>
+</html>

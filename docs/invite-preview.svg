@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">ChurchOps Team Invite</title>
+  <desc id="desc">A polished ChurchOps invite preview card for message link previews.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10263f"/>
+      <stop offset="0.52" stop-color="#0f6a77"/>
+      <stop offset="1" stop-color="#e8f3ef"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.98"/>
+      <stop offset="1" stop-color="#f6fbf9" stop-opacity="0.94"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#081827" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <path d="M0 490 C190 398 316 594 528 505 C759 408 881 186 1200 268 L1200 630 L0 630 Z" fill="#f8fbf8" opacity="0.16"/>
+  <path d="M0 78 C186 148 286 82 428 53 C596 19 746 67 890 145 C1005 207 1092 205 1200 154 L1200 0 L0 0 Z" fill="#ffffff" opacity="0.09"/>
+
+  <g filter="url(#shadow)">
+    <rect x="124" y="92" width="952" height="446" rx="34" fill="url(#card)"/>
+  </g>
+
+  <g transform="translate(178 136)">
+    <circle cx="28" cy="28" r="18" fill="#0f6a77"/>
+    <circle cx="28" cy="28" r="28" fill="#0f6a77" opacity="0.16"/>
+    <text x="72" y="37" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="34" font-weight="750" fill="#152238">ChurchOps</text>
+  </g>
+
+  <g transform="translate(178 206)">
+    <text x="0" y="70" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif" font-size="72" font-weight="800" fill="#152238">Team Invite</text>
+    <text x="2" y="126" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif" font-size="31" font-weight="500" fill="#5d6778">Open your invite, prefilled with your code and email.</text>
+  </g>
+
+  <g transform="translate(178 384)">
+    <rect x="0" y="0" width="270" height="86" rx="22" fill="#0f6a77" opacity="0.12"/>
+    <text x="28" y="35" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif" font-size="20" font-weight="750" fill="#0f6a77" letter-spacing="2">INVITE CODE</text>
+    <text x="28" y="67" font-family="'SF Mono', ui-monospace, Menlo, Consolas, monospace" font-size="34" font-weight="800" fill="#152238">READY</text>
+  </g>
+
+  <g transform="translate(784 352)">
+    <rect x="0" y="0" width="170" height="170" rx="42" fill="#0f6a77"/>
+    <path d="M51 58 H119 C130 58 138 66 138 77 V116 C138 127 130 135 119 135 H51 C40 135 32 127 32 116 V77 C32 66 40 58 51 58 Z" fill="none" stroke="#ffffff" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M38 72 L84 104 L132 72" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="128" cy="48" r="19" fill="#f4c86a"/>
+  </g>
+</svg>

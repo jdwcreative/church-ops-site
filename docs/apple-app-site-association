@@ -1,0 +1,34 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "CLC2Q76H7M.com.jdw.churchops"
+        ],
+        "components": [
+          {
+            "/": "/invite.html",
+            "comment": "Open ChurchOps invite links in the app."
+          },
+          {
+            "/": "/invite",
+            "comment": "Open extensionless ChurchOps invite links in the app."
+          },
+          {
+            "/": "/open.html",
+            "comment": "Open ChurchOps from email notifications."
+          },
+          {
+            "/": "/open",
+            "comment": "Open extensionless ChurchOps notification links in the app."
+          },
+          {
+            "/": "/plaid/oauth",
+            "comment": "Return Plaid bank OAuth flows to ChurchOps."
+          }
+        ]
+      }
+    ]
+  }
+}

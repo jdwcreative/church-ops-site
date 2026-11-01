@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Request a Reimbursement – ChurchOps</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f5f5f9;
+      --card: #ffffff;
+      --accent: #2563f2;
+      --accent-soft: #e5edff;
+      --danger: #d14343;
+      --text-main: #1f2933;
+      --text-muted: #7b8794;
+      --border: #d8e2f2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 32px 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 720px;
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      padding: 24px 24px 28px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .intro {
+      margin: 0 0 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .section-label {
+      margin-top: 18px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .field {
+      flex: 1 1 220px;
+      min-width: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    label .req {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text-main);
+      background-color: #f9fbff;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 1px rgba(37, 99, 242, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .receipt-picker {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .receipt-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .file-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f7f9fc;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .file-button:hover:not([disabled]) {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: #102a6b;
+    }
+
+    .file-button[disabled] {
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    .receipt-count {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .receipt-list {
+      display: none;
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f9fbff;
+    }
+
+    .receipt-list.has-items {
+      display: block;
+    }
+
+    .receipt-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .receipt-item:first-child {
+      border-top: none;
+    }
+
+    .receipt-name {
+      flex: 1;
+      min-width: 0;
+      font-size: 13px;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .receipt-size {
+      flex: 0 0 auto;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .receipt-remove-button {
+      flex: 0 0 auto;
+      border: none;
+      background: transparent;
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    .receipt-remove-button[disabled] {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .receipt-notice {
+      display: none;
+      margin-top: 6px;
+      color: #8b1c1c;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .receipt-drop-zone {
+      padding: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .receipt-drop-zone.is-dragover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .payment-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f7f9fc;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .payment-option input {
+      margin: 0;
+    }
+
+    .payment-option.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: #102a6b;
+    }
+
+    .payment-detail {
+      border-radius: 10px;
+      border: 1px dashed var(--border);
+      background: #f9fbff;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+
+    .error-banner {
+      display: none;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(209, 67, 67, 0.06);
+      border: 1px solid rgba(209, 67, 67, 0.3);
+      color: #8b1c1c;
+      font-size: 13px;
+    }
+
+    .success-banner {
+      display: none;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #e3f9e5;
+      border: 1px solid #8ed1a5;
+      color: #03543f;
+      font-size: 13px;
+    }
+
+    .info-banner {
+      display: none;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      font-size: 13px;
+    }
+
+    .submit-progress {
+      display: none;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      font-size: 13px;
+    }
+
+    .submit-progress-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .submit-progress-text {
+      color: #3b5b85;
+      line-height: 1.4;
+    }
+
+    .submit-progress-bar {
+      position: relative;
+      overflow: hidden;
+      height: 4px;
+      margin-top: 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+    }
+
+    .submit-progress-bar::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 42%;
+      border-radius: inherit;
+      background: var(--accent);
+      animation: submitProgress 1.1s ease-in-out infinite;
+    }
+
+    @keyframes submitProgress {
+      0% { transform: translateX(-110%); }
+      100% { transform: translateX(250%); }
+    }
+
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .button-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(37, 99, 242, 0.25);
+      transition: box-shadow 0.15s ease, transform 0.08s ease, background-color 0.15s ease;
+    }
+
+    .button-primary:hover {
+      background: #1746d3;
+      box-shadow: 0 10px 20px rgba(37, 99, 242, 0.32);
+    }
+
+    .button-primary:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 8px rgba(37, 99, 242, 0.2);
+    }
+
+    .button-primary[disabled] {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 20px 16px 24px;
+      }
+    }
+  </style>
+
+  <!-- Firebase JS SDK (compat) for reading externalForms config from Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Firebase Storage for attachments -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <div class="eyebrow">External Reimbursement</div>
+      <h1>Request a Reimbursement</h1>
+      <p class="intro">
+        Use this form if you purchased something for the church and need to be reimbursed. Your request will be
+        reviewed by our team and routed for payment.
+      </p>
+
+      <!-- Dynamic instructions from /teams/{teamId}/config/externalForms.reimbursementInstructions -->
+      <div id="dynamicInstructions" class="intro" style="display:none;"></div>
+
+      <!-- Banner shown when reimbursementEnabled is false -->
+      <div id="formDisabledNotice" class="info-banner"></div>
+
+      <div id="errorBanner" class="error-banner"></div>
+      <div id="successBanner" class="success-banner"></div>
+      <div id="submitProgress" class="submit-progress" role="status" aria-live="polite" aria-atomic="true">
+        <div class="submit-progress-title">Submitting...</div>
+        <div id="submitProgressText" class="submit-progress-text">Please wait while we send your reimbursement request.</div>
+        <div class="submit-progress-bar"></div>
+      </div>
+
+      <form id="reimbForm" novalidate>
+        <!-- Contact & Summary -->
+        <div class="section-label">Contact &amp; Summary</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="requesterName">Your Name <span class="req">*</span></label>
+            <input id="requesterName" name="requesterName" type="text" autocomplete="name" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="requesterEmail">Email <span class="req">*</span></label>
+            <input id="requesterEmail" name="requesterEmail" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="requesterPhone">Phone <span class="req">*</span></label>
+            <input id="requesterPhone" name="requesterPhone" type="tel" inputmode="tel" placeholder="423-555-1234" required />
+            <div class="help">We’ll format this as you type.</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="orgName">Group / Ministry (Optional)</label>
+            <input id="orgName" name="orgName" type="text" placeholder="e.g. Kids Ministry, Youth, etc." />
+          </div>
+        </div>
+
+        <!-- Reimbursement details -->
+        <div class="section-label">Reimbursement Details</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="title">What Is This For? <span class="req">*</span></label>
+            <input id="title" name="title" type="text" placeholder="e.g. Snacks for youth event" required />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="purpose">Description / Purpose <span class="req">*</span></label>
+            <textarea id="purpose" name="purpose" rows="3"
+              placeholder="Briefly describe what you purchased and why."
+              required></textarea>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="amount">Amount To Be Reimbursed (USD) <span class="req">*</span></label>
+            <input id="amount" name="amount" type="number" min="0" step="0.01" placeholder="0.00" required />
+          </div>
+        </div>
+
+        <!-- Receipts / attachments -->
+        <div class="section-label">Receipts (Required)</div>
+        <div class="field-row">
+          <div id="receiptDropZone" class="field receipt-drop-zone">
+            <label for="receiptFile">Upload Receipts or Invoices</label>
+            <div class="receipt-picker">
+              <input id="receiptFile" class="receipt-input" name="receiptFile" type="file" accept=".pdf,image/*" multiple />
+              <button id="receiptPickerButton" class="file-button" type="button">Choose receipts</button>
+              <span id="receiptCount" class="receipt-count">No receipts selected</span>
+            </div>
+            <ul id="receiptList" class="receipt-list" aria-live="polite"></ul>
+            <div id="receiptNotice" class="receipt-notice"></div>
+            <div class="help">
+              Choose photos or PDFs, or drag and drop them here on desktop. Up to 10 files, 10 MB each.
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment method -->
+        <div class="section-label">How Should We Pay You?</div>
+        <div class="payment-options" id="paymentOptions">
+          <label class="payment-option">
+            <input type="radio" name="paymentMethod" value="direct_deposit" checked />
+            <span>Direct Deposit</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="paymentMethod" value="mail_check" />
+            <span>Mail a Check</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="paymentMethod" value="pickup" />
+            <span>Pick Up at Church Office</span>
+          </label>
+        </div>
+
+        <!-- Direct deposit details -->
+        <div id="directDepositDetails" class="payment-detail">
+          <div class="field-row">
+            <div class="field">
+              <label>
+                <input type="checkbox" id="useExistingDepositInfo" />
+                Use direct deposit information we already have on file
+              </label>
+              <div class="help">
+                If you’ve been paid by this church via direct deposit before, check this and you can skip entering your
+                account details.
+              </div>
+            </div>
+          </div>
+
+          <div id="ddFields">
+            <div class="field-row">
+              <div class="field">
+                <label for="bankRoutingNumber">Routing Number <span class="req">*</span></label>
+                <input id="bankRoutingNumber" name="bankRoutingNumber" type="password" autocomplete="off" />
+              </div>
+              <div class="field">
+                <label for="bankAccountNumber">Account Number <span class="req">*</span></label>
+                <input id="bankAccountNumber" name="bankAccountNumber" type="password" autocomplete="off" />
+              </div>
+            </div>
+            <div class="help">Your banking details are encrypted in transit and stored securely.</div>
+          </div>
+        </div>
+
+        <!-- Mail check details -->
+        <div id="mailDetails" class="payment-detail" style="display:none;">
+          <div class="field-row">
+            <div class="field">
+              <label for="payToName">Name on Check <span class="req">*</span></label>
+              <input id="payToName" name="payToName" type="text" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="mailingAddress">Mailing Address <span class="req">*</span></label>
+              <textarea id="mailingAddress" name="mailingAddress" rows="3" placeholder="Street, city, state, ZIP"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pickup details -->
+        <div id="pickupDetails" class="payment-detail" style="display:none;">
+          <div class="help">
+            We’ll prepare your reimbursement check for pickup at the church office. Please check office hours before arriving.
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="submitButton" class="button-primary">
+            Submit Reimbursement Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function domById(id) { return document.getElementById(id); }
+
+      function showError(msg) {
+        const el = domById("errorBanner");
+        el.textContent = msg;
+        el.style.display = "block";
+        domById("successBanner").style.display = "none";
+        hideSubmitProgress();
+        scrollToStatus(el);
+      }
+
+      function showSuccess(msg) {
+        const el = domById("successBanner");
+        el.textContent = msg;
+        el.style.display = "block";
+        domById("errorBanner").style.display = "none";
+        hideSubmitProgress();
+        scrollToStatus(el);
+      }
+
+      function clearMessages() {
+        domById("errorBanner").style.display = "none";
+        domById("successBanner").style.display = "none";
+        hideSubmitProgress();
+      }
+
+      function scrollToStatus(el) {
+        if (!el) {
+          return;
+        }
+        window.setTimeout(function () {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 0);
+      }
+
+      function setSubmitProgress(message) {
+        const el = domById("submitProgress");
+        const text = domById("submitProgressText");
+        if (text) {
+          text.textContent = message || "Please wait while we send your reimbursement request.";
+        }
+        if (el) {
+          el.style.display = "block";
+          scrollToStatus(el);
+        }
+      }
+
+      function hideSubmitProgress() {
+        const el = domById("submitProgress");
+        if (el) {
+          el.style.display = "none";
+        }
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const teamId = (params.get("teamId") || "").trim();
+
+      const instructionsEl = domById("dynamicInstructions");
+      const formDisabledNotice = domById("formDisabledNotice");
+
+      // Initialize Firebase + Firestore + Storage for external forms config + attachments
+      let db = null;
+      let storage = null;
+      try {
+        if (typeof firebase !== "undefined") {
+          if (!firebase.apps.length) {
+            const firebaseConfig = {
+              apiKey: "AIzaSyCLLRMc-Tw-7EJMorQzw7-736gyQhvniGQ",
+              authDomain: "crswlkoperations.firebaseapp.com",
+              projectId: "crswlkoperations",
+              storageBucket: "crswlkoperations.firebasestorage.app",
+              messagingSenderId: "828244861941",
+              appId: "1:828244861941:web:4a41c371fb8474f12476bc",
+              measurementId: "G-N9892V2MT7"
+            };
+            firebase.initializeApp(firebaseConfig);
+          }
+          db = firebase.firestore();
+          if (firebase.storage) {
+            storage = firebase.storage();
+          } else {
+            console.warn("Firebase Storage SDK not available.");
+          }
+        } else {
+          console.warn("Firebase SDK not available; externalForms config will not be loaded.");
+        }
+      } catch (e) {
+        console.error("Error initializing Firebase for external forms config:", e);
+      }
+
+      async function loadExternalFormsConfig() {
+        if (!teamId || !db) {
+          return;
+        }
+        try {
+          const docRef = db
+            .collection("teams")
+            .doc(teamId)
+            .collection("config")
+            .doc("externalForms");
+          const snap = await docRef.get();
+          if (!snap.exists) {
+            return;
+          }
+          const data = snap.data() || {};
+
+          const reimbursementEnabled = data.reimbursementEnabled !== false; // default to true
+          const instructions = (data.reimbursementInstructions || "").trim();
+
+          if (instructions) {
+            instructionsEl.textContent = instructions;
+            instructionsEl.style.display = "block";
+          }
+
+          if (!reimbursementEnabled) {
+            const form = domById("reimbForm");
+            if (form) {
+              form.style.display = "none";
+            }
+            formDisabledNotice.textContent =
+              "This reimbursement form is currently disabled. Please contact the church office if you have questions.";
+            formDisabledNotice.style.display = "block";
+          }
+        } catch (err) {
+          console.error("Error loading externalForms config:", err);
+        }
+      }
+
+      // Kick off config load (non-blocking)
+      loadExternalFormsConfig();
+
+      const maxReceiptFiles = 10;
+
+      function randomRequestToken() {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+          return window.crypto.randomUUID().replace(/-/g, "").slice(0, 12);
+        }
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      }
+
+      function createReimbursementRequestId() {
+        return "reimb_" + Date.now().toString(36) + "_" + randomRequestToken();
+      }
+
+      function sanitizeReceiptFileName(name) {
+        const safeName = String(name || "receipt").replace(/[^\w.\-]/g, "_");
+        return safeName || "receipt";
+      }
+
+      function storedReceiptFileName(file, index) {
+        const order = String(index + 1).padStart(2, "0");
+        return order + "_" + randomRequestToken() + "_" + sanitizeReceiptFileName(file.name);
+      }
+
+      async function uploadReceiptFile(teamId, requestId, file, index) {
+        if (!file) return null;
+        if (!storage) {
+          console.warn("uploadReceiptFile: storage not initialized; skipping upload.");
+          return null;
+        }
+
+        const safeName = storedReceiptFileName(file, index);
+        const path = "teams/" + teamId + "/external_attachments/reimbursements/" + requestId + "/" + safeName;
+
+        const rootRef = storage.ref();
+        const fileRef = rootRef.child(path);
+
+        await fileRef.put(file);
+
+        return {
+          filePath: path,
+          requestId: requestId
+        };
+      }
+
+      async function uploadReceiptFiles(teamId, requestId, files) {
+        const uploaded = [];
+        for (let i = 0; i < files.length; i += 1) {
+          const file = files[i];
+          setSubmitProgress("Uploading receipt " + (i + 1) + " of " + files.length + "...");
+          const attachmentInfo = await uploadReceiptFile(teamId, requestId, file, i);
+          if (!attachmentInfo || !attachmentInfo.filePath) {
+            throw new Error("Receipt upload did not return a Storage path.");
+          }
+          uploaded.push(attachmentInfo);
+        }
+        return uploaded;
+      }
+
+      // Payment method UI
+      const paymentOptions = Array.from(document.querySelectorAll('input[name="paymentMethod"]'));
+
+      function updatePaymentUI() {
+        const selected = paymentOptions.find((o) => o.checked)?.value || "direct_deposit";
+        const dd = domById("directDepositDetails");
+        const mail = domById("mailDetails");
+        const pickup = domById("pickupDetails");
+
+        dd.style.display = selected === "direct_deposit" ? "block" : "none";
+        mail.style.display = selected === "mail_check" ? "block" : "none";
+        pickup.style.display = selected === "pickup" ? "block" : "none";
+
+        document.querySelectorAll(".payment-option").forEach((opt) => opt.classList.remove("active"));
+        paymentOptions.forEach((opt) => {
+          if (opt.checked) {
+            opt.closest(".payment-option")?.classList.add("active");
+          }
+        });
+      }
+
+      paymentOptions.forEach((opt) => opt.addEventListener("change", updatePaymentUI));
+      updatePaymentUI();
+
+      // Hide/show direct deposit account fields
+      const useExistingCheckbox = domById("useExistingDepositInfo");
+      const ddFields = domById("ddFields");
+      function updateDdFields() {
+        ddFields.style.display = useExistingCheckbox.checked ? "none" : "block";
+      }
+      useExistingCheckbox.addEventListener("change", updateDdFields);
+      updateDdFields();
+
+      // Auto-format phone
+      const phoneInput = domById("requesterPhone");
+      phoneInput.addEventListener("input", function () {
+        let digits = this.value.replace(/\D/g, "").slice(0, 10);
+        let formatted = "";
+        if (digits.length <= 3) {
+          formatted = digits;
+        } else if (digits.length <= 6) {
+          formatted = digits.slice(0, 3) + "-" + digits.slice(3);
+        } else {
+          formatted =
+            digits.slice(0, 3) + "-" + digits.slice(3, 6) + "-" + digits.slice(6);
+        }
+        this.value = formatted;
+      });
+
+      const form = domById("reimbForm");
+      const submitButton = domById("submitButton");
+      const receiptInput = domById("receiptFile");
+      const receiptPickerButton = domById("receiptPickerButton");
+      const receiptCount = domById("receiptCount");
+      const receiptList = domById("receiptList");
+      const receiptNotice = domById("receiptNotice");
+      const receiptDropZone = domById("receiptDropZone");
+      const defaultSubmitButtonText = submitButton.textContent.trim();
+      const selectedReceiptFiles = [];
+      let isSubmitting = false;
+
+      function receiptFileKey(file) {
+        return [
+          file && file.name ? file.name : "",
+          file && typeof file.size === "number" ? file.size : "",
+          file && typeof file.lastModified === "number" ? file.lastModified : ""
+        ].join("|");
+      }
+
+      function formatReceiptSize(bytes) {
+        const size = Number(bytes);
+        if (!Number.isFinite(size) || size <= 0) {
+          return "";
+        }
+        if (size < 1024 * 1024) {
+          return Math.max(1, Math.round(size / 1024)) + " KB";
+        }
+        return (size / (1024 * 1024)).toFixed(1) + " MB";
+      }
+
+      function setReceiptNotice(message) {
+        if (!receiptNotice) {
+          return;
+        }
+        receiptNotice.textContent = message || "";
+        receiptNotice.style.display = message ? "block" : "none";
+      }
+
+      function renderReceiptFiles() {
+        if (receiptCount) {
+          const count = selectedReceiptFiles.length;
+          receiptCount.textContent = count === 0
+            ? "No receipts selected"
+            : count + " receipt" + (count === 1 ? "" : "s") + " selected";
+        }
+
+        if (receiptPickerButton) {
+          const atLimit = selectedReceiptFiles.length >= maxReceiptFiles;
+          receiptPickerButton.disabled = isSubmitting || atLimit;
+          receiptPickerButton.textContent = atLimit
+            ? "Receipt limit reached"
+            : selectedReceiptFiles.length === 0
+              ? "Choose receipts"
+              : "Add more receipts";
+        }
+
+        if (!receiptList) {
+          return;
+        }
+
+        receiptList.innerHTML = "";
+        receiptList.classList.toggle("has-items", selectedReceiptFiles.length > 0);
+        selectedReceiptFiles.forEach((file, index) => {
+          const item = document.createElement("li");
+          item.className = "receipt-item";
+
+          const name = document.createElement("span");
+          name.className = "receipt-name";
+          name.textContent = file.name || "Receipt " + (index + 1);
+
+          const size = document.createElement("span");
+          size.className = "receipt-size";
+          size.textContent = formatReceiptSize(file.size);
+
+          const remove = document.createElement("button");
+          remove.className = "receipt-remove-button";
+          remove.type = "button";
+          remove.textContent = "Remove";
+          remove.setAttribute("data-index", String(index));
+          remove.disabled = isSubmitting;
+
+          item.appendChild(name);
+          if (size.textContent) {
+            item.appendChild(size);
+          }
+          item.appendChild(remove);
+          receiptList.appendChild(item);
+        });
+      }
+
+      function addReceiptFiles(files) {
+        const incomingFiles = Array.from(files || []);
+        if (incomingFiles.length === 0) {
+          return;
+        }
+
+        const existingKeys = new Set(selectedReceiptFiles.map(receiptFileKey));
+        let added = 0;
+        let skippedDuplicates = 0;
+        let skippedLimit = 0;
+        let skippedInvalid = 0;
+        let skippedTooLarge = 0;
+
+        incomingFiles.forEach((file) => {
+          if (!file) {
+            return;
+          }
+          const fileName = String(file.name || "").toLowerCase();
+          const isSupported = file.type === "application/pdf"
+            || String(file.type || "").startsWith("image/")
+            || /\.(pdf|jpe?g|png|gif|webp|heic|heif)$/i.test(fileName);
+          if (!isSupported) {
+            skippedInvalid += 1;
+            return;
+          }
+          if (Number(file.size || 0) > 10 * 1024 * 1024) {
+            skippedTooLarge += 1;
+            return;
+          }
+          const key = receiptFileKey(file);
+          if (existingKeys.has(key)) {
+            skippedDuplicates += 1;
+            return;
+          }
+          if (selectedReceiptFiles.length >= maxReceiptFiles) {
+            skippedLimit += 1;
+            return;
+          }
+          selectedReceiptFiles.push(file);
+          existingKeys.add(key);
+          added += 1;
+        });
+
+        if (skippedTooLarge > 0) {
+          setReceiptNotice("Receipts must be 10 MB or smaller.");
+        } else if (skippedInvalid > 0) {
+          setReceiptNotice("Choose PDF or image receipts.");
+        } else if (skippedLimit > 0) {
+          setReceiptNotice("You can attach up to " + maxReceiptFiles + " receipts. Extra files were not added.");
+        } else if (skippedDuplicates > 0 && added === 0) {
+          setReceiptNotice("That receipt is already selected.");
+        } else {
+          setReceiptNotice("");
+        }
+
+        renderReceiptFiles();
+      }
+
+      if (receiptPickerButton && receiptInput) {
+        receiptPickerButton.addEventListener("click", function () {
+          if (isSubmitting || selectedReceiptFiles.length >= maxReceiptFiles) {
+            return;
+          }
+          receiptInput.click();
+        });
+      }
+
+      if (receiptInput) {
+        receiptInput.addEventListener("change", function () {
+          addReceiptFiles(this.files);
+          this.value = "";
+        });
+      }
+
+      if (receiptDropZone) {
+        ["dragenter", "dragover"].forEach(function (eventName) {
+          receiptDropZone.addEventListener(eventName, function (evt) {
+            evt.preventDefault();
+            if (!isSubmitting && selectedReceiptFiles.length < maxReceiptFiles) {
+              receiptDropZone.classList.add("is-dragover");
+            }
+          });
+        });
+        ["dragleave", "dragend"].forEach(function (eventName) {
+          receiptDropZone.addEventListener(eventName, function () {
+            receiptDropZone.classList.remove("is-dragover");
+          });
+        });
+        receiptDropZone.addEventListener("drop", function (evt) {
+          evt.preventDefault();
+          receiptDropZone.classList.remove("is-dragover");
+          if (isSubmitting || selectedReceiptFiles.length >= maxReceiptFiles) {
+            return;
+          }
+          addReceiptFiles(evt.dataTransfer ? evt.dataTransfer.files : []);
+        });
+      }
+
+      if (receiptList) {
+        receiptList.addEventListener("click", function (evt) {
+          const target = evt.target;
+          if (!target || !target.matches || !target.matches(".receipt-remove-button")) {
+            return;
+          }
+          const index = Number(target.getAttribute("data-index"));
+          if (!Number.isInteger(index) || index < 0 || index >= selectedReceiptFiles.length || isSubmitting) {
+            return;
+          }
+          selectedReceiptFiles.splice(index, 1);
+          setReceiptNotice("");
+          renderReceiptFiles();
+        });
+      }
+
+      function startSubmitting(message) {
+        isSubmitting = true;
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+        renderReceiptFiles();
+        setSubmitProgress(message);
+      }
+
+      function finishSubmitting() {
+        isSubmitting = false;
+        submitButton.disabled = false;
+        submitButton.textContent = defaultSubmitButtonText;
+        renderReceiptFiles();
+        hideSubmitProgress();
+      }
+
+      form.addEventListener("submit", async function (evt) {
+        evt.preventDefault();
+        clearMessages();
+
+        if (!teamId) {
+          showError("This form is missing the team id. Please use the link provided by your church.");
+          return;
+        }
+
+        const requesterName = domById("requesterName").value.trim();
+        const requesterEmail = domById("requesterEmail").value.trim();
+        const requesterPhone = domById("requesterPhone").value.trim();
+        const orgName = domById("orgName").value.trim();
+        const title = domById("title").value.trim();
+        const purpose = domById("purpose").value.trim();
+        const amountStr = domById("amount").value.trim();
+
+        if (!requesterName) { showError("Please enter your name."); return; }
+        if (!requesterEmail) { showError("Please enter your email."); return; }
+        if (!requesterPhone) { showError("Please enter your phone number."); return; }
+        if (!title) { showError("Please tell us what this reimbursement is for."); return; }
+        if (!purpose) { showError("Please describe what you purchased and why."); return; }
+        if (!amountStr || isNaN(Number(amountStr))) {
+          showError("Please enter a valid reimbursement amount.");
+          return;
+        }
+
+        const paymentMethod = (paymentOptions.find((o) => o.checked)?.value || "direct_deposit").trim();
+
+        let useExistingDepositInfo = false;
+        let bankRoutingNumber = null;
+        let bankAccountNumber = null;
+        let payToName = requesterName;
+        let mailingAddress = null;
+
+        if (paymentMethod === "direct_deposit") {
+          useExistingDepositInfo = useExistingCheckbox.checked;
+          if (!useExistingDepositInfo) {
+            const routing = domById("bankRoutingNumber").value.trim();
+            const account = domById("bankAccountNumber").value.trim();
+            if (!routing || !account) {
+              showError("Please enter routing and account numbers, or choose to use existing deposit info.");
+              return;
+            }
+            bankRoutingNumber = routing;
+            bankAccountNumber = account;
+          }
+        } else if (paymentMethod === "mail_check") {
+          payToName = domById("payToName").value.trim();
+          mailingAddress = domById("mailingAddress").value.trim();
+          if (!payToName || !mailingAddress) {
+            showError("Please provide the name and mailing address for the check.");
+            return;
+          }
+        } else if (paymentMethod === "pickup") {
+          // payToName stays requesterName; mailingAddress stays null.
+        }
+
+        const amountCents = Math.round(Number(amountStr) * 100);
+
+        startSubmitting("Preparing your reimbursement request...");
+
+        // Upload receipts (required)
+        let uploadedReceipts = [];
+        const requestId = createReimbursementRequestId();
+        try {
+          const receiptFiles = selectedReceiptFiles.slice();
+
+          if (receiptFiles.length === 0) {
+            finishSubmitting();
+            showError("Please upload at least one receipt before submitting.");
+            return;
+          }
+
+          if (receiptFiles.length > maxReceiptFiles) {
+            finishSubmitting();
+            showError("Please upload no more than " + maxReceiptFiles + " receipts.");
+            return;
+          }
+
+          uploadedReceipts = await uploadReceiptFiles(teamId, requestId, receiptFiles);
+        } catch (uploadErr) {
+          console.error("uploadReceiptFiles error", uploadErr);
+          finishSubmitting();
+          showError("There was an error uploading your receipts. Please try again.");
+          return;
+        }
+
+        const attachments = uploadedReceipts
+          .map((info) => info.filePath)
+          .filter((path) => !!path);
+
+        if (attachments.length !== uploadedReceipts.length || attachments.length === 0) {
+          finishSubmitting();
+          showError("There was an error preparing your uploaded receipts. Please try again.");
+          return;
+        }
+
+        const payload = {
+          teamId: teamId,
+          title: title,
+          requesterName: requesterName,
+          requesterEmail: requesterEmail,
+          requesterPhone: requesterPhone,
+          // We can fold orgName into purpose for now so admins see it.
+          purpose: orgName ? purpose + " (Group/Ministry: " + orgName + ")" : purpose,
+          amountCents: amountCents,
+          currencyCode: "USD",
+          payToName: payToName,
+          mailingAddress: mailingAddress,
+          useExistingDepositInfo: useExistingDepositInfo,
+          bankRoutingNumber: bankRoutingNumber,
+          bankAccountNumber: bankAccountNumber,
+          attachments: attachments,
+          clientRequestId: requestId
+        };
+
+        try {
+          setSubmitProgress("Submitting your reimbursement request...");
+          const resp = await fetch(
+            "https://us-central1-crswlkoperations.cloudfunctions.net/submitExternalReimbursement",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload)
+            }
+          );
+
+          if (!resp.ok) {
+            const data = await resp.json().catch(() => ({}));
+            const msg =
+              (data && data.error) ||
+              (data && data.message) ||
+              "There was an error submitting your reimbursement request.";
+            showError(msg);
+            finishSubmitting();
+            return;
+          }
+
+          form.reset();
+          selectedReceiptFiles.splice(0, selectedReceiptFiles.length);
+          if (receiptInput) {
+            receiptInput.value = "";
+          }
+          setReceiptNotice("");
+          renderReceiptFiles();
+          updatePaymentUI();
+          updateDdFields();
+          showSuccess("Thank you! Your reimbursement request has been submitted.");
+        } catch (err) {
+          console.error("submitExternalReimbursement error", err);
+          showError("Unexpected error submitting your request. Please try again in a moment.");
+        } finally {
+          finishSubmitting();
+        }
+      });
+
+      renderReceiptFiles();
+    })();
+  </script>
+</body>
+</html>
