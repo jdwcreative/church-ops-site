@@ -1,3 +1,15 @@
+# November 3, 2026 Website Publication
+
+The production website is published from **`main` → `/docs`** on GitHub Pages at `https://www.church-ops.com/`. The root files below are preserved historical source; preview the current site with `python3 -m http.server 8768 --bind 127.0.0.1 --directory docs`.
+
+The redesigned marketing site leads with church needs, separates product availability, and provides direct routes to the central account workspace, product details, help and downloads. Account creation runs on `https://app.church-ops.com/account.html?mode=signup`; the public website does not host or replace authentication. Operational forms, invitation handlers, Plaid callbacks, Apple association files and legal article content are preserved. No Functions, Rules, billing, feature activation or native app release is part of this website publication.
+
+The exact publication and QA records are retained by the ChurchOps workspace under `docs/qa/website-redesign-2026-11-03/publication-02`. Source HTML/CSS/JS is buildless. The shared marketing stylesheet and script use content-hashed URLs.
+
+The rest of this document records historical revisions and their original boundaries.
+
+---
+
 # ChurchOps public website
 
 Static product website for `www.church-ops.com`. Serve the repository root; no package install or build step is required.

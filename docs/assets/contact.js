@@ -20,6 +20,6 @@
    form.hidden=true;const success=document.getElementById('contact-success');success.hidden=false;success.focus();
   } catch(error) {
    feedback.textContent=error.name==='TimeoutError'?'Delivery is taking longer than expected. Please retry; we’ll use the same reference to avoid a duplicate.':error.name==='TypeError'||error.message==='Failed to fetch'?'We couldn’t reach the inquiry service. Your message is still here. Please retry or email hello@church-ops.com.':error.message;
-  } finally {sending=false;button.disabled=false;button.textContent='Send Request ↗';}
+  } finally {sending=false;button.disabled=false;button.textContent='Send Request';}
  });
 })();
