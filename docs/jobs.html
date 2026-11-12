@@ -635,6 +635,10 @@
       margin: 0;
     }
 
+    #wizardAvailability .field + .field {
+      margin-top: 14px;
+    }
+
     .wizard-reference {
       min-width: 0;
       margin: 0 0 12px;
@@ -1774,7 +1778,13 @@
       </ol>
       <h4 id="wizardStepTitle" tabindex="-1"></h4>
       <div class="wizard-panel" id="wizardDetails"><div class="field-grid"></div></div>
-      <div class="wizard-panel" id="wizardAvailability" hidden></div>
+      <div class="wizard-panel" id="wizardAvailability" hidden>
+        <div class="field">
+          <label for="positionInterest">Why are you interested in this position?</label>
+          <div id="positionInterestHelp" class="field-help">Optional. Up to 400 characters.</div>
+          <textarea id="positionInterest" maxlength="400" aria-describedby="positionInterestHelp"></textarea>
+        </div>
+      </div>
       <div class="wizard-panel" id="wizardReferences" hidden>
         <p class="wizard-reference-intro">Add at least one person who can speak to your experience.</p>
         <div id="wizardReferenceGroups"></div>
@@ -1804,6 +1814,7 @@
           <div><dt>Email</dt><dd data-review="applicantEmail"></dd></div>
           <div><dt>Phone</dt><dd data-review="applicantPhone"></dd></div>
           <div><dt>Availability</dt><dd data-review="availability"></dd></div>
+          <div id="wizardInterestReview" hidden><dt>Interest in This Position</dt><dd></dd></div>
           <div><dt>References</dt><dd data-review="references"></dd></div>
         </dl>
       </div>
@@ -1956,6 +1967,9 @@
         const stepCount = find("wizardStepCount");
         const progress = Array.from(root.querySelectorAll(".wizard-progress li"));
         const panels = ["wizardDetails", "wizardAvailability", "wizardReferences", "wizardResumeReview"].map(find);
+        const positionInterest = find("positionInterest");
+        const interestReview = find("wizardInterestReview");
+        const interestReviewValue = interestReview.querySelector("dd");
         const referenceGroups = find("wizardReferenceGroups");
         const referenceTemplate = find("wizardReferenceTemplate");
         const addReference = find("wizardAddReference");
@@ -1973,7 +1987,7 @@
         [dom.applicantName, dom.applicantEmail, dom.applicantPhone].forEach((field) => {
           detailFields.append(field.closest(".field"));
         });
-        panels[1].append(dom.availability.closest(".field"));
+        panels[1].prepend(dom.availability.closest(".field"));
         panels[3].insertBefore(dom.resumeDropZone, panels[3].firstChild);
         dom.references.closest(".field").hidden = true;
         dom.references.required = false;
@@ -2067,6 +2081,14 @@
           return null;
         }
 
+        function availabilityForSubmission() {
+          const availability = dom.availability.value.trim();
+          const interest = positionInterest.value.trim();
+          return interest
+            ? availability + "\n\nWhy are you interested in this position?\n" + interest
+            : availability;
+        }
+
         function validateStep(index) {
           if (index === 0) {
             if (!dom.applicantName.value.trim()) return issue(dom.applicantName, "Please enter your full name.");
@@ -2077,8 +2099,11 @@
               return issue(dom.applicantPhone, "Please enter a valid phone number.");
             }
           }
-          if (index === 1 && !dom.availability.value.trim()) {
-            return issue(dom.availability, "Please share your availability.");
+          if (index === 1) {
+            if (!dom.availability.value.trim()) return issue(dom.availability, "Please share your availability.");
+            if (availabilityForSubmission().length > 800) {
+              return issue(positionInterest, "Shorten your availability or interest so both fit within 800 characters.");
+            }
           }
           return index === 2 ? validateReferences() : null;
         }
@@ -2100,6 +2125,9 @@
             root.querySelectorAll("[data-review]").forEach((item) => {
               item.textContent = dom[item.dataset.review].value.trim();
             });
+            const interest = positionInterest.value.trim();
+            interestReview.hidden = !interest;
+            interestReviewValue.textContent = interest;
           }
           if (focus) stepTitle.focus();
         }
@@ -2172,6 +2200,7 @@
 
         reset();
         return {
+          availabilityForSubmission,
           prepareSubmit() {
             if (card.hidden || completed) return false;
             if (step !== steps.length - 1) {
@@ -2756,7 +2785,7 @@
         const applicantName = dom.applicantName.value.trim();
         const applicantEmail = dom.applicantEmail.value.trim();
         const applicantPhone = formatPhoneNumber(dom.applicantPhone.value);
-        const availability = dom.availability.value.trim();
+        const availability = wizard ? wizard.availabilityForSubmission() : dom.availability.value.trim();
         const references = dom.references.value.trim();
         const file = selectedResumeFile;
 
