@@ -643,6 +643,11 @@
           Select a role to read the job description and apply.
         </div>
 
+        <div id="unavailableJobState" class="empty-state hidden" role="status">
+          <strong>This job is no longer available.</strong>
+          <div id="otherRolesHint" class="hidden">Select another role from the list to see its details.</div>
+        </div>
+
         <div id="jobDetail" class="detail-shell">
           <div class="detail-header">
             <div>
@@ -692,7 +697,7 @@
                   </div>
                   <div class="field">
                     <label for="applicantPhone">Phone <span class="req">*</span></label>
-                    <input id="applicantPhone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="423-555-0107" maxlength="14" required />
+                    <input id="applicantPhone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="423-555-0107" required />
                   </div>
                   <div class="field full">
                     <label for="availability">Availability <span class="req">*</span></label>
@@ -739,7 +744,7 @@
 
       const params = new URLSearchParams(window.location.search);
       const teamId = (params.get("teamId") || "").trim();
-      const requestedSlug = (params.get("job") || "").trim().toLowerCase();
+      const requestedSlug = params.has("job") ? params.get("job").trim().toLowerCase() : null;
 
       const dom = {
         boardBrandLabel: document.getElementById("boardBrandLabel"),
@@ -753,6 +758,8 @@
         loadingState: document.getElementById("loadingState"),
         disabledState: document.getElementById("disabledState"),
         noSelectionState: document.getElementById("noSelectionState"),
+        unavailableJobState: document.getElementById("unavailableJobState"),
+        otherRolesHint: document.getElementById("otherRolesHint"),
         jobDetail: document.getElementById("jobDetail"),
         jobTitle: document.getElementById("jobTitle"),
         jobSummary: document.getElementById("jobSummary"),
@@ -778,10 +785,11 @@
         resumeFileStatus: document.getElementById("resumeFileStatus")
       };
 
-      let boardDisabled = false;
       let jobs = [];
       let selectedJob = null;
       let selectedResumeFile = null;
+      let submissionInProgress = false;
+      const pendingSubmissions = new Map();
 
       function setResumeFile(file) {
         const error = file ? validateResumeFile(file) : "";
@@ -804,11 +812,13 @@
       }
 
       function phoneDigits(value) {
-        return String(value || "").replace(/\D+/g, "").slice(0, 10);
+        const digits = String(value || "").replace(/\D+/g, "");
+        return digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
       }
 
       function formatPhoneNumber(value) {
         const digits = phoneDigits(value);
+        if (digits.length > 10) return value;
         if (digits.length <= 3) return digits;
         if (digits.length <= 6) return digits.slice(0, 3) + "-" + digits.slice(3);
         return digits.slice(0, 3) + "-" + digits.slice(3, 6) + "-" + digits.slice(6);
@@ -833,6 +843,29 @@
         });
       }
 
+      async function hashBytes(bytes) {
+        const digest = await window.crypto.subtle.digest("SHA-256", bytes);
+        return Array.from(new Uint8Array(digest), function (byte) {
+          return byte.toString(16).padStart(2, "0");
+        }).join("");
+      }
+
+      async function submissionKey(application, file) {
+        const fileDigest = await hashBytes(await file.arrayBuffer());
+        const identity = JSON.stringify([application, file.name, detectResumeContentType(file), fileDigest]);
+        return hashBytes(new TextEncoder().encode(identity));
+      }
+
+      function setSubmissionInProgress(inProgress) {
+        submissionInProgress = inProgress;
+        dom.form.setAttribute("aria-busy", String(inProgress));
+        dom.submitButton.disabled = inProgress;
+        dom.submitButton.textContent = inProgress ? "Submitting…" : "Submit Application";
+        dom.jobsList.querySelectorAll("button").forEach(function (button) {
+          button.disabled = inProgress;
+        });
+      }
+
       function showError(message) {
         dom.errorBanner.textContent = message;
         dom.errorBanner.classList.add("is-visible");
@@ -854,6 +887,8 @@
         dom.loadingState.classList.toggle("hidden", state !== "loading");
         dom.disabledState.classList.toggle("hidden", state !== "disabled");
         dom.noSelectionState.classList.toggle("hidden", state !== "empty");
+        dom.unavailableJobState.classList.toggle("hidden", state !== "unavailable");
+        dom.otherRolesHint.classList.toggle("hidden", jobs.length === 0);
         dom.jobDetail.classList.toggle("is-visible", state === "detail");
       }
 
@@ -927,7 +962,7 @@
       function updateUrl(job) {
         if (!window.history || !window.history.replaceState) return;
         const next = new URL(window.location.href);
-        if (job && job.slug) {
+        if (job.slug) {
           next.searchParams.set("job", job.slug);
         } else {
           next.searchParams.delete("job");
@@ -936,18 +971,9 @@
       }
 
       function selectJob(job) {
-        selectedJob = job || null;
+        if (submissionInProgress || selectedJob?.id === job.id) return;
+        selectedJob = job;
         renderJobsList();
-
-        if (!selectedJob) {
-          if (boardDisabled) {
-            setPrimaryState("disabled");
-          } else {
-            setPrimaryState("empty");
-          }
-          updateUrl(null);
-          return;
-        }
 
         clearMessages();
         dom.jobTitle.textContent = selectedJob.title || "Open role";
@@ -992,8 +1018,7 @@
         return "";
       }
 
-      async function uploadResume(file) {
-        const requestId = "job_" + Date.now() + "_" + Math.random().toString(36).slice(2, 10);
+      async function uploadResume(file, requestId) {
         const fileDataBase64 = await readFileAsBase64(file);
         const response = await fetch(UPLOAD_ENDPOINT, {
           method: "POST",
@@ -1007,13 +1032,10 @@
           })
         });
         const data = await response.json().catch(function () { return {}; });
-        if (!response.ok) {
+        if (!response.ok || !data.resumePath || (data.clientRequestId && data.clientRequestId !== requestId)) {
           throw new Error(data.error || "Unable to upload your resume.");
         }
-        return {
-          filePath: data.resumePath,
-          requestId: data.clientRequestId || requestId
-        };
+        return data.resumePath;
       }
 
       async function loadJobsBoard() {
@@ -1040,7 +1062,7 @@
           }
 
           const board = data.board || {};
-          boardDisabled = data.disabled === true;
+          const boardDisabled = data.disabled === true;
           jobs = Array.isArray(data.jobs) ? data.jobs : [];
 
           dom.boardBrandLabel.textContent = board.publicBrandLabel || "Hiring";
@@ -1048,24 +1070,15 @@
           dom.boardSubtitle.textContent = board.publicSubtitle || "Explore current openings and apply online for the role that fits you best.";
           dom.heroReadyLabel.textContent = boardDisabled ? "Paused" : "Live";
 
-          renderJobsList();
-
-          if (boardDisabled) {
-            selectJob(null);
-            setPrimaryState("disabled");
-            return;
-          }
-
-          if (!jobs.length) {
-            selectJob(null);
-            setPrimaryState("empty");
-            return;
-          }
-
-          const match = jobs.find(function (job) {
+          const match = requestedSlug === null ? jobs[0] : jobs.find(function (job) {
             return String(job.slug || "").toLowerCase() === requestedSlug;
           });
-          selectJob(match || jobs[0]);
+          if (boardDisabled || !match) {
+            renderJobsList();
+            setPrimaryState(boardDisabled ? "disabled" : requestedSlug === null ? "empty" : "unavailable");
+            return;
+          }
+          selectJob(match);
         } catch (err) {
           console.error("loadJobsBoard error", err);
           dom.boardSubtitle.textContent = "We could not load the current opportunities right now. Please try again shortly.";
@@ -1078,6 +1091,7 @@
 
       dom.form.addEventListener("submit", async function (event) {
         event.preventDefault();
+        if (submissionInProgress) return;
         clearMessages();
 
         if (!teamId) {
@@ -1123,44 +1137,50 @@
           return;
         }
 
-        dom.submitButton.disabled = true;
+        const application = { teamId, jobId: selectedJob.id, applicantName, applicantEmail, applicantPhone, availability, references };
+        setSubmissionInProgress(true);
 
         try {
-          const upload = await uploadResume(file);
+          const key = await submissionKey(application, file);
+          if (!pendingSubmissions.has(key)) {
+            pendingSubmissions.set(key, { requestId: "job_" + window.crypto.randomUUID(), resumePath: null });
+          }
+          const pending = pendingSubmissions.get(key);
+          if (!pending.resumePath) {
+            pending.resumePath = await uploadResume(file, pending.requestId);
+          }
           const response = await fetch(SUBMIT_ENDPOINT, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              teamId: teamId,
-              jobId: selectedJob.id,
-              applicantName: applicantName,
-              applicantEmail: applicantEmail,
-              applicantPhone: applicantPhone,
-              availability: availability,
-              references: references,
-              resumePath: upload.filePath,
-              clientRequestId: upload.requestId
+              ...application,
+              resumePath: pending.resumePath,
+              clientRequestId: pending.requestId
             })
           });
 
           const data = await response.json().catch(function () { return {}; });
-          if (!response.ok) {
+          if (!response.ok || !data.id) {
+            if (response.status === 400 && data.error === "Your resume upload could not be found. Please upload it again.") {
+              pending.resumePath = null;
+            }
             throw new Error(data.error || "Unable to submit your application.");
           }
 
+          pendingSubmissions.delete(key);
           dom.form.reset();
           setResumeFile(null);
           dom.applicantPhone.value = "";
           showSuccess(
-            data.confirmationEmailSent === false
-              ? "Your application was submitted successfully."
-              : "Your application was submitted successfully. Check your email for confirmation."
+            data.confirmationEmailSent === true
+              ? "Your application was submitted successfully. Check your email for confirmation."
+              : "Your application was submitted successfully."
           );
         } catch (err) {
           console.error("submit application error", err);
           showError(err && err.message ? err.message : "Unable to submit your application right now.");
         } finally {
-          dom.submitButton.disabled = false;
+          setSubmissionInProgress(false);
         }
       });
 
