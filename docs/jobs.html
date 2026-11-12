@@ -2837,8 +2837,43 @@
         }
       });
 
-      dom.applicantPhone.addEventListener("input", function () {
-        dom.applicantPhone.value = formatPhoneNumber(dom.applicantPhone.value);
+      dom.applicantPhone.addEventListener("beforeinput", function (event) {
+        if (!event.cancelable || event.inputType !== "insertText" || !/^\d$/.test(event.data || "")) return;
+
+        const start = this.selectionStart ?? this.value.length;
+        const end = this.selectionEnd ?? start;
+        const nextValue = this.value.slice(0, start) + event.data + this.value.slice(end);
+        if (nextValue.replace(/\D/g, "").length > 10) event.preventDefault();
+      });
+
+      dom.applicantPhone.addEventListener("input", function (event) {
+        let value = this.value;
+        let caret = this.selectionStart ?? value.length;
+        let formatted = formatPhoneNumber(value);
+
+        const backward = event.inputType === "deleteContentBackward";
+        const forward = event.inputType === "deleteContentForward";
+        if ((backward || forward) && formatted[caret] === "-" &&
+            formatted.slice(0, caret) + formatted.slice(caret + 1) === value) {
+          // When a separator is deleted, remove the digit in the direction of the edit.
+          if (backward) caret--;
+          value = value.slice(0, caret) + value.slice(caret + 1);
+          formatted = formatPhoneNumber(value);
+        }
+
+        if (this.value === formatted) return;
+        this.value = formatted;
+        if (caret >= value.length) return;
+
+        const rawDigits = value.replace(/\D/g, "");
+        const removedPrefix = rawDigits.length - phoneDigits(value).length;
+        let digitsBeforeCaret = Math.max(0, value.slice(0, caret).replace(/\D/g, "").length - removedPrefix);
+        let position = 0;
+        while (position < formatted.length && digitsBeforeCaret > 0) {
+          if (formatted[position] !== "-") digitsBeforeCaret--;
+          position++;
+        }
+        this.setSelectionRange(position, position);
       });
 
       dom.resumeFile.addEventListener("change", function () {
