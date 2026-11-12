@@ -2440,6 +2440,16 @@
         });
       }
 
+      function crosswalkGatheringCopy(job, text) {
+        if (typeof text !== "string" || !isCrosswalk || (job.slug !== "crosswalk-men-ministry-leader" && job.slug !== "crosswalk-women-ministry-leader")) {
+          return text;
+        }
+        return text
+          .replace("Lead a volunteer team to host one simple monthly gathering", "Lead a volunteer team to plan and host gatherings")
+          .replace("Lead a team to host one simple gathering each month.", "Lead a team to plan and host gatherings and events throughout the year.")
+          .replace(/Plan a monthly gathering that welcomes newcomers, helps (men|women) connect, and reflects our commitment to learning to #lovewell\./, "Plan gatherings and events that welcome newcomers, help $1 connect, and reflect our commitment to learning to #lovewell.");
+      }
+
       function renderCrosswalkRoles(filter) {
         const shownJobs = filter === "all" ? jobs : jobs.filter((job) => crosswalkPositionType(job) === filter);
         dom.crosswalkRoles.replaceChildren();
@@ -2462,7 +2472,7 @@
           if (job.summary) {
             const summary = document.createElement("p");
             summary.className = "crosswalk-role-summary";
-            summary.textContent = job.summary;
+            summary.textContent = crosswalkGatheringCopy(job, job.summary);
             content.appendChild(summary);
           }
           const metaText = [job.locationName, formatCrosswalkCompensation(job.compensationSummary) || formatLabel(job.employmentType)].filter(Boolean).join(" · ");
@@ -2570,12 +2580,15 @@
 
         clearMessages();
         dom.jobTitle.textContent = selectedJob.title || "Open role";
-        dom.jobSummary.textContent = selectedJob.summary || "Review the role details and submit your application.";
-        dom.jobOverview.textContent = selectedJob.overview || "";
+        dom.jobSummary.textContent = crosswalkGatheringCopy(job, job.summary || "Review the role details and submit your application.");
+        dom.jobOverview.textContent = crosswalkGatheringCopy(job, job.overview || "");
         dom.jobSchedule.textContent = selectedJob.scheduleNotes || "";
         dom.scheduleSection.classList.toggle("hidden", !selectedJob.scheduleNotes);
         renderMeta(selectedJob);
-        renderBulletList(dom.jobResponsibilities, selectedJob.responsibilities, dom.responsibilitiesSection);
+        const responsibilities = Array.isArray(job.responsibilities)
+          ? job.responsibilities.map((text) => crosswalkGatheringCopy(job, text))
+          : job.responsibilities;
+        renderBulletList(dom.jobResponsibilities, responsibilities, dom.responsibilitiesSection);
         renderBulletList(dom.jobRequirements, selectedJob.requirements, dom.requirementsSection);
         renderCrosswalkDescription(selectedJob);
         dom.form.reset();
@@ -2645,14 +2658,14 @@
 
           (item.paragraphs || []).forEach(function (text) {
             const paragraph = document.createElement("p");
-            paragraph.textContent = text;
+            paragraph.textContent = crosswalkGatheringCopy(job, text);
             section.appendChild(paragraph);
           });
           if (item.bullets?.length) {
             const list = document.createElement("ul");
             item.bullets.forEach(function (text) {
               const bullet = document.createElement("li");
-              bullet.textContent = text;
+              bullet.textContent = crosswalkGatheringCopy(job, text);
               list.appendChild(bullet);
             });
             section.appendChild(list);
