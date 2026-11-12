@@ -1567,20 +1567,20 @@
 
     .crosswalk-board .crosswalk-role-link {
       padding-inline: clamp(10px, 2vw, 16px);
-      transition: background-color .16s ease;
     }
 
     .crosswalk-board .crosswalk-role-link:is(:hover, :focus-visible) {
-      background-color: var(--crosswalk-green-light);
+      background-color: var(--crosswalk-green-dark);
+      color: #fffef9;
     }
 
-    .crosswalk-board .crosswalk-role-link:is(:hover, :focus-visible) h2 {
-      color: var(--crosswalk-green);
+    .crosswalk-board .crosswalk-role-link:is(:hover, :focus-visible) :is(h2, .crosswalk-role-meta, .crosswalk-role-arrow) {
+      color: inherit;
     }
 
     .crosswalk-board .crosswalk-role-link:is(:hover, :focus-visible) .crosswalk-role-arrow {
-      background: var(--crosswalk-green-light);
-      border-color: var(--crosswalk-green);
+      background: transparent;
+      border-color: currentColor;
     }
 
     .crosswalk-board .button-primary {
