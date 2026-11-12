@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif&amp;family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
   <style>
@@ -1017,6 +1017,11 @@
       justify-content: flex-start;
     }
 
+    /* Static navigation targets keep focus for reading and keyboard continuity. */
+    .crosswalk-board :is(#boardTitle, #jobTitle, #unavailableJobState, #applyForRole, #wizardStepTitle):focus {
+      outline: none;
+    }
+
     .crosswalk-role-link:focus-visible,
     .crosswalk-back:focus-visible,
     #startCrosswalkApplication:focus-visible {
@@ -1109,6 +1114,359 @@
 
       .crosswalk-board .original-role-description {
         gap: 20px;
+      }
+    }
+
+    .crosswalk-board {
+      --bg: #f8f6f0;
+      --surface: #fffef9;
+      --surface-strong: #f6f3ec;
+      --border: #d6d0c4;
+      --text-main: #302e28;
+      --text-muted: #615c52;
+      --accent: #39362c;
+      --accent-dark: #25231c;
+      --max-page: 820px;
+    }
+
+    .crosswalk-board .page {
+      width: min(calc(100% - 64px), var(--max-page));
+      padding: 48px 0 64px;
+    }
+
+    .crosswalk-board .board-header {
+      padding: 0 0 21px;
+      margin: 0 0 14px;
+    }
+
+    .crosswalk-board .board-brand {
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+    }
+
+    .crosswalk-board h1 {
+      margin: 8px 0 5px;
+      font-size: clamp(25px, 3.4vw, 34px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+    }
+
+    .crosswalk-board .board-copy {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .crosswalk-board .detail-panel {
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    .crosswalk-board .crosswalk-roles:not(.hidden) {
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .crosswalk-board .crosswalk-roles > li + li {
+      border-top: 1px solid var(--border);
+    }
+
+    .crosswalk-board .crosswalk-role-link {
+      align-items: center;
+      gap: clamp(12px, 4vw, 32px);
+      padding: 20px 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .crosswalk-board .crosswalk-role-link h2 {
+      font-size: clamp(17px, 2.5vw, 19px);
+      font-weight: 750;
+      letter-spacing: -0.018em;
+    }
+
+    .crosswalk-board .crosswalk-role-summary {
+      max-width: 63ch;
+      margin: 5px 0 0;
+      color: var(--text-muted);
+    }
+
+    .crosswalk-board .crosswalk-role-meta {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .crosswalk-board .crosswalk-role-arrow {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      font-size: 18px;
+      transition: background-color .16s ease, border-color .16s ease;
+    }
+
+    .crosswalk-board .crosswalk-role-link:hover h2 {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .crosswalk-board .crosswalk-role-link:hover .crosswalk-role-arrow {
+      background: var(--surface-strong);
+      border-color: #a09a8a;
+    }
+
+    .crosswalk-board .crosswalk-back:not(.hidden),
+    .crosswalk-board .wizard-return {
+      gap: 7px;
+      margin: 0 0 14px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .crosswalk-board .crosswalk-back:hover,
+    .crosswalk-board .wizard-return:hover {
+      color: var(--accent-dark);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .crosswalk-board .detail-header {
+      gap: 9px;
+      margin-bottom: 20px;
+    }
+
+    .crosswalk-board .detail-header h2 {
+      margin: 0;
+      font-size: clamp(24px, 3.5vw, 33px);
+      letter-spacing: -0.036em;
+      line-height: 1.15;
+    }
+
+    .crosswalk-board .role-document-title {
+      display: block;
+    }
+
+    .crosswalk-board .role-document-subtitle {
+      display: block;
+      margin-top: 2px;
+      font: 400 clamp(22px, 3.2vw, 29px)/1.1 "Instrument Serif", Georgia, serif;
+      letter-spacing: -0.012em;
+    }
+
+    .crosswalk-board .detail-summary {
+      max-width: 61ch;
+      margin-top: 10px;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .crosswalk-board .detail-header .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      color: var(--text-muted);
+    }
+
+    .crosswalk-board .detail-header .meta-chip {
+      padding: 0;
+      border-radius: 0;
+      background: none;
+      color: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .crosswalk-board .detail-grid {
+      row-gap: 26px;
+    }
+
+    .crosswalk-board .content-card {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .crosswalk-board .original-role-description {
+      gap: 23px;
+    }
+
+    .crosswalk-board .description-category {
+      margin: 0 0 10px;
+      font-size: 10px;
+      letter-spacing: 0.095em;
+    }
+
+    .crosswalk-board .description-facts {
+      column-gap: clamp(12px, 3vw, 30px);
+      padding: 13px 0;
+      border-block: 1px solid var(--border);
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .crosswalk-board .description-facts dt {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .crosswalk-board .description-facts dd {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .crosswalk-board .description-section {
+      max-width: 67ch;
+      font-size: 15px;
+      line-height: 1.72;
+    }
+
+    .crosswalk-board .description-section h3 {
+      margin: 0 0 7px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .crosswalk-board .crosswalk-apply-footer {
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .crosswalk-board .button-primary {
+      min-height: 44px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      color: #fffef9;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .crosswalk-board .application-wizard-card {
+      width: min(100%, 560px);
+      margin: 0;
+    }
+
+    .crosswalk-board .application-wizard-card #applyForRole {
+      margin-bottom: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .crosswalk-board .application-wizard-card #wizardStepTitle {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 30px);
+      font-weight: 700;
+    }
+
+    .crosswalk-board .wizard-role {
+      margin: 0 0 22px;
+      color: var(--accent-dark);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .crosswalk-board .wizard-progress {
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+
+    .crosswalk-board .wizard-progress li {
+      min-height: 3px;
+    }
+
+    .crosswalk-board .wizard-reference,
+    .crosswalk-board .wizard-review {
+      padding: 12px 0 0;
+      border: 0;
+      border-top: 1px solid var(--border);
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .crosswalk-board .wizard-reference legend {
+      padding: 0 9px 0 0;
+    }
+
+    .crosswalk-board .wizard-reference .field + .field {
+      margin-top: 12px;
+    }
+
+    .crosswalk-board .wizard-secondary {
+      border-radius: 8px;
+    }
+
+    .crosswalk-board .wizard-return {
+      padding-inline: 0;
+    }
+
+    .crosswalk-board .application-wizard-card :is(input[type="text"], input[type="email"], input[type="tel"], textarea) {
+      min-height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      font-size: 16px;
+    }
+
+    .crosswalk-board .application-wizard-card textarea {
+      min-height: 112px;
+    }
+
+    .crosswalk-board .application-wizard-card :is(input[type="text"], input[type="email"], input[type="tel"], textarea):focus {
+      border-color: #776d5e;
+      box-shadow: 0 0 0 3px rgba(119, 109, 94, .19);
+      transform: none;
+    }
+
+    .crosswalk-board .wizard-actions {
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 580px) {
+      .crosswalk-board .page {
+        width: calc(100% - 36px);
+        padding-top: 24px;
+      }
+
+      .crosswalk-board .board-header {
+        margin-bottom: 10px;
+        padding-bottom: 15px;
+      }
+
+      .crosswalk-board .crosswalk-role-link {
+        padding: 16px 0;
+      }
+
+      .crosswalk-board .crosswalk-role-arrow {
+        width: 31px;
+        height: 31px;
+      }
+
+      .crosswalk-board .description-facts {
+        row-gap: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .crosswalk-board .crosswalk-role-arrow,
+      .crosswalk-board .detail-shell {
+        animation: none;
+        transition: none;
       }
     }
   </style>
@@ -1370,7 +1728,7 @@
         resumeFileStatus: document.getElementById("resumeFileStatus")
       };
 
-      const originalRoleDescriptions = {"crosswalk-men-ministry-leader":{"categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Justin Wampler, Administrative Director"},{"label":"Commitment","value":"Approximately 15 hours per month, varies with event needs."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Create a warm, welcoming environment where men in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate, authentic connection is the priority."]},{"heading":"RESPONSIBILITIES","bullets":["Plan a monthly gathering that welcomes newcomers, helps men connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.","Marketing: graphics, announcements, and promotion. Facilities: building use and setup. Production: sound and lighting. Worship: worship moments. Pastor Dave: spiritual content and guest speakers. Coordinate support needs in advance."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, a heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment and discretion. Leadership experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Orientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing."]}],"approvedPost":{"title":"Crosswalk Men Ministry Leader","summary":"Lead a volunteer team to host one simple monthly gathering where men can connect, grow in faith, and find belonging.","overview":"Create a warm, welcoming environment where men in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate. Authentic connection is the priority.\n\nReports to Justin Wampler, Administrative Director. You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.\n\nCoordinate staff support in advance. Marketing helps with graphics, announcements, and promotion. Facilities helps with building use and setup. Production helps with sound and lighting. Worship helps with worship moments. Consult Pastor Dave on spiritual content and guest speakers.\n\nOrientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing.","responsibilities":["Plan a monthly gathering that welcomes newcomers, helps men connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","A heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment, and discretion.","Leadership experience is helpful but optional."],"scheduleNotes":"Approximately 15 hours per month, varying with event needs. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}},"crosswalk-women-ministry-leader":{"categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Justin Wampler, Administrative Director"},{"label":"Commitment","value":"Approximately 15 hours per month, varies with event needs."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Create a warm, welcoming environment where women in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate, authentic connection is the priority."]},{"heading":"RESPONSIBILITIES","bullets":["Plan a monthly gathering that welcomes newcomers, helps women connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.","Marketing: graphics, announcements, and promotion. Facilities: building use and setup. Production: sound and lighting. Worship: worship moments. Pastor Dave: spiritual content and guest speakers. Coordinate support needs in advance."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, a heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment and discretion. Leadership experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Orientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing."]}],"approvedPost":{"title":"Crosswalk Women Ministry Leader","summary":"Lead a volunteer team to host one simple monthly gathering where women can connect, grow in faith, and find belonging.","overview":"Create a warm, welcoming environment where women in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate. Authentic connection is the priority.\n\nReports to Justin Wampler, Administrative Director. You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.\n\nCoordinate staff support in advance. Marketing helps with graphics, announcements, and promotion. Facilities helps with building use and setup. Production helps with sound and lighting. Worship helps with worship moments. Consult Pastor Dave on spiritual content and guest speakers.\n\nOrientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing.","responsibilities":["Plan a monthly gathering that welcomes newcomers, helps women connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","A heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment, and discretion.","Leadership experience is helpful but optional."],"scheduleNotes":"Approximately 15 hours per month, varying with event needs. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}},"volunteer-engagement-coordinator":{"categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Shastin Rains, Experience Director"},{"label":"Commitment","value":"10-15 hours per month, mainly during the week."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Support the Experience Director with scheduling, communication, and onboarding for the Guest Experience Teams: First Impressions, Volunteer Breakfast, and Next Steps. Help volunteers feel welcomed, informed, and prepared to serve."]},{"heading":"RESPONSIBILITIES","bullets":["Prepare and maintain Planning Center schedules one month in advance, using the process taught by the Experience Director.","Send scheduling requests and reminders, follow up on unanswered requests, and communicate schedule changes.","Keep volunteer contact information, availability, and serving assignments current.","Follow up with people interested in serving, help onboard new volunteers, and arrange training with the appropriate team leaders.","Help team leaders find replacements for last-minute absences. Bring unresolved coverage needs to the Experience Director.","Help coordinate two to four gatherings each year to build community among team leaders, with direction from the Experience Director.","Check in with the Experience Director to review schedules, volunteer needs, and priorities."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["The Experience Director provides scheduling training, tools, priorities, and ongoing support. Team leaders provide role-specific volunteer training.","Own routine scheduling, communication, records, and onboarding follow-up. The Experience Director retains decisions about placement, team leadership, and sensitive concerns. Keep volunteer information confidential."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, strong organization and follow-through, warm communication, discretion, and willingness to learn scheduling tools. Planning Center or volunteer coordination experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Most scheduling work falls within one week each month, with follow-up and coverage support as needed afterward. Saturdays are not required. Team-leader gatherings may require additional time. Review workload and support at the three- and six-month check-ins.","An interview gives both sides time to discuss interests, experience, availability, and expectations before committing to this unpaid volunteer role."]}],"approvedPost":{"title":"Volunteer Engagement Coordinator","summary":"Support the Guest Experience Teams through scheduling, communication, and onboarding so volunteers feel welcomed, informed, and prepared to serve.","overview":"Support the Experience Director with scheduling, communication, and onboarding for the Guest Experience Teams: First Impressions, Volunteer Breakfast, and Next Steps. Help volunteers feel welcomed, informed, and prepared to serve.\n\nReports to Shastin Rains, Experience Director. The Experience Director provides scheduling training, tools, priorities, and ongoing support. Team leaders provide role-specific volunteer training.\n\nOwn routine scheduling, communication, records, and onboarding follow-up. The Experience Director retains decisions about placement, team leadership, and sensitive concerns. Keep volunteer information confidential.\n\nReview workload and support at the three- and six-month check-ins. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing to this unpaid volunteer role.","responsibilities":["Prepare and maintain Planning Center schedules one month in advance, using the process taught by the Experience Director.","Send scheduling requests and reminders, follow up on unanswered requests, and communicate schedule changes.","Keep volunteer contact information, availability, and serving assignments current.","Follow up with people interested in serving, help onboard new volunteers, and arrange training with the appropriate team leaders.","Help team leaders find replacements for last-minute absences. Bring unresolved coverage needs to the Experience Director.","Help coordinate two to four gatherings each year to build community among team leaders, with direction from the Experience Director.","Check in with the Experience Director to review schedules, volunteer needs, and priorities."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","Strong organization and follow-through, warm communication, discretion, and willingness to learn scheduling tools.","Planning Center or volunteer coordination experience is helpful but optional."],"scheduleNotes":"10\u201315 hours per month, mainly during the week. Most scheduling falls within one week each month, with follow-up and coverage support afterward as needed. Saturdays are optional. Team-leader gatherings may require additional time. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}}};
+      const originalRoleDescriptions = {"crosswalk-men-ministry-leader":{"roleSubtitle":"Ministry Leader","categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Justin Wampler, Administrative Director"},{"label":"Commitment","value":"Approximately 15 hours per month, varies with event needs."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Create a warm, welcoming environment where men in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate, authentic connection is the priority."]},{"heading":"RESPONSIBILITIES","bullets":["Plan a monthly gathering that welcomes newcomers, helps men connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.","Marketing: graphics, announcements, and promotion. Facilities: building use and setup. Production: sound and lighting. Worship: worship moments. Pastor Dave: spiritual content and guest speakers. Coordinate support needs in advance."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, a heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment and discretion. Leadership experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Orientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing."]}],"approvedPost":{"title":"Crosswalk Men Ministry Leader","summary":"Lead a volunteer team to host one simple monthly gathering where men can connect, grow in faith, and find belonging.","overview":"Create a warm, welcoming environment where men in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate. Authentic connection is the priority.\n\nReports to Justin Wampler, Administrative Director. You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.\n\nCoordinate staff support in advance. Marketing helps with graphics, announcements, and promotion. Facilities helps with building use and setup. Production helps with sound and lighting. Worship helps with worship moments. Consult Pastor Dave on spiritual content and guest speakers.\n\nOrientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing.","responsibilities":["Plan a monthly gathering that welcomes newcomers, helps men connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","A heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment, and discretion.","Leadership experience is helpful but optional."],"scheduleNotes":"Approximately 15 hours per month, varying with event needs. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}},"crosswalk-women-ministry-leader":{"roleSubtitle":"Ministry Leader","categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Justin Wampler, Administrative Director"},{"label":"Commitment","value":"Approximately 15 hours per month, varies with event needs."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Create a warm, welcoming environment where women in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate, authentic connection is the priority."]},{"heading":"RESPONSIBILITIES","bullets":["Plan a monthly gathering that welcomes newcomers, helps women connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.","Marketing: graphics, announcements, and promotion. Facilities: building use and setup. Production: sound and lighting. Worship: worship moments. Pastor Dave: spiritual content and guest speakers. Coordinate support needs in advance."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, a heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment and discretion. Leadership experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Orientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing."]}],"approvedPost":{"title":"Crosswalk Women Ministry Leader","summary":"Lead a volunteer team to host one simple monthly gathering where women can connect, grow in faith, and find belonging.","overview":"Create a warm, welcoming environment where women in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate. Authentic connection is the priority.\n\nReports to Justin Wampler, Administrative Director. You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.\n\nCoordinate staff support in advance. Marketing helps with graphics, announcements, and promotion. Facilities helps with building use and setup. Production helps with sound and lighting. Worship helps with worship moments. Consult Pastor Dave on spiritual content and guest speakers.\n\nOrientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing.","responsibilities":["Plan a monthly gathering that welcomes newcomers, helps women connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","A heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment, and discretion.","Leadership experience is helpful but optional."],"scheduleNotes":"Approximately 15 hours per month, varying with event needs. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}},"volunteer-engagement-coordinator":{"roleSubtitle":"Coordinator","categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Shastin Rains, Experience Director"},{"label":"Commitment","value":"10-15 hours per month, mainly during the week."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Support the Experience Director with scheduling, communication, and onboarding for the Guest Experience Teams: First Impressions, Volunteer Breakfast, and Next Steps. Help volunteers feel welcomed, informed, and prepared to serve."]},{"heading":"RESPONSIBILITIES","bullets":["Prepare and maintain Planning Center schedules one month in advance, using the process taught by the Experience Director.","Send scheduling requests and reminders, follow up on unanswered requests, and communicate schedule changes.","Keep volunteer contact information, availability, and serving assignments current.","Follow up with people interested in serving, help onboard new volunteers, and arrange training with the appropriate team leaders.","Help team leaders find replacements for last-minute absences. Bring unresolved coverage needs to the Experience Director.","Help coordinate two to four gatherings each year to build community among team leaders, with direction from the Experience Director.","Check in with the Experience Director to review schedules, volunteer needs, and priorities."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["The Experience Director provides scheduling training, tools, priorities, and ongoing support. Team leaders provide role-specific volunteer training.","Own routine scheduling, communication, records, and onboarding follow-up. The Experience Director retains decisions about placement, team leadership, and sensitive concerns. Keep volunteer information confidential."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, strong organization and follow-through, warm communication, discretion, and willingness to learn scheduling tools. Planning Center or volunteer coordination experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Most scheduling work falls within one week each month, with follow-up and coverage support as needed afterward. Saturdays are not required. Team-leader gatherings may require additional time. Review workload and support at the three- and six-month check-ins.","An interview gives both sides time to discuss interests, experience, availability, and expectations before committing to this unpaid volunteer role."]}],"approvedPost":{"title":"Volunteer Engagement Coordinator","summary":"Support the Guest Experience Teams through scheduling, communication, and onboarding so volunteers feel welcomed, informed, and prepared to serve.","overview":"Support the Experience Director with scheduling, communication, and onboarding for the Guest Experience Teams: First Impressions, Volunteer Breakfast, and Next Steps. Help volunteers feel welcomed, informed, and prepared to serve.\n\nReports to Shastin Rains, Experience Director. The Experience Director provides scheduling training, tools, priorities, and ongoing support. Team leaders provide role-specific volunteer training.\n\nOwn routine scheduling, communication, records, and onboarding follow-up. The Experience Director retains decisions about placement, team leadership, and sensitive concerns. Keep volunteer information confidential.\n\nReview workload and support at the three- and six-month check-ins. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing to this unpaid volunteer role.","responsibilities":["Prepare and maintain Planning Center schedules one month in advance, using the process taught by the Experience Director.","Send scheduling requests and reminders, follow up on unanswered requests, and communicate schedule changes.","Keep volunteer contact information, availability, and serving assignments current.","Follow up with people interested in serving, help onboard new volunteers, and arrange training with the appropriate team leaders.","Help team leaders find replacements for last-minute absences. Bring unresolved coverage needs to the Experience Director.","Help coordinate two to four gatherings each year to build community among team leaders, with direction from the Experience Director.","Check in with the Experience Director to review schedules, volunteer needs, and priorities."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","Strong organization and follow-through, warm communication, discretion, and willingness to learn scheduling tools.","Planning Center or volunteer coordination experience is helpful but optional."],"scheduleNotes":"10\u201315 hours per month, mainly during the week. Most scheduling falls within one week each month, with follow-up and coverage support afterward as needed. Saturdays are optional. Team-leader gatherings may require additional time. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}}};
 
       let jobs = [];
       let selectedJob = null;
@@ -1781,7 +2139,7 @@
         const chips = [];
         if (job.department) chips.push(job.department);
         if (job.locationName) chips.push(job.locationName);
-        if (job.employmentType) chips.push(formatLabel(job.employmentType));
+        if (job.employmentType && (!isCrosswalk || !job.compensationSummary)) chips.push(formatLabel(job.employmentType));
         if (job.workplaceType) chips.push(formatLabel(job.workplaceType));
         if (job.compensationSummary) chips.push(job.compensationSummary);
 
@@ -2012,6 +2370,22 @@
         article.classList.toggle("hidden", !matches);
         article.parentElement.classList.toggle("has-source-description", Boolean(matches));
         if (!matches) return;
+
+        const subtitle = source.roleSubtitle;
+        const suffix = " " + subtitle;
+        if (job.title.endsWith(suffix)) {
+          const title = document.createElement("span");
+          title.className = "role-document-title";
+          title.textContent = job.title.slice(0, -suffix.length);
+          const type = document.createElement("span");
+          type.className = "role-document-subtitle";
+          type.textContent = subtitle;
+          dom.jobTitle.replaceChildren(title, " ", type);
+        }
+        if (job.compensationSummary) {
+          const compensation = Array.from(dom.jobMeta.children).find((item) => item.textContent === job.compensationSummary);
+          compensation?.remove();
+        }
 
         const header = document.createElement("div");
         const category = document.createElement("p");
