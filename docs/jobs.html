@@ -12,14 +12,14 @@
   />
   <style>
     :root {
-      --bg: #f4efe5;
+      --bg: #f7f4ec;
       --bg-strong: #e6dcc8;
-      --surface: rgba(255, 252, 246, 0.88);
+      --surface: #fffdf7;
       --surface-strong: #fffaf1;
       --surface-muted: #efe6d6;
       --border: rgba(101, 82, 44, 0.14);
       --text-main: #1e2a2a;
-      --text-muted: #6a746f;
+      --text-muted: #546057;
       --accent: #8f6a28;
       --accent-dark: #6d4d16;
       --accent-soft: rgba(143, 106, 40, 0.12);
@@ -29,7 +29,7 @@
       --danger-bg: #faece9;
       --danger-border: #e7b5ab;
       --danger-text: #8b3327;
-      --shadow: 0 18px 40px rgba(47, 35, 14, 0.08);
+      --shadow: 0 3px 12px rgba(47, 35, 14, 0.045);
       --radius-xl: 28px;
       --radius-lg: 22px;
       --radius-md: 16px;
@@ -37,14 +37,74 @@
       --max-page: 1240px;
     }
 
+    .crosswalk-board {
+      --bg: #f4f1ea;
+      --surface: #fffefa;
+      --surface-strong: #f4f1ea;
+      --border: #d6d1c7;
+      --text-main: #3a3a38;
+      --text-muted: #5c5852;
+      --accent: #3a3a38;
+      --accent-dark: #211d1e;
+    }
+
+    .crosswalk-board .board-brand {
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .crosswalk-board h1,
+    .crosswalk-board .detail-header h2 {
+      color: var(--accent-dark);
+      font-family: "Manrope", system-ui, sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      line-height: 1.12;
+    }
+
+    .crosswalk-board .job-card:hover,
+    .crosswalk-board .job-card.is-selected {
+      background: var(--bg);
+      border-color: #8c8377;
+    }
+
+    .crosswalk-board .meta-chip {
+      background: var(--bg);
+      color: var(--text-main);
+    }
+
+    .crosswalk-board .apply-jump,
+    .crosswalk-board .button-primary {
+      background: var(--accent-dark);
+      box-shadow: none;
+    }
+
+    .crosswalk-board .apply-jump:hover,
+    .crosswalk-board .button-primary:hover {
+      background: var(--accent);
+      box-shadow: none;
+    }
+
+    .crosswalk-board .prose,
+    .crosswalk-board .bullet-list {
+      color: var(--text-main);
+    }
+
+    .crosswalk-board .file-field {
+      border-color: #8c8377;
+    }
+
+    .crosswalk-board .file-choose {
+      border-color: #8c8377;
+    }
+
     * {
       box-sizing: border-box;
     }
 
     html {
-      background:
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), transparent 30%),
-        linear-gradient(180deg, #f6f1e6 0%, #ece1cd 100%);
+      background: var(--bg);
     }
 
     body {
@@ -52,217 +112,125 @@
       min-height: 100vh;
       font-family: "Manrope", system-ui, sans-serif;
       color: var(--text-main);
-      background: transparent;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.6), transparent 22%),
-        radial-gradient(circle at 82% 8%, rgba(143, 106, 40, 0.16), transparent 18%),
-        radial-gradient(circle at 82% 78%, rgba(56, 91, 76, 0.12), transparent 22%);
-      pointer-events: none;
     }
 
     .page {
-      position: relative;
-      width: min(calc(100% - 32px), var(--max-page));
+      width: min(calc(100% - 40px), var(--max-page));
       margin: 0 auto;
-      padding: 32px 0 48px;
+      padding: 26px 0 44px;
     }
 
-    .hero {
-      position: relative;
-      overflow: hidden;
-      border-radius: 36px;
-      padding: 32px;
-      margin-bottom: 20px;
-      background:
-        linear-gradient(135deg, rgba(255, 250, 241, 0.96), rgba(247, 239, 223, 0.92)),
-        #fffaf1;
-      border: 1px solid rgba(105, 84, 47, 0.1);
-      box-shadow: var(--shadow);
+    .board-header {
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -48px;
-      top: -48px;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(143, 106, 40, 0.2), transparent 70%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: var(--accent-soft);
+    .board-brand {
       color: var(--accent-dark);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 800;
     }
 
-    .hero-grid {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
-      gap: 18px;
-      align-items: end;
-      margin-top: 18px;
-    }
-
     h1 {
-      margin: 0 0 10px;
+      margin: 4px 0 6px;
       font-family: "Fraunces", serif;
-      font-size: clamp(34px, 5vw, 58px);
-      line-height: 1.02;
-      letter-spacing: -0.04em;
+      font-size: clamp(30px, 4vw, 47px);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
       color: #172225;
     }
 
-    .hero-copy {
+    .board-copy {
       margin: 0;
-      max-width: 720px;
+      max-width: 680px;
       color: var(--text-muted);
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .hero-stat {
-      padding: 16px 18px;
-      border-radius: 18px;
-      background: rgba(255, 252, 246, 0.72);
-      border: 1px solid rgba(105, 84, 47, 0.08);
-    }
-
-    .hero-stat strong {
-      display: block;
-      font-size: 26px;
-      line-height: 1;
-      margin-bottom: 4px;
-      color: #21302d;
-    }
-
-    .hero-stat span {
-      display: block;
-      font-size: 12px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-weight: 700;
+      font-size: 14px;
+      line-height: 1.55;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
-      gap: 20px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
       align-items: start;
+    }
+
+    .layout.has-roles {
+      grid-template-columns: minmax(220px, 288px) minmax(0, 1fr);
     }
 
     .panel {
       background: var(--surface);
-      backdrop-filter: blur(16px);
-      border-radius: var(--radius-xl);
+      border-radius: var(--radius-md);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
     }
 
     .jobs-panel {
-      padding: 18px;
+      padding: 14px;
       position: sticky;
-      top: 20px;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+      top: 16px;
     }
 
     .panel-title {
-      margin: 0;
-      font-size: 14px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      margin: 0 0 10px;
       color: var(--text-muted);
-      font-weight: 800;
-    }
-
-    .count-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 34px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #efe4cf;
-      color: var(--accent-dark);
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 800;
     }
 
     .jobs-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      display: grid;
+      gap: 8px;
     }
 
     .job-card {
-      border: 1px solid transparent;
-      border-radius: 20px;
-      padding: 18px 18px 16px;
-      background: rgba(255, 255, 255, 0.58);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 13px;
+      background: var(--surface);
       cursor: pointer;
-      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+      font: inherit;
+      text-align: left;
     }
 
-    .job-card:hover {
-      transform: translateY(-1px);
-      border-color: rgba(143, 106, 40, 0.18);
-      box-shadow: 0 16px 30px rgba(47, 35, 14, 0.06);
-    }
-
+    .job-card:hover,
     .job-card.is-selected {
-      border-color: rgba(143, 106, 40, 0.34);
-      background: #fff8ee;
-      box-shadow: 0 18px 28px rgba(47, 35, 14, 0.08);
+      border-color: #9e8150;
+      background: #f6eee0;
     }
 
-    .job-card h2 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      line-height: 1.28;
+    .job-card:disabled {
+      cursor: default;
+    }
+
+    .job-card-title,
+    .job-card-summary {
+      display: block;
+    }
+
+    .job-card-title {
+      margin-bottom: 5px;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.32;
       color: #1d2a2d;
     }
 
     .job-card-summary {
-      margin: 0 0 12px;
+      margin: 0 0 8px;
       color: var(--text-muted);
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.45;
       display: -webkit-box;
-      -webkit-line-clamp: 4;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+
+    .mobile-role-picker {
+      display: none;
     }
 
     .job-meta {
@@ -286,7 +254,8 @@
     }
 
     .detail-panel {
-      padding: 22px;
+      min-width: 0;
+      padding: 20px;
     }
 
     .detail-shell {
@@ -299,18 +268,45 @@
     }
 
     .detail-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 18px;
+      display: grid;
+      justify-items: start;
+      gap: 11px;
+      margin-bottom: 16px;
+    }
+
+    .apply-jump {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: #25362e;
+      color: #fffdf7;
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .apply-jump:hover {
+      background: #344c3f;
+    }
+
+    .apply-jump:focus-visible,
+    .job-card:focus-visible,
+    .mobile-role-picker select:focus-visible,
+    #applyForRole:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+
+    #applyForRole {
+      scroll-margin-top: 16px;
     }
 
     .detail-header h2 {
       margin: 0 0 8px;
       font-family: "Fraunces", serif;
-      font-size: clamp(28px, 3vw, 42px);
+      font-size: clamp(26px, 3vw, 38px);
       line-height: 1.04;
       letter-spacing: -0.04em;
       color: #162225;
@@ -344,9 +340,8 @@
       align-items: center;
       gap: 8px;
       margin: 0 0 12px;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
+      font-size: 14px;
+      letter-spacing: 0.02em;
       color: var(--accent-dark);
       font-weight: 800;
     }
@@ -448,9 +443,83 @@
       background: rgba(143, 106, 40, 0.08);
     }
 
-    input[type="file"] {
+    .file-label {
+      color: #273432;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .file-label .req {
+      color: var(--danger-text);
+    }
+
+    .file-actions {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      border: 0;
+    }
+
+    .file-choose,
+    .file-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--accent-dark);
       font: inherit;
-      color: #4d5856;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .file-choose {
+      background: var(--surface-strong);
+    }
+
+    .file-remove {
+      background: transparent;
+    }
+
+    .file-input:focus-visible + .file-choose,
+    .file-remove:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 2px;
+    }
+
+    .file-input:disabled + .file-choose,
+    .file-remove:disabled {
+      cursor: default;
+      opacity: 0.65;
+    }
+
+    .file-status {
+      overflow-wrap: anywhere;
+    }
+
+    .file-status.is-error {
+      color: var(--danger-text);
+    }
+
+    @media (hover: none) {
+      .file-drop-help {
+        display: none;
+      }
     }
 
     .field-help {
@@ -548,38 +617,75 @@
       }
     }
 
-    @media (max-width: 980px) {
-      .hero-grid,
-      .layout,
+    @media (max-width: 1060px) {
       .detail-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .layout,
+      .layout.has-roles {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
       }
 
       .jobs-panel {
-        position: static;
+        display: none;
+      }
+
+      .mobile-role-picker {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 10px;
+      }
+
+      .mobile-role-picker label {
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .mobile-role-picker select {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 0 10px;
+        border: 1px solid #b2a48a;
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text-main);
+        font: inherit;
+        font-size: 14px;
+      }
+
+      #directRoleChooserSlot > .mobile-role-picker {
+        margin-bottom: 16px;
       }
     }
 
     @media (max-width: 680px) {
       .page {
-        width: min(calc(100% - 20px), var(--max-page));
-        padding-top: 20px;
+        width: min(calc(100% - 24px), var(--max-page));
+        padding-top: 16px;
       }
 
-      .hero,
-      .detail-panel,
-      .jobs-panel,
+      .board-header {
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+      }
+
+      .detail-panel {
+        padding: 14px;
+      }
+
       .content-card,
       .apply-card {
         border-radius: 22px;
       }
 
-      .hero {
-        padding: 24px 20px;
-      }
-
-      .field-grid,
-      .hero-stats {
+      .field-grid {
         grid-template-columns: 1fr;
       }
 
@@ -596,52 +702,35 @@
 </head>
 <body>
   <div class="page">
-    <section class="hero">
-      <div class="eyebrow" id="boardBrandLabel">Hiring</div>
-      <div class="hero-grid">
-        <div>
-          <h1 id="boardTitle">Open Roles</h1>
-          <p class="hero-copy" id="boardSubtitle">
-            Explore current openings and apply online for the role that fits you best.
-          </p>
-        </div>
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <strong id="heroJobCount">0</strong>
-            <span>Open positions</span>
-          </div>
-          <div class="hero-stat">
-            <strong id="heroReadyLabel">Live</strong>
-            <span>Application flow</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <header class="board-header">
+      <div class="board-brand" id="boardBrandLabel">Hiring</div>
+      <h1 id="boardTitle">Open Roles</h1>
+      <p class="board-copy" id="boardSubtitle">
+        Explore current openings and apply online for the role that fits you best.
+      </p>
+    </header>
 
-    <div class="layout">
-      <aside class="panel jobs-panel">
-        <div class="panel-header">
-          <h2 class="panel-title">Open roles</h2>
-          <div class="count-pill" id="jobsCountPill">0</div>
-        </div>
+    <div class="layout" id="jobsLayout">
+      <div class="mobile-role-picker hidden" id="mobileRolePicker">
+        <label for="roleChooser">Role</label>
+        <select id="roleChooser" aria-controls="jobDetail"></select>
+      </div>
+
+      <aside class="panel jobs-panel hidden" id="jobsPanel" aria-labelledby="rolesHeading">
+        <h2 class="panel-title" id="rolesHeading">Choose a Role</h2>
         <div id="jobsList" class="jobs-list"></div>
-        <div id="jobsEmptyState" class="empty-state hidden">
-          There are no open roles posted right now.
-        </div>
       </aside>
 
       <main class="panel detail-panel">
-        <div id="loadingState" class="loading-state">
+        <div id="loadingState" class="loading-state" role="status">
           Loading current opportunities…
         </div>
 
-        <div id="disabledState" class="empty-state hidden">
+        <div id="disabledState" class="empty-state hidden" role="status">
           This jobs board is currently unavailable.
         </div>
 
-        <div id="noSelectionState" class="empty-state hidden">
-          Select a role to read the job description and apply.
-        </div>
+        <div id="noSelectionState" class="empty-state hidden" role="status"></div>
 
         <div id="unavailableJobState" class="empty-state hidden" role="status">
           <strong>This job is no longer available.</strong>
@@ -655,12 +744,14 @@
               <p class="detail-summary" id="jobSummary"></p>
             </div>
             <div class="job-meta" id="jobMeta"></div>
+            <a class="apply-jump" href="#applyForRole" aria-describedby="jobTitle">Apply for This Role</a>
           </div>
 
+          <div id="directRoleChooserSlot"></div>
           <div class="detail-grid">
             <section class="content-card stack">
               <div>
-                <h3 class="section-title">Role overview</h3>
+                <h3 class="section-title">Role Overview</h3>
                 <div class="prose" id="jobOverview"></div>
               </div>
 
@@ -681,14 +772,14 @@
             </section>
 
             <section class="apply-card">
-              <h3 class="section-title">Apply now</h3>
+              <h3 class="section-title" id="applyForRole" tabindex="-1">Apply Now</h3>
               <div id="errorBanner" class="banner error"></div>
               <div id="successBanner" class="banner success"></div>
 
               <form id="applicationForm" novalidate>
                 <div class="field-grid">
                   <div class="field">
-                    <label for="applicantName">Full name <span class="req">*</span></label>
+                    <label for="applicantName">Full Name <span class="req">*</span></label>
                     <input id="applicantName" type="text" autocomplete="name" required />
                   </div>
                   <div class="field">
@@ -709,16 +800,25 @@
                   </div>
                   <div class="field full">
                     <label for="references">References <span class="req">*</span></label>
-                    <textarea
-                      id="references"
-                      placeholder="List references with names, relationship, and phone or email contact info."
-                      required
-                    ></textarea>
+                    <div id="referencesHelp" class="field-help">
+                      Enter one reference per line with their name, relationship to you, and phone number or email address.
+                    </div>
+                    <textarea id="references" aria-describedby="referencesHelp" required></textarea>
                   </div>
                   <div id="resumeDropZone" class="field full file-field">
-                    <label for="resumeFile">Resume <span class="req">*</span></label>
-                    <input id="resumeFile" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-                    <div id="resumeFileStatus" class="field-help">Choose a PDF, DOC, or DOCX file up to 10 MB, or drag and drop it here on desktop.</div>
+                    <div class="file-label">Résumé <span class="req" aria-hidden="true">*</span></div>
+                    <div id="resumeFileHelp" class="field-help">
+                      PDF, DOC, or DOCX up to 10 MB.
+                      <span class="file-drop-help">You can also drag and drop a file here.</span>
+                    </div>
+                    <div class="file-actions">
+                      <input id="resumeFile" class="file-input" type="file" aria-required="true"
+                        aria-describedby="resumeFileHelp resumeFileStatus"
+                        accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                      <label class="file-choose" for="resumeFile">Choose Résumé</label>
+                      <button id="removeResumeFile" class="file-remove hidden" type="button">Remove</button>
+                    </div>
+                    <div id="resumeFileStatus" class="field-help file-status" role="status" aria-atomic="true">No file selected.</div>
                   </div>
                 </div>
 
@@ -744,17 +844,21 @@
 
       const params = new URLSearchParams(window.location.search);
       const teamId = (params.get("teamId") || "").trim();
+      if (teamId === "crosswalk-church") {
+        document.documentElement.classList.add("crosswalk-board");
+      }
       const requestedSlug = params.has("job") ? params.get("job").trim().toLowerCase() : null;
 
       const dom = {
         boardBrandLabel: document.getElementById("boardBrandLabel"),
         boardTitle: document.getElementById("boardTitle"),
         boardSubtitle: document.getElementById("boardSubtitle"),
-        heroJobCount: document.getElementById("heroJobCount"),
-        heroReadyLabel: document.getElementById("heroReadyLabel"),
-        jobsCountPill: document.getElementById("jobsCountPill"),
+        jobsLayout: document.getElementById("jobsLayout"),
+        jobsPanel: document.getElementById("jobsPanel"),
         jobsList: document.getElementById("jobsList"),
-        jobsEmptyState: document.getElementById("jobsEmptyState"),
+        mobileRolePicker: document.getElementById("mobileRolePicker"),
+        roleChooser: document.getElementById("roleChooser"),
+        directRoleChooserSlot: document.getElementById("directRoleChooserSlot"),
         loadingState: document.getElementById("loadingState"),
         disabledState: document.getElementById("disabledState"),
         noSelectionState: document.getElementById("noSelectionState"),
@@ -781,6 +885,7 @@
         availability: document.getElementById("availability"),
         references: document.getElementById("references"),
         resumeFile: document.getElementById("resumeFile"),
+        removeResumeFile: document.getElementById("removeResumeFile"),
         resumeDropZone: document.getElementById("resumeDropZone"),
         resumeFileStatus: document.getElementById("resumeFileStatus")
       };
@@ -793,16 +898,14 @@
 
       function setResumeFile(file) {
         const error = file ? validateResumeFile(file) : "";
-        if (error) {
-          selectedResumeFile = null;
-          dom.resumeFile.value = "";
-          dom.resumeFileStatus.textContent = error;
-          return;
-        }
-        selectedResumeFile = file || null;
-        dom.resumeFileStatus.textContent = selectedResumeFile
-          ? (selectedResumeFile.name || "Resume selected")
-          : "Choose a PDF, DOC, or DOCX file up to 10 MB, or drag and drop it here on desktop.";
+        selectedResumeFile = error ? null : file;
+        if (!selectedResumeFile) dom.resumeFile.value = "";
+        dom.resumeFile.setAttribute("aria-invalid", String(Boolean(error)));
+        dom.removeResumeFile.classList.toggle("hidden", !selectedResumeFile);
+        dom.resumeFileStatus.classList.toggle("is-error", Boolean(error));
+        dom.resumeFileStatus.textContent = error || (selectedResumeFile
+          ? "Selected: " + (selectedResumeFile.name || "Résumé")
+          : "No file selected.");
       }
 
       function formatLabel(value) {
@@ -860,7 +963,10 @@
         submissionInProgress = inProgress;
         dom.form.setAttribute("aria-busy", String(inProgress));
         dom.submitButton.disabled = inProgress;
+        dom.resumeFile.disabled = inProgress;
+        dom.removeResumeFile.disabled = inProgress;
         dom.submitButton.textContent = inProgress ? "Submitting…" : "Submit Application";
+        dom.roleChooser.disabled = inProgress;
         dom.jobsList.querySelectorAll("button").forEach(function (button) {
           button.disabled = inProgress;
         });
@@ -886,17 +992,26 @@
       function setPrimaryState(state) {
         dom.loadingState.classList.toggle("hidden", state !== "loading");
         dom.disabledState.classList.toggle("hidden", state !== "disabled");
-        dom.noSelectionState.classList.toggle("hidden", state !== "empty");
+        const message = {
+          empty: "There are no open roles posted right now.",
+          setup: "This link is missing its team. Please use the link provided by your church.",
+          error: "We could not load the current opportunities right now. Please try again shortly."
+        }[state];
+        dom.noSelectionState.classList.toggle("hidden", !message);
+        if (message) dom.noSelectionState.textContent = message;
         dom.unavailableJobState.classList.toggle("hidden", state !== "unavailable");
         dom.otherRolesHint.classList.toggle("hidden", jobs.length === 0);
         dom.jobDetail.classList.toggle("is-visible", state === "detail");
+        dom.jobsPanel.classList.toggle("hidden", jobs.length === 0);
+        dom.mobileRolePicker.classList.toggle("hidden", jobs.length === 0);
+        dom.jobsLayout.classList.toggle("has-roles", jobs.length > 0);
       }
 
       function buildMetaChip(label) {
-        const div = document.createElement("div");
-        div.className = "meta-chip";
-        div.textContent = label;
-        return div;
+        const chip = document.createElement("span");
+        chip.className = "meta-chip";
+        chip.textContent = label;
+        return chip;
       }
 
       function renderMeta(job) {
@@ -925,26 +1040,32 @@
       }
 
       function renderJobsList() {
-        dom.jobsList.innerHTML = "";
-        dom.jobsCountPill.textContent = String(jobs.length);
-        dom.heroJobCount.textContent = String(jobs.length);
-        dom.jobsEmptyState.classList.toggle("hidden", jobs.length !== 0);
+        dom.jobsList.replaceChildren();
+        const placeholder = new Option("Choose a Role", "", false, !selectedJob);
+        placeholder.disabled = true;
+        dom.roleChooser.replaceChildren(placeholder);
 
         jobs.forEach(function (job) {
+          const isSelected = selectedJob?.id === job.id;
+          dom.roleChooser.add(new Option(job.title, job.id, false, isSelected));
+
           const button = document.createElement("button");
           button.type = "button";
-          button.className = "job-card" + (selectedJob && selectedJob.id === job.id ? " is-selected" : "");
+          button.className = "job-card" + (isSelected ? " is-selected" : "");
+          button.setAttribute("aria-pressed", String(isSelected));
+          button.setAttribute("aria-controls", "jobDetail");
 
-          const title = document.createElement("h2");
+          const title = document.createElement("span");
+          title.className = "job-card-title";
           title.textContent = job.title;
           button.appendChild(title);
 
-          const summary = document.createElement("p");
+          const summary = document.createElement("span");
           summary.className = "job-card-summary";
           summary.textContent = job.summary || "View the full job description and apply online.";
           button.appendChild(summary);
 
-          const meta = document.createElement("div");
+          const meta = document.createElement("span");
           meta.className = "job-meta";
           [job.department, job.locationName, job.employmentType && formatLabel(job.employmentType)].filter(Boolean).slice(0, 3).forEach(function (item) {
             meta.appendChild(buildMetaChip(item));
@@ -953,11 +1074,17 @@
 
           button.addEventListener("click", function () {
             selectJob(job);
+            dom.jobsList.querySelector('[aria-pressed="true"]')?.focus({ preventScroll: true });
           });
 
           dom.jobsList.appendChild(button);
         });
       }
+
+      dom.roleChooser.addEventListener("change", function () {
+        const role = jobs.find((job) => job.id === dom.roleChooser.value);
+        if (role) selectJob(role);
+      });
 
       function updateUrl(job) {
         if (!window.history || !window.history.replaceState) return;
@@ -1040,12 +1167,7 @@
 
       async function loadJobsBoard() {
         if (!teamId) {
-          dom.boardSubtitle.textContent = "This page is missing a team id. Please use the link provided by your church staff.";
-          dom.heroReadyLabel.textContent = "Setup";
-          setPrimaryState("empty");
-          dom.jobsEmptyState.classList.remove("hidden");
-          dom.jobsList.innerHTML = "";
-          dom.loadingState.classList.add("hidden");
+          setPrimaryState("setup");
           return;
         }
 
@@ -1063,12 +1185,12 @@
 
           const board = data.board || {};
           const boardDisabled = data.disabled === true;
-          jobs = Array.isArray(data.jobs) ? data.jobs : [];
+          jobs = !boardDisabled && Array.isArray(data.jobs) ? data.jobs : [];
 
           dom.boardBrandLabel.textContent = board.publicBrandLabel || "Hiring";
           dom.boardTitle.textContent = board.publicTitle || "Open Roles";
           dom.boardSubtitle.textContent = board.publicSubtitle || "Explore current openings and apply online for the role that fits you best.";
-          dom.heroReadyLabel.textContent = boardDisabled ? "Paused" : "Live";
+          document.title = [dom.boardTitle.textContent, dom.boardBrandLabel.textContent].join(" | ");
 
           const match = requestedSlug === null ? jobs[0] : jobs.find(function (job) {
             return String(job.slug || "").toLowerCase() === requestedSlug;
@@ -1078,12 +1200,14 @@
             setPrimaryState(boardDisabled ? "disabled" : requestedSlug === null ? "empty" : "unavailable");
             return;
           }
+          if (requestedSlug !== null) {
+            dom.directRoleChooserSlot.appendChild(dom.mobileRolePicker);
+          }
           selectJob(match);
         } catch (err) {
           console.error("loadJobsBoard error", err);
-          dom.boardSubtitle.textContent = "We could not load the current opportunities right now. Please try again shortly.";
-          dom.heroReadyLabel.textContent = "Offline";
-          setPrimaryState("empty");
+          jobs = [];
+          setPrimaryState("error");
         } finally {
           dom.loadingState.classList.add("hidden");
         }
@@ -1192,10 +1316,15 @@
         setResumeFile(this.files && this.files[0] ? this.files[0] : null);
       });
 
+      dom.removeResumeFile.addEventListener("click", function () {
+        setResumeFile(null);
+        dom.resumeFile.focus();
+      });
+
       ["dragenter", "dragover"].forEach(function (eventName) {
         dom.resumeDropZone.addEventListener(eventName, function (event) {
           event.preventDefault();
-          dom.resumeDropZone.classList.add("is-dragover");
+          if (!submissionInProgress) dom.resumeDropZone.classList.add("is-dragover");
         });
       });
       ["dragleave", "dragend"].forEach(function (eventName) {
@@ -1206,8 +1335,11 @@
       dom.resumeDropZone.addEventListener("drop", function (event) {
         event.preventDefault();
         dom.resumeDropZone.classList.remove("is-dragover");
+        if (submissionInProgress) return;
         const files = event.dataTransfer ? event.dataTransfer.files : null;
-        setResumeFile(files && files[0] ? files[0] : null);
+        if (!files || !files.length) return;
+        dom.resumeFile.value = "";
+        setResumeFile(files[0]);
       });
 
       loadJobsBoard();
