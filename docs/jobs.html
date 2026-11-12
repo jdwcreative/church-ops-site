@@ -1520,9 +1520,30 @@
       border-color: #b8c7bb;
     }
 
+    .crosswalk-board .board-header:has(.crosswalk-board-logo:not([hidden])) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: clamp(10px, 3vw, 24px);
+      align-content: start;
+    }
+
+    .crosswalk-board .board-header:has(.crosswalk-board-logo:not([hidden])) > h1 {
+      grid-column: 1;
+      grid-row: 1;
+      margin-top: 0;
+    }
+
+    .crosswalk-board .board-header:has(.crosswalk-board-logo:not([hidden])) > .board-copy {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
     .crosswalk-board .crosswalk-board-logo:not([hidden]) {
       display: block;
-      width: clamp(142px, 42vw, 182px);
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: start;
+      width: clamp(108px, 29vw, 176px);
       height: auto;
       filter: brightness(1.1);
       mix-blend-mode: multiply;
