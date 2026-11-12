@@ -1469,6 +1469,145 @@
         transition: none;
       }
     }
+    .crosswalk-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .crosswalk-filter {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--accent-dark);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .crosswalk-filter:hover {
+      border-color: var(--accent);
+    }
+
+    .crosswalk-filter[aria-current="page"] {
+      border-color: var(--accent-dark);
+      background: var(--accent-dark);
+      color: var(--surface);
+    }
+
+    .crosswalk-filter:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+
+    .crosswalk-board {
+      --crosswalk-green: #43624c;
+      --crosswalk-green-dark: #253c32;
+      --crosswalk-green-hover: #2e473b;
+      --crosswalk-green-light: #e8eeea;
+    }
+
+    .crosswalk-board .board-brand,
+    .crosswalk-board .crosswalk-back:not(.hidden),
+    .crosswalk-board .wizard-return {
+      color: var(--crosswalk-green);
+    }
+
+    .crosswalk-board h1 {
+      letter-spacing: -.018em;
+      word-spacing: .025em;
+    }
+
+    .crosswalk-board .crosswalk-role-link h2,
+    .crosswalk-board .detail-header h2 {
+      font-weight: 700;
+      letter-spacing: -.005em;
+      word-spacing: .07em;
+    }
+
+    .crosswalk-board .crosswalk-role-arrow {
+      color: var(--crosswalk-green);
+      border-color: #b8c7bb;
+    }
+
+    .crosswalk-board .crosswalk-role-link:hover .crosswalk-role-arrow {
+      background: var(--crosswalk-green-light);
+      border-color: var(--crosswalk-green);
+    }
+
+    .crosswalk-board .button-primary {
+      background: var(--crosswalk-green-dark);
+      color: #fffef9;
+    }
+
+    .crosswalk-board .button-primary:hover {
+      background: var(--crosswalk-green-hover);
+    }
+
+    .crosswalk-board .wizard-progress li.is-reached {
+      background: var(--crosswalk-green);
+    }
+
+    .crosswalk-board .crosswalk-filters:not(.hidden) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 4px 0 14px;
+    }
+
+    .crosswalk-board .crosswalk-filter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 5px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .crosswalk-board .crosswalk-filter:hover {
+      border-color: var(--crosswalk-green);
+      color: var(--crosswalk-green-dark);
+    }
+
+    .crosswalk-board .crosswalk-filter[aria-current="page"] {
+      background: var(--crosswalk-green-light);
+      border-color: #b8c7bb;
+      color: var(--crosswalk-green-dark);
+    }
+
+    .crosswalk-board :is(.crosswalk-filter, .crosswalk-role-link, .crosswalk-back, #startCrosswalkApplication):focus-visible {
+      outline: 2px solid var(--crosswalk-green);
+      outline-offset: 3px;
+    }
+
+    .crosswalk-board .crosswalk-filter-empty {
+      margin: 0;
+      padding: 18px 0;
+      border: 0;
+      border-block: 1px solid var(--border);
+      border-radius: 0;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    @media (max-width: 400px) {
+      .crosswalk-board .crosswalk-filter {
+        padding-inline: 11px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1493,7 +1632,13 @@
       </aside>
 
       <main class="panel detail-panel" id="jobsDetailPanel">
+        <nav class="crosswalk-filters hidden" id="crosswalkPositionFilters" aria-label="Filter Positions">
+          <a class="crosswalk-filter" data-position-filter="all" href="">All Positions</a>
+          <a class="crosswalk-filter" data-position-filter="volunteer" href="">Volunteer</a>
+          <a class="crosswalk-filter" data-position-filter="paid" href="">Paid</a>
+        </nav>
         <ul class="crosswalk-roles hidden" id="crosswalkRoles" aria-label="Open Roles"></ul>
+        <p class="empty-state crosswalk-filter-empty hidden" id="crosswalkFilterEmpty" role="status"></p>
         <a class="crosswalk-back hidden" id="backToCrosswalkRoles" href="">
           <span aria-hidden="true">←</span> Back to Roles
         </a>
@@ -1690,6 +1835,8 @@
         jobsLayout: document.getElementById("jobsLayout"),
         jobsDetailPanel: document.getElementById("jobsDetailPanel"),
         crosswalkRoles: document.getElementById("crosswalkRoles"),
+        crosswalkPositionFilters: document.getElementById("crosswalkPositionFilters"),
+        crosswalkFilterEmpty: document.getElementById("crosswalkFilterEmpty"),
         backToCrosswalkRoles: document.getElementById("backToCrosswalkRoles"),
         startCrosswalkApplication: document.getElementById("startCrosswalkApplication"),
         jobsPanel: document.getElementById("jobsPanel"),
@@ -1750,6 +1897,12 @@
         dom.resumeFileStatus.textContent = error || (selectedResumeFile
           ? "Selected: " + (selectedResumeFile.name || "Résumé")
           : "No file selected.");
+      }
+
+      function formatCrosswalkCompensation(value) {
+        return typeof value === "string" && /^unpaid volunteer role$/i.test(value.trim())
+          ? "Unpaid Volunteer Role"
+          : value;
       }
 
       function formatLabel(value) {
@@ -2121,8 +2274,12 @@
         dom.mobileRolePicker.classList.toggle("hidden", !showGenericRoles);
         dom.jobsLayout.classList.toggle("has-roles", showGenericRoles);
         if (isCrosswalk) {
-          dom.crosswalkRoles.classList.toggle("hidden", state !== "list");
-          dom.jobsDetailPanel.classList.toggle("is-crosswalk-list", state === "list");
+          const isList = state === "list";
+          const hasResults = dom.crosswalkRoles.childElementCount > 0;
+          dom.crosswalkPositionFilters.classList.toggle("hidden", !isList);
+          dom.crosswalkRoles.classList.toggle("hidden", !isList || !hasResults);
+          dom.crosswalkFilterEmpty.classList.toggle("hidden", !isList || hasResults);
+          dom.jobsDetailPanel.classList.toggle("is-crosswalk-list", isList);
           dom.backToCrosswalkRoles.classList.toggle("hidden", state !== "detail" && state !== "unavailable");
         }
       }
@@ -2141,7 +2298,7 @@
         if (job.locationName) chips.push(job.locationName);
         if (job.employmentType && (!isCrosswalk || !job.compensationSummary)) chips.push(formatLabel(job.employmentType));
         if (job.workplaceType) chips.push(formatLabel(job.workplaceType));
-        if (job.compensationSummary) chips.push(job.compensationSummary);
+        if (job.compensationSummary) chips.push(isCrosswalk ? formatCrosswalkCompensation(job.compensationSummary) : job.compensationSummary);
 
         chips.forEach(function (item) {
           dom.jobMeta.appendChild(buildMetaChip(item));
@@ -2206,27 +2363,61 @@
         if (role) selectJob(role);
       });
 
-      function crosswalkRoleUrl(slug) {
+      function readCrosswalkFilter() {
+        const filter = new URLSearchParams(window.location.search).get("filter")?.trim().toLowerCase();
+        return filter === "volunteer" || filter === "paid" ? filter : "all";
+      }
+
+      function crosswalkPositionType(job) {
+        const type = String(job.employmentType || "").trim().toLowerCase().replace(/[\s-]+/g, "_");
+        const compensation = String(job.compensationSummary || "").trim().toLowerCase();
+        const explicitlyVolunteer = /^(?:volunteer|voluntary)$|\b(?:unpaid\s+volunteer|volunteer\s+(?:role|position|opportunity))\b/.test(compensation);
+        if (type === "volunteer" || explicitlyVolunteer) return "volunteer";
+
+        const explicitlyUnpaid = /\b(?:unpaid|uncompensated|non[- ]?paid|pro bono|expenses only)\b|\b(?:not|no|without)\s+(?:an?\s+)?(?:pay|paid|salary|compensation|stipend)\b/.test(compensation);
+        if (explicitlyUnpaid) return null;
+
+        const standardPaidType = ["full_time", "part_time", "contract"].includes(type);
+        const explicitPay = /\b(?:paid|salaried|salary|hourly|stipend|compensated)\b|[$£€]\s*(?:[1-9]\d*|0\.\d*[1-9])/.test(compensation);
+        return standardPaidType || explicitPay ? "paid" : null;
+      }
+
+      function crosswalkRoleUrl(slug, filter = readCrosswalkFilter()) {
         const url = new URL(window.location.href);
         if (slug) url.searchParams.set("job", slug);
         else url.searchParams.delete("job");
+        if (filter === "all") url.searchParams.delete("filter");
+        else url.searchParams.set("filter", filter);
         url.hash = "";
         return url;
       }
 
-      function navigateCrosswalk(event, slug) {
+      function navigateCrosswalk(event, slug, filter, moveFocus = true) {
         if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
         if (submissionInProgress) return;
-        const url = crosswalkRoleUrl(slug);
+        const url = crosswalkRoleUrl(slug, filter);
         if (url.href !== window.location.href) window.history.pushState(null, "", url);
-        syncCrosswalkRoute(true);
+        syncCrosswalkRoute(moveFocus);
       }
 
-      function renderCrosswalkRoles() {
+      function updateCrosswalkFilterNavigation(filter) {
+        dom.backToCrosswalkRoles.href = crosswalkRoleUrl(null, filter).href;
+        dom.crosswalkPositionFilters.querySelectorAll("a").forEach(function (link) {
+          const option = link.dataset.positionFilter;
+          link.href = crosswalkRoleUrl(null, option).href;
+          if (option === filter) link.setAttribute("aria-current", "page");
+          else link.removeAttribute("aria-current");
+        });
+      }
+
+      function renderCrosswalkRoles(filter) {
+        const shownJobs = filter === "all" ? jobs : jobs.filter((job) => crosswalkPositionType(job) === filter);
         dom.crosswalkRoles.replaceChildren();
-        dom.backToCrosswalkRoles.href = crosswalkRoleUrl(null).href;
-        jobs.forEach(function (job, index) {
+        dom.crosswalkFilterEmpty.textContent = shownJobs.length ? "" : (
+          filter === "volunteer" ? "There are no open volunteer positions." : "There are no open paid positions."
+        );
+        shownJobs.forEach(function (job, index) {
           const item = document.createElement("li");
           const link = document.createElement("a");
           link.className = "crosswalk-role-link";
@@ -2245,7 +2436,7 @@
             summary.textContent = job.summary;
             content.appendChild(summary);
           }
-          const metaText = [job.locationName, job.compensationSummary || formatLabel(job.employmentType)].filter(Boolean).join(" · ");
+          const metaText = [job.locationName, formatCrosswalkCompensation(job.compensationSummary) || formatLabel(job.employmentType)].filter(Boolean).join(" · ");
           if (metaText) {
             const meta = document.createElement("span");
             meta.className = "crosswalk-role-meta";
@@ -2291,6 +2482,8 @@
         }
 
         const slug = new URLSearchParams(window.location.search).get("job");
+        const filter = readCrosswalkFilter();
+        updateCrosswalkFilterNavigation(filter);
         const role = slug === null ? null : jobs.find((job) => String(job.slug || "").toLowerCase() === slug.trim().toLowerCase());
         let focusTarget = dom.boardTitle;
         if (role) {
@@ -2304,6 +2497,7 @@
           }
           emitCrosswalkRoleChange();
           const state = slug === null ? (jobs.length ? "list" : "empty") : "unavailable";
+          if (state === "list") renderCrosswalkRoles(filter);
           setPrimaryState(state);
           if (state === "unavailable") focusTarget = dom.unavailableJobState;
         }
@@ -2315,6 +2509,11 @@
       }
 
       if (isCrosswalk) {
+        dom.crosswalkPositionFilters.querySelectorAll("a").forEach(function (link) {
+          link.addEventListener("click", function (event) {
+            navigateCrosswalk(event, null, link.dataset.positionFilter, false);
+          });
+        });
         dom.backToCrosswalkRoles.addEventListener("click", function (event) {
           navigateCrosswalk(event, null);
         });
@@ -2383,7 +2582,8 @@
           dom.jobTitle.replaceChildren(title, " ", type);
         }
         if (job.compensationSummary) {
-          const compensation = Array.from(dom.jobMeta.children).find((item) => item.textContent === job.compensationSummary);
+          const label = formatCrosswalkCompensation(job.compensationSummary);
+          const compensation = Array.from(dom.jobMeta.children).find((item) => item.textContent === label);
           compensation?.remove();
         }
 
@@ -2503,14 +2703,16 @@
           jobs = !boardDisabled && Array.isArray(data.jobs) ? data.jobs : [];
 
           dom.boardBrandLabel.textContent = board.publicBrandLabel || "Hiring";
-          dom.boardTitle.textContent = board.publicTitle || "Open Roles";
+          const boardTitle = board.publicTitle || "Open Roles";
+          dom.boardTitle.textContent = isCrosswalk && boardTitle.trim().toLowerCase() === "volunteer opportunities"
+            ? "Open Positions"
+            : boardTitle;
           dom.boardSubtitle.textContent = board.publicSubtitle || "Explore current openings and apply online for the role that fits you best.";
           document.title = [dom.boardTitle.textContent, dom.boardBrandLabel.textContent].join(" | ");
 
           if (isCrosswalk) {
             crosswalkBoardDisabled = boardDisabled;
             crosswalkBoardReady = true;
-            renderCrosswalkRoles();
             syncCrosswalkRoute(false);
             return;
           }
