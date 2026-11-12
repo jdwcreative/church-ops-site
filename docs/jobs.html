@@ -550,6 +550,186 @@
       overflow-wrap: anywhere;
     }
 
+    .crosswalk-board #jobDetail.is-application-open .detail-header,
+    .crosswalk-board #jobDetail.is-application-open .detail-grid > .content-card,
+    .crosswalk-board #jobDetail.is-application-open .crosswalk-apply-footer,
+    .application-wizard-card[hidden],
+    .application-wizard-card [hidden] {
+      display: none !important;
+    }
+
+    .crosswalk-board #jobDetail.is-application-open .detail-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .crosswalk-board .detail-panel.is-crosswalk-application > .crosswalk-back {
+      display: none;
+    }
+
+    .crosswalk-board .application-wizard-card {
+      width: min(100%, 610px);
+      margin-inline: auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .application-wizard-card #applyForRole,
+    .application-wizard-card #wizardStepTitle {
+      margin: 0 0 7px;
+      font-family: Manrope, system-ui, sans-serif;
+      font-size: clamp(19px, 3vw, 25px);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      text-transform: none;
+    }
+
+    .wizard-role {
+      margin: 0 0 16px;
+      color: var(--text-muted);
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .wizard-step-count {
+      margin: 0 0 6px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .wizard-progress {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 5px;
+      margin: 0 0 18px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .wizard-progress li {
+      min-height: 5px;
+      border-radius: 10px;
+      background: var(--border);
+    }
+
+    .wizard-progress li.is-reached {
+      background: var(--accent-dark);
+    }
+
+    .wizard-visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    .wizard-panel {
+      margin-top: 12px;
+    }
+
+    .wizard-panel .field-grid {
+      margin: 0;
+    }
+
+    .wizard-reference {
+      min-width: 0;
+      margin: 0 0 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .wizard-reference legend {
+      padding: 0 4px;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .wizard-reference .field + .field {
+      margin-top: 8px;
+    }
+
+    .wizard-secondary {
+      min-height: 44px;
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--accent-dark);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .wizard-secondary:disabled {
+      opacity: 0.65;
+      cursor: default;
+    }
+
+    .wizard-secondary:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 2px;
+    }
+
+    .wizard-return {
+      margin-bottom: 8px;
+      padding-inline: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .wizard-reference-intro {
+      margin: 0 0 12px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .wizard-reference .wizard-secondary {
+      margin-top: 10px;
+    }
+
+    .wizard-review {
+      display: grid;
+      gap: 10px;
+      margin: 14px 0 0;
+      padding: 13px;
+      background: var(--bg);
+      border-radius: 12px;
+    }
+
+    .wizard-review dt {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .wizard-review dd {
+      margin: 2px 0 0;
+      font-size: 14px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .wizard-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .wizard-actions .button-primary {
+      margin-inline-start: auto;
+      min-height: 44px;
+    }
+
     .file-status.is-error {
       color: var(--danger-text);
     }
@@ -736,6 +916,201 @@
         max-width: none;
       }
     }
+    .crosswalk-roles,
+    .crosswalk-back,
+    .crosswalk-apply-footer {
+      display: none;
+    }
+
+    .crosswalk-board {
+      --max-page: 840px;
+    }
+
+    .crosswalk-board .layout,
+    .crosswalk-board .detail-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .crosswalk-board .detail-panel.is-crosswalk-list {
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .crosswalk-board .crosswalk-roles:not(.hidden) {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .crosswalk-role-link {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      min-height: 64px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .crosswalk-role-link:hover {
+      border-color: #8c8377;
+    }
+
+    .crosswalk-role-link h2 {
+      margin: 0;
+      color: var(--accent-dark);
+      font-size: 17px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .crosswalk-role-summary {
+      margin: 5px 0 0;
+      color: var(--text-main);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .crosswalk-role-meta {
+      display: block;
+      margin-top: 6px;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .crosswalk-role-arrow {
+      color: var(--accent-dark);
+      font-size: 20px;
+    }
+
+    .crosswalk-board .crosswalk-back:not(.hidden) {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      margin: -4px 0 10px;
+      color: var(--accent-dark);
+      font-size: 14px;
+      font-weight: 700;
+      text-underline-offset: 3px;
+    }
+
+    .crosswalk-back[aria-disabled="true"] {
+      cursor: default;
+      opacity: 0.55;
+    }
+
+    .crosswalk-board .apply-jump {
+      display: none;
+    }
+
+    .crosswalk-board .crosswalk-apply-footer {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .crosswalk-role-link:focus-visible,
+    .crosswalk-back:focus-visible,
+    #startCrosswalkApplication:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 480px) {
+      .crosswalk-role-link {
+        padding: 14px;
+      }
+    }
+
+    .crosswalk-board .content-card.has-source-description > :not(.original-role-description) {
+      display: none;
+    }
+
+    .crosswalk-board .original-role-description {
+      display: grid;
+      gap: 24px;
+      width: 100%;
+      color: var(--text-main);
+    }
+
+    .crosswalk-board .description-category {
+      margin: 0 0 10px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.045em;
+    }
+
+    .crosswalk-board .description-facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px 18px;
+      margin: 0;
+      padding: 14px;
+      border-radius: 10px;
+      background: var(--bg);
+    }
+
+    .crosswalk-board .description-facts dt {
+      margin-bottom: 4px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .crosswalk-board .description-facts dd {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .crosswalk-board .description-section {
+      max-width: 71ch;
+      font-size: 15px;
+      line-height: 1.72;
+    }
+
+    .crosswalk-board .description-section h3 {
+      margin: 0 0 7px;
+      color: var(--accent-dark);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.025em;
+    }
+
+    .crosswalk-board .description-section p {
+      margin: 0;
+    }
+
+    .crosswalk-board .description-section p + p {
+      margin-top: 9px;
+    }
+
+    .crosswalk-board .description-section ul {
+      margin: 0;
+      padding-left: 19px;
+    }
+
+    .crosswalk-board .description-section li + li {
+      margin-top: 7px;
+    }
+
+    @media (max-width: 580px) {
+      .crosswalk-board .description-facts {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .crosswalk-board .original-role-description {
+        gap: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -759,7 +1134,11 @@
         <div id="jobsList" class="jobs-list"></div>
       </aside>
 
-      <main class="panel detail-panel">
+      <main class="panel detail-panel" id="jobsDetailPanel">
+        <ul class="crosswalk-roles hidden" id="crosswalkRoles" aria-label="Open Roles"></ul>
+        <a class="crosswalk-back hidden" id="backToCrosswalkRoles" href="">
+          <span aria-hidden="true">←</span> Back to Roles
+        </a>
         <div id="loadingState" class="loading-state" role="status">
           Loading current opportunities…
         </div>
@@ -788,6 +1167,7 @@
           <div id="directRoleChooserSlot"></div>
           <div class="detail-grid">
             <section class="content-card stack">
+              <article id="originalRoleDescription" class="original-role-description hidden" hidden></article>
               <div>
                 <h3 class="section-title">Role Overview</h3>
                 <div class="prose" id="jobOverview"></div>
@@ -808,6 +1188,10 @@
                 <ul class="bullet-list" id="jobRequirements"></ul>
               </div>
             </section>
+
+            <div class="crosswalk-apply-footer">
+              <button class="button-primary" id="startCrosswalkApplication" type="button">Apply for This Role</button>
+            </div>
 
             <section class="apply-card">
               <h3 class="section-title" id="applyForRole" tabindex="-1">Apply Now</h3>
@@ -874,6 +1258,59 @@
     </div>
   </div>
 
+  <template id="crosswalkApplicationTemplate">
+    <button type="button" class="wizard-secondary wizard-return" id="wizardBackToRole"><span aria-hidden="true">←</span> Back to Role</button>
+    <p class="wizard-role" id="wizardRoleTitle"></p>
+    <div id="crosswalkWizard">
+      <p class="wizard-step-count" id="wizardStepCount"></p>
+      <ol class="wizard-progress" aria-label="Application Progress">
+        <li><span class="wizard-visually-hidden">Your Details</span></li>
+        <li><span class="wizard-visually-hidden">Availability</span></li>
+        <li><span class="wizard-visually-hidden">References</span></li>
+        <li><span class="wizard-visually-hidden">Résumé &amp; Review</span></li>
+      </ol>
+      <h4 id="wizardStepTitle" tabindex="-1"></h4>
+      <div class="wizard-panel" id="wizardDetails"><div class="field-grid"></div></div>
+      <div class="wizard-panel" id="wizardAvailability" hidden></div>
+      <div class="wizard-panel" id="wizardReferences" hidden>
+        <p class="wizard-reference-intro">Add at least one person who can speak to your experience.</p>
+        <div id="wizardReferenceGroups"></div>
+        <button type="button" class="wizard-secondary" id="wizardAddReference">Add Reference</button>
+        <template id="wizardReferenceTemplate">
+          <fieldset class="wizard-reference">
+            <legend></legend>
+            <div class="field">
+              <label>Reference Name</label>
+              <input type="text" data-reference-field="Name" />
+            </div>
+            <div class="field">
+              <label>Relationship</label>
+              <input type="text" data-reference-field="Relationship" />
+            </div>
+            <div class="field">
+              <label>Phone or Email</label>
+              <input type="text" data-reference-field="Contact" />
+            </div>
+            <button type="button" class="wizard-secondary">Remove Reference</button>
+          </fieldset>
+        </template>
+      </div>
+      <div class="wizard-panel" id="wizardResumeReview" hidden>
+        <dl class="wizard-review">
+          <div><dt>Full Name</dt><dd data-review="applicantName"></dd></div>
+          <div><dt>Email</dt><dd data-review="applicantEmail"></dd></div>
+          <div><dt>Phone</dt><dd data-review="applicantPhone"></dd></div>
+          <div><dt>Availability</dt><dd data-review="availability"></dd></div>
+          <div><dt>References</dt><dd data-review="references"></dd></div>
+        </dl>
+      </div>
+      <div class="wizard-actions">
+        <button type="button" class="wizard-secondary" id="wizardBack" hidden>Back</button>
+        <button type="button" class="button-primary" id="wizardContinue">Continue</button>
+      </div>
+    </div>
+  </template>
+
   <script>
     (function () {
       const BOARD_ENDPOINT = "https://us-central1-crswlkoperations.cloudfunctions.net/getPublicJobsBoard";
@@ -882,7 +1319,8 @@
 
       const params = new URLSearchParams(window.location.search);
       const teamId = (params.get("teamId") || "").trim();
-      if (teamId === "crosswalk-church") {
+      const isCrosswalk = teamId === "crosswalk-church";
+      if (isCrosswalk) {
         document.documentElement.classList.add("crosswalk-board");
       }
       const requestedSlug = params.has("job") ? params.get("job").trim().toLowerCase() : null;
@@ -892,6 +1330,10 @@
         boardTitle: document.getElementById("boardTitle"),
         boardSubtitle: document.getElementById("boardSubtitle"),
         jobsLayout: document.getElementById("jobsLayout"),
+        jobsDetailPanel: document.getElementById("jobsDetailPanel"),
+        crosswalkRoles: document.getElementById("crosswalkRoles"),
+        backToCrosswalkRoles: document.getElementById("backToCrosswalkRoles"),
+        startCrosswalkApplication: document.getElementById("startCrosswalkApplication"),
         jobsPanel: document.getElementById("jobsPanel"),
         jobsList: document.getElementById("jobsList"),
         mobileRolePicker: document.getElementById("mobileRolePicker"),
@@ -928,11 +1370,17 @@
         resumeFileStatus: document.getElementById("resumeFileStatus")
       };
 
+      const originalRoleDescriptions = {"crosswalk-men-ministry-leader":{"categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Justin Wampler, Administrative Director"},{"label":"Commitment","value":"Approximately 15 hours per month, varies with event needs."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Create a warm, welcoming environment where men in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate, authentic connection is the priority."]},{"heading":"RESPONSIBILITIES","bullets":["Plan a monthly gathering that welcomes newcomers, helps men connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.","Marketing: graphics, announcements, and promotion. Facilities: building use and setup. Production: sound and lighting. Worship: worship moments. Pastor Dave: spiritual content and guest speakers. Coordinate support needs in advance."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, a heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment and discretion. Leadership experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Orientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing."]}],"approvedPost":{"title":"Crosswalk Men Ministry Leader","summary":"Lead a volunteer team to host one simple monthly gathering where men can connect, grow in faith, and find belonging.","overview":"Create a warm, welcoming environment where men in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate. Authentic connection is the priority.\n\nReports to Justin Wampler, Administrative Director. You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.\n\nCoordinate staff support in advance. Marketing helps with graphics, announcements, and promotion. Facilities helps with building use and setup. Production helps with sound and lighting. Worship helps with worship moments. Consult Pastor Dave on spiritual content and guest speakers.\n\nOrientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing.","responsibilities":["Plan a monthly gathering that welcomes newcomers, helps men connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","A heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment, and discretion.","Leadership experience is helpful but optional."],"scheduleNotes":"Approximately 15 hours per month, varying with event needs. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}},"crosswalk-women-ministry-leader":{"categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Justin Wampler, Administrative Director"},{"label":"Commitment","value":"Approximately 15 hours per month, varies with event needs."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Create a warm, welcoming environment where women in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate, authentic connection is the priority."]},{"heading":"RESPONSIBILITIES","bullets":["Plan a monthly gathering that welcomes newcomers, helps women connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.","Marketing: graphics, announcements, and promotion. Facilities: building use and setup. Production: sound and lighting. Worship: worship moments. Pastor Dave: spiritual content and guest speakers. Coordinate support needs in advance."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, a heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment and discretion. Leadership experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Orientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing."]}],"approvedPost":{"title":"Crosswalk Women Ministry Leader","summary":"Lead a volunteer team to host one simple monthly gathering where women can connect, grow in faith, and find belonging.","overview":"Create a warm, welcoming environment where women in our community build relationships, grow in faith, and find belonging. Lead a team to host one simple gathering each month. Gatherings do not need to be elaborate. Authentic connection is the priority.\n\nReports to Justin Wampler, Administrative Director. You shape gatherings and build your team within the approved budget and church guidelines. The Administrative Director provides direct supervision and guidance.\n\nCoordinate staff support in advance. Marketing helps with graphics, announcements, and promotion. Facilities helps with building use and setup. Production helps with sound and lighting. Worship helps with worship moments. Consult Pastor Dave on spiritual content and guest speakers.\n\nOrientation, tools, and ongoing staff support are provided. Three- and six-month check-ins review workload, support needs, and fit. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing.","responsibilities":["Plan a monthly gathering that welcomes newcomers, helps women connect, and reflects our commitment to learning to #lovewell.","Select and build your volunteer team, share responsibilities, and create opportunities for others to lead.","Choose events and dates. Confirm calendar and building availability with the Office Manager before finalizing plans.","Coordinate promotion, setup, production, and worship needs with staff in advance.","Manage the approved budget, track spending, and follow purchasing and reimbursement procedures. Review budget needs with the Administrative Director.","Create opportunities for prayer, faith conversations, and mentoring. Consult Pastor Dave on spiritual content and guest speakers.","Partner with Groups and Outreach leaders to connect people with church life and service. Communicate plans, gather feedback, and meet regularly with your supervisor."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","A heart for welcoming others, strong communication and follow-through, team-building skills, sound judgment, and discretion.","Leadership experience is helpful but optional."],"scheduleNotes":"Approximately 15 hours per month, varying with event needs. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}},"volunteer-engagement-coordinator":{"categoryLines":["UNPAID VOLUNTEER","LEADERSHIP ROLE"],"metadata":[{"label":"Reports to","value":"Shastin Rains, Experience Director"},{"label":"Commitment","value":"10-15 hours per month, mainly during the week."},{"label":"Term","value":"One year, with check-ins at three and six months."}],"sections":[{"heading":"ABOUT THE ROLE","paragraphs":["Support the Experience Director with scheduling, communication, and onboarding for the Guest Experience Teams: First Impressions, Volunteer Breakfast, and Next Steps. Help volunteers feel welcomed, informed, and prepared to serve."]},{"heading":"RESPONSIBILITIES","bullets":["Prepare and maintain Planning Center schedules one month in advance, using the process taught by the Experience Director.","Send scheduling requests and reminders, follow up on unanswered requests, and communicate schedule changes.","Keep volunteer contact information, availability, and serving assignments current.","Follow up with people interested in serving, help onboard new volunteers, and arrange training with the appropriate team leaders.","Help team leaders find replacements for last-minute absences. Bring unresolved coverage needs to the Experience Director.","Help coordinate two to four gatherings each year to build community among team leaders, with direction from the Experience Director.","Check in with the Experience Director to review schedules, volunteer needs, and priorities."]},{"heading":"LEADERSHIP AND SUPPORT","paragraphs":["The Experience Director provides scheduling training, tools, priorities, and ongoing support. Team leaders provide role-specific volunteer training.","Own routine scheduling, communication, records, and onboarding follow-up. The Experience Director retains decisions about placement, team leadership, and sensitive concerns. Keep volunteer information confidential."]},{"heading":"QUALIFICATIONS","paragraphs":["Alignment with the Crosswalk mission, vision, and values, active participation or willingness to become involved, strong organization and follow-through, warm communication, discretion, and willingness to learn scheduling tools. Planning Center or volunteer coordination experience is helpful, not required."]},{"heading":"COMMITMENT AND SELECTION","paragraphs":["Most scheduling work falls within one week each month, with follow-up and coverage support as needed afterward. Saturdays are not required. Team-leader gatherings may require additional time. Review workload and support at the three- and six-month check-ins.","An interview gives both sides time to discuss interests, experience, availability, and expectations before committing to this unpaid volunteer role."]}],"approvedPost":{"title":"Volunteer Engagement Coordinator","summary":"Support the Guest Experience Teams through scheduling, communication, and onboarding so volunteers feel welcomed, informed, and prepared to serve.","overview":"Support the Experience Director with scheduling, communication, and onboarding for the Guest Experience Teams: First Impressions, Volunteer Breakfast, and Next Steps. Help volunteers feel welcomed, informed, and prepared to serve.\n\nReports to Shastin Rains, Experience Director. The Experience Director provides scheduling training, tools, priorities, and ongoing support. Team leaders provide role-specific volunteer training.\n\nOwn routine scheduling, communication, records, and onboarding follow-up. The Experience Director retains decisions about placement, team leadership, and sensitive concerns. Keep volunteer information confidential.\n\nReview workload and support at the three- and six-month check-ins. An interview gives both sides time to discuss interests, experience, availability, and expectations before committing to this unpaid volunteer role.","responsibilities":["Prepare and maintain Planning Center schedules one month in advance, using the process taught by the Experience Director.","Send scheduling requests and reminders, follow up on unanswered requests, and communicate schedule changes.","Keep volunteer contact information, availability, and serving assignments current.","Follow up with people interested in serving, help onboard new volunteers, and arrange training with the appropriate team leaders.","Help team leaders find replacements for last-minute absences. Bring unresolved coverage needs to the Experience Director.","Help coordinate two to four gatherings each year to build community among team leaders, with direction from the Experience Director.","Check in with the Experience Director to review schedules, volunteer needs, and priorities."],"requirements":["Alignment with the Crosswalk mission, vision, and values.","Active participation or willingness to become involved.","Strong organization and follow-through, warm communication, discretion, and willingness to learn scheduling tools.","Planning Center or volunteer coordination experience is helpful but optional."],"scheduleNotes":"10\u201315 hours per month, mainly during the week. Most scheduling falls within one week each month, with follow-up and coverage support afterward as needed. Saturdays are optional. Team-leader gatherings may require additional time. One-year term, with check-ins at three and six months.","employmentType":"volunteer","locationName":"Chattanooga, TN","compensationSummary":"Unpaid volunteer role"}}};
+
       let jobs = [];
       let selectedJob = null;
       let selectedResumeFile = null;
       let submissionInProgress = false;
+      let crosswalkBoardReady = false;
+      let crosswalkBoardDisabled = false;
+      let crosswalkNavigationDeferred = false;
       const pendingSubmissions = new Map();
+      const wizard = teamId === "crosswalk-church" ? createApplicationWizard() : null;
 
       function setResumeFile(file) {
         const error = file ? validateResumeFile(file) : "";
@@ -984,6 +1432,268 @@
         });
       }
 
+      function createApplicationWizard() {
+        const card = dom.form.closest(".apply-card");
+        const panel = card.closest(".detail-panel");
+        const heading = card.querySelector("#applyForRole");
+        const fragment = document.getElementById("crosswalkApplicationTemplate").content.cloneNode(true);
+        const root = fragment.querySelector("#crosswalkWizard");
+        const find = (id) => root.querySelector("#" + id);
+        const backToRole = fragment.querySelector("#wizardBackToRole");
+        const roleTitle = fragment.querySelector("#wizardRoleTitle");
+        const stepTitle = find("wizardStepTitle");
+        const stepCount = find("wizardStepCount");
+        const progress = Array.from(root.querySelectorAll(".wizard-progress li"));
+        const panels = ["wizardDetails", "wizardAvailability", "wizardReferences", "wizardResumeReview"].map(find);
+        const referenceGroups = find("wizardReferenceGroups");
+        const referenceTemplate = find("wizardReferenceTemplate");
+        const addReference = find("wizardAddReference");
+        const back = find("wizardBack");
+        const next = find("wizardContinue");
+        const steps = ["Your Details", "Availability", "References", "Résumé & Review"];
+        let step = 0;
+        let roleId = null;
+        let referenceIndex = 0;
+        let completed = false;
+        let invalidField = null;
+
+        const submitRow = dom.submitButton.parentElement;
+        const detailFields = panels[0].querySelector(".field-grid");
+        [dom.applicantName, dom.applicantEmail, dom.applicantPhone].forEach((field) => {
+          detailFields.append(field.closest(".field"));
+        });
+        panels[1].append(dom.availability.closest(".field"));
+        panels[3].insertBefore(dom.resumeDropZone, panels[3].firstChild);
+        dom.references.closest(".field").hidden = true;
+        dom.references.required = false;
+        root.querySelector(".wizard-actions").append(dom.submitButton);
+        submitRow.remove();
+        dom.form.append(root);
+        card.prepend(backToRole);
+        heading.after(roleTitle);
+        card.classList.add("application-wizard-card");
+        card.hidden = true;
+        heading.textContent = "Application";
+        dom.form.setAttribute("aria-labelledby", heading.id);
+        dom.form.setAttribute("aria-describedby", roleTitle.id);
+        dom.errorBanner.setAttribute("role", "alert");
+        dom.successBanner.setAttribute("role", "status");
+        dom.applicantName.maxLength = 140;
+        dom.applicantEmail.maxLength = 320;
+        dom.availability.maxLength = 800;
+
+        function clearIssue() {
+          if (invalidField) invalidField.removeAttribute("aria-invalid");
+          invalidField = null;
+          clearMessages();
+        }
+
+        function reportIssue(issue) {
+          clearIssue();
+          invalidField = issue.field;
+          invalidField.setAttribute("aria-invalid", "true");
+          showError(issue.message);
+          invalidField.focus();
+        }
+
+        function labelReferences() {
+          Array.from(referenceGroups.children).forEach((group, index) => {
+            group.querySelector("legend").textContent = "Reference " + (index + 1);
+            group.querySelector("button").setAttribute("aria-label", "Remove Reference " + (index + 1));
+          });
+        }
+
+        function appendReference(focus) {
+          const group = referenceTemplate.content.firstElementChild.cloneNode(true);
+          const index = ++referenceIndex;
+          const inputs = Array.from(group.querySelectorAll("input"));
+          inputs.forEach((input) => {
+            input.id = "wizardReference" + index + input.dataset.referenceField;
+            input.previousElementSibling.htmlFor = input.id;
+            input.required = index === 1;
+          });
+          const remove = group.querySelector("button");
+          remove.hidden = index === 1;
+          remove.addEventListener("click", () => {
+            clearIssue();
+            group.remove();
+            labelReferences();
+            addReference.focus();
+          });
+          referenceGroups.append(group);
+          labelReferences();
+          if (focus) inputs[0].focus();
+        }
+
+        function issue(field, message) {
+          return { field, message };
+        }
+
+        function validateReferences() {
+          const lines = [];
+          for (const [index, group] of Array.from(referenceGroups.children).entries()) {
+            const fields = Array.from(group.querySelectorAll("input"));
+            const values = fields.map((field) => field.value.trim());
+            if (index > 0 && values.every((value) => !value)) continue;
+            const missing = values.findIndex((value) => !value);
+            if (missing >= 0) {
+              const labels = ["a name", "the relationship", "a phone number or email"];
+              return issue(fields[missing], "Enter " + labels[missing] + " for Reference " + (index + 1) + ".");
+            }
+            const contact = values[2];
+            const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+            const phone = !contact.includes("@") && contact.replace(/\D/g, "").length >= 7;
+            if (!email && !phone) {
+              return issue(fields[2], "Enter a valid phone number or email for Reference " + (index + 1) + ".");
+            }
+            lines.push(values.join(", "));
+          }
+          const value = lines.join("\n");
+          if (value.length > 1400) {
+            return issue(referenceGroups.querySelector("input"), "Keep your references to 1,400 characters total.");
+          }
+          dom.references.value = value;
+          return null;
+        }
+
+        function validateStep(index) {
+          if (index === 0) {
+            if (!dom.applicantName.value.trim()) return issue(dom.applicantName, "Please enter your full name.");
+            if (!dom.applicantEmail.value.trim() || dom.applicantEmail.validity.typeMismatch) {
+              return issue(dom.applicantEmail, "Please enter a valid email address.");
+            }
+            if (!hasValidPhoneNumber(dom.applicantPhone.value)) {
+              return issue(dom.applicantPhone, "Please enter a valid phone number.");
+            }
+          }
+          if (index === 1 && !dom.availability.value.trim()) {
+            return issue(dom.availability, "Please share your availability.");
+          }
+          return index === 2 ? validateReferences() : null;
+        }
+
+        function showStep(index, focus = true) {
+          step = index;
+          stepTitle.textContent = steps[step];
+          stepCount.textContent = "Step " + (step + 1) + " of " + steps.length;
+          panels.forEach((panel, index) => { panel.hidden = index !== step; });
+          progress.forEach((item, index) => {
+            item.classList.toggle("is-reached", index <= step);
+            if (index === step) item.setAttribute("aria-current", "step");
+            else item.removeAttribute("aria-current");
+          });
+          back.hidden = step === 0;
+          next.hidden = step === steps.length - 1;
+          dom.submitButton.hidden = !next.hidden;
+          if (next.hidden) {
+            root.querySelectorAll("[data-review]").forEach((item) => {
+              item.textContent = dom[item.dataset.review].value.trim();
+            });
+          }
+          if (focus) stepTitle.focus();
+        }
+
+        function advance() {
+          if (submissionInProgress || step === steps.length - 1) return;
+          const problem = validateStep(step);
+          if (problem) {
+            reportIssue(problem);
+            return;
+          }
+          clearIssue();
+          showStep(step + 1);
+        }
+
+        function reset() {
+          clearIssue();
+          completed = false;
+          dom.form.reset();
+          setResumeFile(null);
+          heading.textContent = "Application";
+          dom.form.hidden = false;
+          referenceGroups.replaceChildren();
+          referenceIndex = 0;
+          appendReference(false);
+          showStep(0, false);
+        }
+
+        function close() {
+          card.hidden = true;
+          dom.jobDetail.classList.remove("is-application-open");
+          panel.classList.remove("is-crosswalk-application");
+        }
+
+        function selectRole(nextId) {
+          if (roleId === nextId) return;
+          roleId = nextId;
+          close();
+          reset();
+        }
+
+        document.addEventListener("crosswalk:role-change", (event) => {
+          selectRole(event.detail?.jobId || null);
+        });
+        document.addEventListener("crosswalk:apply", (event) => {
+          if (submissionInProgress || !selectedJob || event.detail?.jobId !== selectedJob.id) return;
+          selectRole(selectedJob.id);
+          roleTitle.textContent = selectedJob.title;
+          card.hidden = false;
+          dom.jobDetail.classList.add("is-application-open");
+          panel.classList.add("is-crosswalk-application");
+          if (completed) heading.focus();
+          else showStep(step);
+        });
+        addReference.addEventListener("click", () => appendReference(true));
+        next.addEventListener("click", advance);
+        back.addEventListener("click", () => {
+          if (submissionInProgress || step === 0) return;
+          clearIssue();
+          showStep(step - 1);
+        });
+        backToRole.addEventListener("click", () => {
+          if (submissionInProgress) return;
+          close();
+          document.getElementById("startCrosswalkApplication")?.focus();
+        });
+        root.addEventListener("input", (event) => {
+          if (event.target === invalidField) clearIssue();
+        });
+
+        reset();
+        return {
+          prepareSubmit() {
+            if (card.hidden || completed) return false;
+            if (step !== steps.length - 1) {
+              advance();
+              return false;
+            }
+            for (let index = 0; index < step; index++) {
+              const problem = validateStep(index);
+              if (problem) {
+                showStep(index, false);
+                reportIssue(problem);
+                return false;
+              }
+            }
+            const resumeError = validateResumeFile(selectedResumeFile);
+            if (resumeError) {
+              reportIssue(issue(dom.resumeFile, resumeError));
+              return false;
+            }
+            return true;
+          },
+          setBusy(inProgress) {
+            [backToRole, back, next, addReference].forEach((button) => { button.disabled = inProgress; });
+          },
+          showCompletion() {
+            completed = true;
+            dom.form.hidden = true;
+            heading.textContent = "Application Received";
+            heading.focus();
+          }
+        };
+      }
+
       async function hashBytes(bytes) {
         const digest = await window.crypto.subtle.digest("SHA-256", bytes);
         return Array.from(new Uint8Array(digest), function (byte) {
@@ -1008,6 +1718,14 @@
         dom.jobsList.querySelectorAll("button").forEach(function (button) {
           button.disabled = inProgress;
         });
+        if (isCrosswalk) {
+          dom.backToCrosswalkRoles.setAttribute("aria-disabled", String(inProgress));
+          dom.startCrosswalkApplication.disabled = inProgress;
+          if (!inProgress && crosswalkNavigationDeferred) {
+            crosswalkNavigationDeferred = false;
+            syncCrosswalkRoute(true);
+          }
+        }
       }
 
       function showError(message) {
@@ -1038,11 +1756,17 @@
         dom.noSelectionState.classList.toggle("hidden", !message);
         if (message) dom.noSelectionState.textContent = message;
         dom.unavailableJobState.classList.toggle("hidden", state !== "unavailable");
-        dom.otherRolesHint.classList.toggle("hidden", jobs.length === 0);
+        dom.otherRolesHint.classList.toggle("hidden", isCrosswalk || jobs.length === 0);
         dom.jobDetail.classList.toggle("is-visible", state === "detail");
-        dom.jobsPanel.classList.toggle("hidden", jobs.length === 0);
-        dom.mobileRolePicker.classList.toggle("hidden", jobs.length === 0);
-        dom.jobsLayout.classList.toggle("has-roles", jobs.length > 0);
+        const showGenericRoles = !isCrosswalk && jobs.length > 0;
+        dom.jobsPanel.classList.toggle("hidden", !showGenericRoles);
+        dom.mobileRolePicker.classList.toggle("hidden", !showGenericRoles);
+        dom.jobsLayout.classList.toggle("has-roles", showGenericRoles);
+        if (isCrosswalk) {
+          dom.crosswalkRoles.classList.toggle("hidden", state !== "list");
+          dom.jobsDetailPanel.classList.toggle("is-crosswalk-list", state === "list");
+          dom.backToCrosswalkRoles.classList.toggle("hidden", state !== "detail" && state !== "unavailable");
+        }
       }
 
       function buildMetaChip(label) {
@@ -1124,6 +1848,124 @@
         if (role) selectJob(role);
       });
 
+      function crosswalkRoleUrl(slug) {
+        const url = new URL(window.location.href);
+        if (slug) url.searchParams.set("job", slug);
+        else url.searchParams.delete("job");
+        url.hash = "";
+        return url;
+      }
+
+      function navigateCrosswalk(event, slug) {
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        if (submissionInProgress) return;
+        const url = crosswalkRoleUrl(slug);
+        if (url.href !== window.location.href) window.history.pushState(null, "", url);
+        syncCrosswalkRoute(true);
+      }
+
+      function renderCrosswalkRoles() {
+        dom.crosswalkRoles.replaceChildren();
+        dom.backToCrosswalkRoles.href = crosswalkRoleUrl(null).href;
+        jobs.forEach(function (job, index) {
+          const item = document.createElement("li");
+          const link = document.createElement("a");
+          link.className = "crosswalk-role-link";
+          link.href = crosswalkRoleUrl(job.slug).href;
+
+          const content = document.createElement("div");
+          const title = document.createElement("h2");
+          title.id = "crosswalkRoleTitle-" + index;
+          title.textContent = job.title;
+          link.setAttribute("aria-labelledby", title.id);
+          content.appendChild(title);
+
+          if (job.summary) {
+            const summary = document.createElement("p");
+            summary.className = "crosswalk-role-summary";
+            summary.textContent = job.summary;
+            content.appendChild(summary);
+          }
+          const metaText = [job.locationName, job.compensationSummary || formatLabel(job.employmentType)].filter(Boolean).join(" · ");
+          if (metaText) {
+            const meta = document.createElement("span");
+            meta.className = "crosswalk-role-meta";
+            meta.textContent = metaText;
+            content.appendChild(meta);
+          }
+
+          const arrow = document.createElement("span");
+          arrow.className = "crosswalk-role-arrow";
+          arrow.setAttribute("aria-hidden", "true");
+          arrow.textContent = "→";
+          link.append(content, arrow);
+          link.addEventListener("click", function (event) {
+            navigateCrosswalk(event, job.slug);
+          });
+          item.appendChild(link);
+          dom.crosswalkRoles.appendChild(item);
+        });
+      }
+
+      function emitCrosswalkRoleChange() {
+        document.dispatchEvent(new CustomEvent("crosswalk:role-change", { detail: crosswalkRoleContext() }));
+      }
+
+      function crosswalkRoleContext() {
+        return selectedJob ? { jobId: selectedJob.id, slug: selectedJob.slug, title: selectedJob.title } : null;
+      }
+
+      function openCrosswalkApplication() {
+        if (!isCrosswalk || !selectedJob || submissionInProgress) return;
+        document.dispatchEvent(new CustomEvent("crosswalk:apply", { detail: crosswalkRoleContext() }));
+      }
+
+      function syncCrosswalkRoute(focus) {
+        if (!crosswalkBoardReady) return;
+        if (submissionInProgress) {
+          crosswalkNavigationDeferred = true;
+          return;
+        }
+        if (crosswalkBoardDisabled) {
+          setPrimaryState("disabled");
+          return;
+        }
+
+        const slug = new URLSearchParams(window.location.search).get("job");
+        const role = slug === null ? null : jobs.find((job) => String(job.slug || "").toLowerCase() === slug.trim().toLowerCase());
+        let focusTarget = dom.boardTitle;
+        if (role) {
+          selectJob(role);
+          focusTarget = dom.jobTitle;
+        } else {
+          if (selectedJob) {
+            selectedJob = null;
+            dom.form.reset();
+            setResumeFile(null);
+          }
+          emitCrosswalkRoleChange();
+          const state = slug === null ? (jobs.length ? "list" : "empty") : "unavailable";
+          setPrimaryState(state);
+          if (state === "unavailable") focusTarget = dom.unavailableJobState;
+        }
+        if (focus) {
+          focusTarget.tabIndex = -1;
+          focusTarget.focus({ preventScroll: true });
+          window.scrollTo(0, 0);
+        }
+      }
+
+      if (isCrosswalk) {
+        dom.backToCrosswalkRoles.addEventListener("click", function (event) {
+          navigateCrosswalk(event, null);
+        });
+        dom.startCrosswalkApplication.addEventListener("click", openCrosswalkApplication);
+        window.addEventListener("popstate", function () {
+          syncCrosswalkRoute(true);
+        });
+      }
+
       function updateUrl(job) {
         if (!window.history || !window.history.replaceState) return;
         const next = new URL(window.location.href);
@@ -1138,7 +1980,7 @@
       function selectJob(job) {
         if (submissionInProgress || selectedJob?.id === job.id) return;
         selectedJob = job;
-        renderJobsList();
+        if (!isCrosswalk) renderJobsList();
 
         clearMessages();
         dom.jobTitle.textContent = selectedJob.title || "Open role";
@@ -1149,10 +1991,71 @@
         renderMeta(selectedJob);
         renderBulletList(dom.jobResponsibilities, selectedJob.responsibilities, dom.responsibilitiesSection);
         renderBulletList(dom.jobRequirements, selectedJob.requirements, dom.requirementsSection);
+        renderCrosswalkDescription(selectedJob);
         dom.form.reset();
         setResumeFile(null);
         setPrimaryState("detail");
-        updateUrl(selectedJob);
+        if (isCrosswalk) emitCrosswalkRoleChange();
+        else updateUrl(selectedJob);
+      }
+
+      function renderCrosswalkDescription(job) {
+        if (teamId !== "crosswalk-church") return;
+        const article = document.getElementById("originalRoleDescription");
+        const source = Object.prototype.hasOwnProperty.call(originalRoleDescriptions, job.slug) ? originalRoleDescriptions[job.slug] : null;
+        // If the published role is edited, use its current content from the Jobs board.
+        const matches = source && Object.entries(source.approvedPost).every(function ([field, value]) {
+          return JSON.stringify(job[field] ?? null) === JSON.stringify(value);
+        });
+        article.replaceChildren();
+        article.hidden = !matches;
+        article.classList.toggle("hidden", !matches);
+        article.parentElement.classList.toggle("has-source-description", Boolean(matches));
+        if (!matches) return;
+
+        const header = document.createElement("div");
+        const category = document.createElement("p");
+        category.className = "description-category";
+        category.textContent = source.categoryLines.join(" ");
+        header.appendChild(category);
+
+        const facts = document.createElement("dl");
+        facts.className = "description-facts";
+        source.metadata.forEach(function (item) {
+          const fact = document.createElement("div");
+          const label = document.createElement("dt");
+          const value = document.createElement("dd");
+          label.textContent = item.label;
+          value.textContent = item.value;
+          fact.append(label, value);
+          facts.appendChild(fact);
+        });
+        header.appendChild(facts);
+        article.appendChild(header);
+
+        source.sections.forEach(function (item) {
+          const section = document.createElement("section");
+          section.className = "description-section";
+          const heading = document.createElement("h3");
+          heading.textContent = item.heading;
+          section.appendChild(heading);
+
+          (item.paragraphs || []).forEach(function (text) {
+            const paragraph = document.createElement("p");
+            paragraph.textContent = text;
+            section.appendChild(paragraph);
+          });
+          if (item.bullets?.length) {
+            const list = document.createElement("ul");
+            item.bullets.forEach(function (text) {
+              const bullet = document.createElement("li");
+              bullet.textContent = text;
+              list.appendChild(bullet);
+            });
+            section.appendChild(list);
+          }
+          article.appendChild(section);
+        });
       }
 
       function validateResumeFile(file) {
@@ -1230,6 +2133,14 @@
           dom.boardSubtitle.textContent = board.publicSubtitle || "Explore current openings and apply online for the role that fits you best.";
           document.title = [dom.boardTitle.textContent, dom.boardBrandLabel.textContent].join(" | ");
 
+          if (isCrosswalk) {
+            crosswalkBoardDisabled = boardDisabled;
+            crosswalkBoardReady = true;
+            renderCrosswalkRoles();
+            syncCrosswalkRoute(false);
+            return;
+          }
+
           const match = requestedSlug === null ? jobs[0] : jobs.find(function (job) {
             return String(job.slug || "").toLowerCase() === requestedSlug;
           });
@@ -1255,6 +2166,7 @@
         event.preventDefault();
         if (submissionInProgress) return;
         clearMessages();
+        if (wizard && !wizard.prepareSubmit()) return;
 
         if (!teamId) {
           showError("This page is missing the team id. Please use the link provided by your church staff.");
@@ -1301,6 +2213,7 @@
 
         const application = { teamId, jobId: selectedJob.id, applicantName, applicantEmail, applicantPhone, availability, references };
         setSubmissionInProgress(true);
+        wizard?.setBusy(true);
 
         try {
           const key = await submissionKey(application, file);
@@ -1338,11 +2251,13 @@
               ? "Your application was submitted successfully. Check your email for confirmation."
               : "Your application was submitted successfully."
           );
+          wizard?.showCompletion();
         } catch (err) {
           console.error("submit application error", err);
           showError(err && err.message ? err.message : "Unable to submit your application right now.");
         } finally {
           setSubmissionInProgress(false);
+          wizard?.setBusy(false);
         }
       });
 
